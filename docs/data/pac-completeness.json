@@ -1,0 +1,14 @@
+{
+  "alert_id": "ok",
+  "created_at": "2026-08-02T18:06:39.933508Z",
+  "trigger": "completeness",
+  "severity": "info",
+  "summary": "[INFO] Policy-as-code lock-step OK for 'pol-ac-001'.",
+  "gaps": [],
+  "changed_paths": [],
+  "linked_statements": [],
+  "linked_iac": [],
+  "frameworks": [],
+  "recommended_actions": [],
+  "metadata": {}
+}

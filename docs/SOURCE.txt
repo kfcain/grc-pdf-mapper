@@ -1,0 +1,1 @@
+examples/viewer/ is the source of truth; docs/ is the GitHub Pages publish root.

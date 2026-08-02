@@ -1,0 +1,617 @@
+{
+  "class": "b",
+  "catalog_version": "2026.07.14.01",
+  "ksi_count": 46,
+  "ksi": [
+    {
+      "id": "KSI-CED-RAT",
+      "name": "Reviewing All Training",
+      "status": "applicable",
+      "controls": [
+        "CP-3",
+        "IR-2",
+        "PS-6",
+        "AT-2",
+        "AT-2(2)",
+        "AT-2(3)"
+      ]
+    },
+    {
+      "id": "KSI-CMT-LMC",
+      "name": "Logging Changes",
+      "status": "applicable",
+      "controls": [
+        "AU-2",
+        "CM-3",
+        "CM-3(2)",
+        "CM-4(2)",
+        "CM-6",
+        "CM-8(3)"
+      ]
+    },
+    {
+      "id": "KSI-CMT-RMV",
+      "name": "Redeploying vs Modifying",
+      "status": "applicable",
+      "controls": [
+        "CM-2",
+        "CM-3",
+        "CM-5",
+        "CM-6",
+        "CM-7",
+        "CM-8(1)"
+      ]
+    },
+    {
+      "id": "KSI-CMT-RVP",
+      "name": "Reviewing Change Procedures",
+      "status": "applicable",
+      "controls": [
+        "CM-3",
+        "CM-3(2)",
+        "CM-3(4)",
+        "CM-5",
+        "CM-7(1)",
+        "CM-9"
+      ]
+    },
+    {
+      "id": "KSI-CMT-VTD",
+      "name": "Validating Throughout Deployment",
+      "status": "applicable",
+      "controls": [
+        "CM-3",
+        "CM-3(2)",
+        "CM-4(2)",
+        "SI-2"
+      ]
+    },
+    {
+      "id": "KSI-CNA-DFP",
+      "name": "Defining Functionality and Privileges",
+      "status": "applicable",
+      "controls": [
+        "CM-2",
+        "SI-3"
+      ]
+    },
+    {
+      "id": "KSI-CNA-EIS",
+      "name": "Enforcing Intended State",
+      "status": "optional",
+      "controls": [
+        "CA-2(1)",
+        "CA-7(1)"
+      ]
+    },
+    {
+      "id": "KSI-CNA-IBP",
+      "name": "Implementing Best Practices",
+      "status": "applicable",
+      "controls": [
+        "AC-17(3)",
+        "CM-2",
+        "PL-10"
+      ]
+    },
+    {
+      "id": "KSI-CNA-MAT",
+      "name": "Minimizing Attack Surface",
+      "status": "applicable",
+      "controls": [
+        "AC-17(3)",
+        "AC-18(1)",
+        "AC-18(3)",
+        "AC-20(1)",
+        "CA-9",
+        "SC-7(3)"
+      ]
+    },
+    {
+      "id": "KSI-CNA-OFA",
+      "name": "Optimizing for Availability",
+      "status": "applicable",
+      "controls": []
+    },
+    {
+      "id": "KSI-CNA-RNT",
+      "name": "Restricting Network Traffic",
+      "status": "applicable",
+      "controls": [
+        "AC-17(3)",
+        "CA-9",
+        "CM-7(1)",
+        "SC-7(5)",
+        "SI-8"
+      ]
+    },
+    {
+      "id": "KSI-CNA-RVP",
+      "name": "Reviewing Protections",
+      "status": "applicable",
+      "controls": [
+        "SC-5",
+        "SI-8",
+        "SI-8(2)"
+      ]
+    },
+    {
+      "id": "KSI-CNA-ULN",
+      "name": "Using Logical Networking",
+      "status": "applicable",
+      "controls": [
+        "AC-12",
+        "AC-17(3)",
+        "CA-9",
+        "SC-4",
+        "SC-7",
+        "SC-7(7)"
+      ]
+    },
+    {
+      "id": "KSI-IAM-AAM",
+      "name": "Automating Account Management",
+      "status": "applicable",
+      "controls": [
+        "AC-2(2)",
+        "AC-2(3)",
+        "AC-2(13)",
+        "AC-6(7)",
+        "IA-4(4)",
+        "IA-12"
+      ]
+    },
+    {
+      "id": "KSI-IAM-APM",
+      "name": "Adopting Passwordless Methods",
+      "status": "applicable",
+      "controls": [
+        "AC-3",
+        "IA-5(1)",
+        "IA-5(2)",
+        "IA-5(6)",
+        "IA-6",
+        "AC-2"
+      ]
+    },
+    {
+      "id": "KSI-IAM-ELP",
+      "name": "Ensuring Least Privilege",
+      "status": "applicable",
+      "controls": [
+        "AC-2(5)",
+        "AC-2(6)",
+        "AC-3",
+        "AC-4",
+        "AC-6",
+        "AC-12"
+      ]
+    },
+    {
+      "id": "KSI-IAM-JIT",
+      "name": "Authorizing Just-in-Time",
+      "status": "applicable",
+      "controls": [
+        "AC-2",
+        "AC-2(1)",
+        "AC-2(2)",
+        "AC-2(3)",
+        "AC-2(4)",
+        "AC-2(6)"
+      ]
+    },
+    {
+      "id": "KSI-IAM-SNU",
+      "name": "Securing Non-User Authentication",
+      "status": "applicable",
+      "controls": [
+        "AC-2",
+        "AC-2(2)",
+        "AC-4",
+        "AC-6(5)",
+        "IA-3",
+        "IA-5(2)"
+      ]
+    },
+    {
+      "id": "KSI-IAM-SUS",
+      "name": "Responding to Suspicious Activity",
+      "status": "applicable",
+      "controls": [
+        "AC-2",
+        "AC-2(1)",
+        "AC-2(3)",
+        "AC-2(13)",
+        "AC-7",
+        "PS-4"
+      ]
+    },
+    {
+      "id": "KSI-INR-AAR",
+      "name": "Generating After Action Reports",
+      "status": "applicable",
+      "controls": [
+        "IR-3",
+        "IR-4",
+        "IR-4(1)",
+        "IR-8"
+      ]
+    },
+    {
+      "id": "KSI-INR-RIR",
+      "name": "Reviewing Incident Response Procedures",
+      "status": "applicable",
+      "controls": [
+        "IR-4",
+        "IR-4(1)",
+        "IR-6",
+        "IR-6(1)",
+        "IR-6(3)",
+        "IR-7"
+      ]
+    },
+    {
+      "id": "KSI-INR-RPI",
+      "name": "Reviewing Past Incidents",
+      "status": "applicable",
+      "controls": [
+        "IR-3",
+        "IR-4",
+        "IR-4(1)",
+        "IR-5",
+        "IR-8"
+      ]
+    },
+    {
+      "id": "KSI-MLA-ALA",
+      "name": "Authorizing Log Access",
+      "status": "optional",
+      "controls": [
+        "SI-11"
+      ]
+    },
+    {
+      "id": "KSI-MLA-EVC",
+      "name": "Evaluating Configurations",
+      "status": "applicable",
+      "controls": [
+        "CA-7",
+        "CM-2",
+        "CM-6",
+        "SI-7(7)"
+      ]
+    },
+    {
+      "id": "KSI-MLA-LET",
+      "name": "Logging Event Types",
+      "status": "applicable",
+      "controls": [
+        "AC-2(4)",
+        "AC-6(9)",
+        "AC-17(1)",
+        "AC-20(1)",
+        "AU-2",
+        "AU-7(1)"
+      ]
+    },
+    {
+      "id": "KSI-MLA-OSM",
+      "name": "Operating SIEM Capability",
+      "status": "applicable",
+      "controls": [
+        "AC-17(1)",
+        "AC-20(1)",
+        "AU-2",
+        "AU-3",
+        "AU-3(1)",
+        "AU-4"
+      ]
+    },
+    {
+      "id": "KSI-MLA-RVL",
+      "name": "Reviewing Logs",
+      "status": "applicable",
+      "controls": [
+        "AC-2(4)",
+        "AC-6(9)",
+        "AU-2",
+        "AU-6",
+        "AU-6(1)",
+        "SI-4"
+      ]
+    },
+    {
+      "id": "KSI-PIY-GIV",
+      "name": "Generating Inventories",
+      "status": "applicable",
+      "controls": [
+        "CM-2(2)",
+        "CM-7(5)",
+        "CM-8",
+        "CM-8(1)",
+        "CM-12",
+        "CM-12(1)"
+      ]
+    },
+    {
+      "id": "KSI-PIY-RES",
+      "name": "Reviewing Executive Support",
+      "status": "applicable",
+      "controls": []
+    },
+    {
+      "id": "KSI-PIY-RIS",
+      "name": "Reviewing Investments in Security",
+      "status": "applicable",
+      "controls": [
+        "AC-5",
+        "CA-2",
+        "CP-2(1)",
+        "CP-4(1)",
+        "IR-3(2)",
+        "PM-3"
+      ]
+    },
+    {
+      "id": "KSI-PIY-RSD",
+      "name": "Reviewing Security in the SDLC",
+      "status": "applicable",
+      "controls": [
+        "AC-5",
+        "AU-3(3)",
+        "CM-3(4)",
+        "PL-8",
+        "PM-7",
+        "SA-3"
+      ]
+    },
+    {
+      "id": "KSI-PIY-RVD",
+      "name": "Reviewing Vulnerability Disclosures",
+      "status": "applicable",
+      "controls": [
+        "RA-5(11)"
+      ]
+    },
+    {
+      "id": "KSI-RPL-ABO",
+      "name": "Aligning Backups with Objectives",
+      "status": "applicable",
+      "controls": [
+        "CM-2(3)",
+        "CP-6",
+        "CP-9",
+        "CP-10",
+        "CP-10(2)",
+        "SI-12"
+      ]
+    },
+    {
+      "id": "KSI-RPL-ARP",
+      "name": "Aligning Recovery Plan",
+      "status": "applicable",
+      "controls": [
+        "CP-2",
+        "CP-2(1)",
+        "CP-2(3)",
+        "CP-4(1)",
+        "CP-6",
+        "CP-6(1)"
+      ]
+    },
+    {
+      "id": "KSI-RPL-RRO",
+      "name": "Reviewing Recovery Objectives",
+      "status": "applicable",
+      "controls": [
+        "CP-2(3)",
+        "CP-10"
+      ]
+    },
+    {
+      "id": "KSI-RPL-TRC",
+      "name": "Testing Recovery Capabilities",
+      "status": "applicable",
+      "controls": [
+        "CP-2(1)",
+        "CP-2(3)",
+        "CP-4",
+        "CP-4(1)",
+        "CP-6",
+        "CP-6(1)"
+      ]
+    },
+    {
+      "id": "KSI-SCR-MIT",
+      "name": "Mitigating Supply Chain Risk",
+      "status": "applicable",
+      "controls": [
+        "AC-20",
+        "RA-3(1)",
+        "SA-9",
+        "SA-10",
+        "SA-11",
+        "SA-15(3)"
+      ]
+    },
+    {
+      "id": "KSI-SCR-MON",
+      "name": "Monitoring Supply Chain Risk",
+      "status": "applicable",
+      "controls": [
+        "AC-20",
+        "CA-3",
+        "IR-6(3)",
+        "PS-7",
+        "RA-5",
+        "SA-9"
+      ]
+    },
+    {
+      "id": "KSI-SVC-ACM",
+      "name": "Automating Configuration Management",
+      "status": "applicable",
+      "controls": [
+        "AC-2(4)",
+        "CM-2",
+        "CM-2(2)",
+        "CM-2(3)",
+        "CM-6",
+        "CM-7(1)"
+      ]
+    },
+    {
+      "id": "KSI-SVC-ASM",
+      "name": "Automating Secret Management",
+      "status": "applicable",
+      "controls": [
+        "AC-17(2)",
+        "IA-5(2)",
+        "IA-5(6)",
+        "SC-12",
+        "SC-17"
+      ]
+    },
+    {
+      "id": "KSI-SVC-EIS",
+      "name": "Evaluating and Improving Security",
+      "status": "applicable",
+      "controls": [
+        "CM-7(1)",
+        "CM-12(1)",
+        "MA-2",
+        "PL-8",
+        "SC-7",
+        "SC-39"
+      ]
+    },
+    {
+      "id": "KSI-SVC-PRR",
+      "name": "Preventing Residual Risk",
+      "status": "optional",
+      "controls": [
+        "SC-4"
+      ]
+    },
+    {
+      "id": "KSI-SVC-RUD",
+      "name": "Removing Unwanted Data",
+      "status": "optional",
+      "controls": [
+        "SI-12(3)",
+        "SI-18(4)"
+      ]
+    },
+    {
+      "id": "KSI-SVC-SIN",
+      "name": "Securing Information",
+      "status": "applicable",
+      "controls": [
+        "AC-1",
+        "AC-17(2)",
+        "CP-9(8)",
+        "SC-8",
+        "SC-8(1)",
+        "SC-13"
+      ]
+    },
+    {
+      "id": "KSI-SVC-VCM",
+      "name": "Validating Communications",
+      "status": "optional",
+      "controls": [
+        "SC-23",
+        "SI-7(1)"
+      ]
+    },
+    {
+      "id": "KSI-SVC-VRI",
+      "name": "Validating Resource Integrity",
+      "status": "applicable",
+      "controls": [
+        "CM-2(2)",
+        "CM-8(3)",
+        "SC-13",
+        "SC-23",
+        "SI-7",
+        "SI-7(1)"
+      ]
+    }
+  ],
+  "documentation": [
+    {
+      "id": "FRC-CSX-VVK",
+      "name": "Automated Verification and Validation of Key Security Indicators",
+      "class": "b",
+      "force": "SHOULD",
+      "statement": "Providers seeking 20x Class B Certification SHOULD implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators with at least 1 automated method for each Key Security Indicator.",
+      "timeframe_type": null,
+      "timeframe_num": null,
+      "following_information": null,
+      "requires_documentation": true
+    },
+    {
+      "id": "FRC-CSX-MOT",
+      "name": "Metrics Over Time for Key Security Indicators",
+      "class": "b",
+      "force": "SHOULD",
+      "statement": "Providers seeking 20x Class B Certification SHOULD supply historical metrics for Key Security Indicators.",
+      "timeframe_type": null,
+      "timeframe_num": null,
+      "following_information": null,
+      "requires_documentation": true
+    },
+    {
+      "id": "SDR-CSX-KMT",
+      "name": "Key Security Indicator Metrics",
+      "class": "b",
+      "force": "MUST",
+      "statement": "Providers with 20x Class B Certifications MUST also include historical metrics in their Security Decision Record, supplying at least the following information for each applicable Key Security Indicator:",
+      "timeframe_type": null,
+      "timeframe_num": null,
+      "following_information": [
+        "Summary of each metric over the past 30 days",
+        "Summary of metric up to the past year (where available)"
+      ],
+      "requires_documentation": true
+    },
+    {
+      "id": "CPO-CSO-OSA",
+      "name": "Overall Summary of Assessment in Certification Package",
+      "class": "b",
+      "force": "MUST",
+      "statement": "Providers seeking Class B Certification MUST also include the overall summary of their FedRAMP independent assessment, supplied by the assessor per IVV-IAS-OSA (Overall Summary of Assessment), in their Certification Package Overview.",
+      "timeframe_type": null,
+      "timeframe_num": null,
+      "following_information": null,
+      "requires_documentation": true
+    },
+    {
+      "id": "CPO-CSX-CPM",
+      "name": "Certification Package Maintenance for 20x",
+      "class": "b",
+      "force": "MUST",
+      "statement": "Providers with 20x Class B Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every month.",
+      "timeframe_type": "months",
+      "timeframe_num": 1,
+      "following_information": null,
+      "requires_documentation": true
+    },
+    {
+      "id": "CPO-CSO-OVR",
+      "name": "Overview of the Cloud Service Offering",
+      "class": "b",
+      "force": "APPLICABLE",
+      "statement": "Providers MUST supply a Certification Package Overview within their FedRAMP Certification Package, in both human-readable and JSON formats, that includes at least all of the information required by the following rules:",
+      "requires_documentation": true
+    },
+    {
+      "id": "CPO-CSO-MTD",
+      "name": "Certification Package Overview Metadata",
+      "class": "b",
+      "force": "APPLICABLE",
+      "statement": "Providers MUST also include the following basic metadata in their Certification Package Overview:",
+      "requires_documentation": true
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "alert_id": "d1d1248111c65899",
+  "created_at": "2026-08-02T18:06:40.082269Z",
+  "trigger": "iac_changed",
+  "severity": "high",
+  "summary": "[HIGH] Terraform change touches policy-as-code links: 1 resource delta(s), 1 lifecycle gap(s). Documentation review required to keep the control lifecycle complete.",
+  "gaps": [
+    {
+      "kind": "iac_changed_requires_doc_review",
+      "severity": "high",
+      "detail": "Terraform aws_iam_policy.require_mfa was changed. Linked policy language: 'Privileged accounts must use multi-factor authentication'. Update or re-validate the documentation in the same change set.",
+      "link_id": "lnk-mfa-privileged",
+      "doc_id": "pol-ac-001",
+      "statement_anchor": "Privileged accounts must use multi-factor authentication",
+      "iac_ref": "aws_iam_policy.require_mfa",
+      "recommended_action": "Open/update document 'pol-ac-001' so the obligation remains accurate for this Terraform behavior, then re-run sync-check."
+    }
+  ],
+  "changed_paths": [
+    "/agent/grc-pdf-mapper/examples/viewer/data/tf-head.tf"
+  ],
+  "linked_statements": [
+    "Privileged accounts must use multi-factor authentication"
+  ],
+  "linked_iac": [
+    "aws_iam_policy.require_mfa"
+  ],
+  "frameworks": [
+    "AC-3",
+    "CC6.1",
+    "IA-2",
+    "KSI-IAM-APM",
+    "KSI-IAM-ELP"
+  ],
+  "recommended_actions": [
+    "Open/update document 'pol-ac-001' so the obligation remains accurate for this Terraform behavior, then re-run sync-check."
+  ],
+  "metadata": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  }
+}

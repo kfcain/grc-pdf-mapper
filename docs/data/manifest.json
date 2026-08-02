@@ -1,0 +1,47 @@
+{
+  "title": "GRC PDF Mapper examples",
+  "sections": [
+    {
+      "id": "impact",
+      "title": "Document change impact",
+      "files": [
+        "impact-alert.json",
+        "report-v1.json",
+        "report-v2.json"
+      ]
+    },
+    {
+      "id": "pac",
+      "title": "Policy-as-code lock-step",
+      "files": [
+        "pac-completeness.json",
+        "pac-iac-impact.json",
+        "pac-completeness.md",
+        "pac-iac-impact.md"
+      ]
+    },
+    {
+      "id": "fedramp",
+      "title": "FedRAMP CR26 KSI by class",
+      "files": [
+        "fedramp-class-a.json",
+        "fedramp-class-b.json",
+        "fedramp-class-c.json",
+        "fedramp-class-d.json"
+      ]
+    }
+  ],
+  "files": [
+    "fedramp-class-a.json",
+    "fedramp-class-b.json",
+    "fedramp-class-c.json",
+    "fedramp-class-d.json",
+    "impact-alert.json",
+    "pac-completeness.json",
+    "pac-completeness.md",
+    "pac-iac-impact.json",
+    "pac-iac-impact.md",
+    "report-v1.json",
+    "report-v2.json"
+  ]
+}

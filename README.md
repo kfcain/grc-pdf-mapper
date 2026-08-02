@@ -34,17 +34,18 @@ grc-pdf evidence report.json AC-2
 
 ## View examples
 
-Hosted gallery on GitHub Pages after the repository is published:
+Live gallery (GitHub Pages):
 
 https://kfcain.github.io/grc-pdf-mapper/
 
-
-The gallery source is [`examples/viewer/`](examples/viewer/). Each push to `main` deploys it with [`.github/workflows/pages-examples.yml`](.github/workflows/pages-examples.yml).
+Gallery source: [`examples/viewer/`](examples/viewer/). Published from [`docs/`](docs/) on the `main` branch.
 
 Regenerate demo artifacts:
 
 ```bash
 bash examples/generate_viewer_data.sh
+# then refresh the Pages root:
+cp -a examples/viewer/index.html docs/index.html && cp -a examples/viewer/data docs/data
 ```
 
 ## Labs
