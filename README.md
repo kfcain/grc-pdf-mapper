@@ -36,9 +36,8 @@ grc-pdf evidence report.json AC-2
 
 Hosted gallery on GitHub Pages after the repository is published:
 
-https://OWNER.github.io/grc-pdf-mapper/
+https://kfcain.github.io/grc-pdf-mapper/
 
-Replace `OWNER` with the GitHub account that owns the repository.
 
 The gallery source is [`examples/viewer/`](examples/viewer/). Each push to `main` deploys it with [`.github/workflows/pages-examples.yml`](.github/workflows/pages-examples.yml).
 
