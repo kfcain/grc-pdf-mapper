@@ -483,6 +483,57 @@ def pac_impact_cmd(
         raise typer.Exit(1)
 
 
+@app.command("scf-map")
+def scf_map_cmd(
+    control_id: str = typer.Argument(..., help="Framework or SCF control id (e.g. AC-2, IAC-01, CC6.1)"),
+    offline: bool = typer.Option(False, help="Use bundled SCF seed only"),
+    json_out: Optional[Path] = typer.Option(None, "--json"),
+) -> None:
+    """Map a control id through the Secure Controls Framework (SCF) API."""
+    from grc_pdf_mapper.models import ControlStatement, ObligationStrength
+    from grc_pdf_mapper.scf import SCF_ATTRIBUTION, ScfClient, is_scf_control_id
+
+    stmt = ControlStatement(
+        statement_id="cli-scf-map",
+        text=f"Map control {control_id}",
+        strength=ObligationStrength.SHOULD,
+        keywords=[],
+        candidate_framework_ids=[control_id],
+        content_hash="cli",
+    )
+    # If the user passes a topic-like token with no id shape, treat as keyword domain.
+    if not is_scf_control_id(control_id) and "-" not in control_id and "." not in control_id:
+        stmt.candidate_framework_ids = []
+        stmt.keywords = [control_id.lower().replace(" ", "_")]
+
+    with ScfClient(offline=offline) as scf:
+        hits = scf.map_statement(stmt)
+
+    console.print(f"[bold]SCF map[/bold]: {control_id}")
+    console.print(f"Hits: {len(hits)}")
+    console.print(SCF_ATTRIBUTION)
+    table = Table(title="SCF crosswalk")
+    table.add_column("Framework")
+    table.add_column("Control")
+    table.add_column("Title")
+    table.add_column("Rel")
+    table.add_column("Conf")
+    for hit in hits[:40]:
+        table.add_row(
+            hit.framework,
+            hit.control_id,
+            (hit.title or "")[:48],
+            hit.relationship,
+            f"{hit.confidence:.2f}",
+        )
+    console.print(table)
+    if json_out:
+        json_out.write_text(
+            json.dumps([h.model_dump() for h in hits], indent=2),
+            encoding="utf-8",
+        )
+
+
 @app.command("fedramp-ksi")
 def fedramp_ksi_cmd(
     class_id: str = typer.Option("c", "--class", help="FedRAMP class a|b|c|d"),

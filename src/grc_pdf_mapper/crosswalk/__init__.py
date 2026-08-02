@@ -1,4 +1,4 @@
-"""Framework crosswalk clients: OpenCRE, OSA, NIST OSCAL, local seed map."""
+"""Framework crosswalk clients: SCF API, OpenCRE, OSA, NIST OSCAL, local seed map."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from typing import Iterable
 import httpx
 
 from grc_pdf_mapper.models import ControlStatement, CrosswalkHit
+from grc_pdf_mapper.scf import SCF_API_BASE, ScfClient
 
 OPENCRE_BASE = "https://opencre.org/rest/v1"
 OSA_BASE = "https://opensecurityarchitecture.org/api/v1"
@@ -79,7 +80,7 @@ _OPENCRE_STANDARD_ALIASES = {
 
 
 class CrosswalkClient:
-    """Aggregate local seed maps with live OpenCRE / OSA / OSCAL lookups."""
+    """Aggregate SCF API maps with seed, FedRAMP, OpenCRE / OSA / OSCAL lookups."""
 
     def __init__(
         self,
@@ -89,15 +90,23 @@ class CrosswalkClient:
         client: httpx.Client | None = None,
         fedramp_class: str | None = None,
         fedramp_catalog_path: str | None = None,
+        scf_base_url: str = SCF_API_BASE,
+        use_scf: bool = True,
     ) -> None:
         self.offline = offline
         self.fedramp_class = fedramp_class
         self.fedramp_catalog_path = fedramp_catalog_path
+        self.scf_base_url = scf_base_url
+        self.use_scf = use_scf
         self._owns_client = client is None
         self.client = client or httpx.Client(timeout=timeout, follow_redirects=True)
         self._oscal_index: dict[str, str] | None = None
+        self._scf: ScfClient | None = None
 
     def close(self) -> None:
+        if self._scf is not None:
+            self._scf.close()
+            self._scf = None
         if self._owns_client:
             self.client.close()
 
@@ -109,6 +118,9 @@ class CrosswalkClient:
 
     def map_statement(self, statement: ControlStatement) -> list[CrosswalkHit]:
         hits: list[CrosswalkHit] = []
+        # SCF is the primary framework backbone (online API + offline seed).
+        if self.use_scf:
+            hits.extend(self._scf_hits(statement))
         hits.extend(self._seed_hits(statement))
         hits.extend(self._explicit_id_hits(statement))
         hits.extend(self._fedramp_ksi_hits(statement))
@@ -216,6 +228,22 @@ class CrosswalkClient:
                 catalog_path=self.fedramp_catalog_path,
             )
         except FileNotFoundError:
+            return []
+
+    def _scf_client(self) -> ScfClient:
+        if self._scf is None:
+            # Share the httpx client; ScfClient must not close it on exit.
+            self._scf = ScfClient(
+                base_url=self.scf_base_url,
+                offline=self.offline,
+                client=self.client,
+            )
+        return self._scf
+
+    def _scf_hits(self, statement: ControlStatement) -> list[CrosswalkHit]:
+        try:
+            return self._scf_client().map_statement(statement)
+        except (httpx.HTTPError, OSError, ValueError, KeyError, TypeError):
             return []
 
     def _explicit_id_hits(self, statement: ControlStatement) -> list[CrosswalkHit]:
@@ -326,6 +354,13 @@ def _guess_framework(control_id: str) -> str:
     cid = control_id.upper()
     if re.match(r"^(AC|AT|AU|CA|CM|CP|IA|IR|MA|MP|PE|PL|PM|PS|PT|RA|SA|SC|SI|SR)-\d+", cid):
         return "NIST 800-53"
+    if re.match(
+        r"^(AAT|AST|BCD|CAP|CFG|CHG|CLD|CPL|CRY|DCH|EMB|END|GOV|HRS|IAC|IAO|"
+        r"IRO|MDM|MNT|MON|NET|OPS|PES|PRI|PRM|RSK|SAT|SEA|TDA|THR|TPM|VPM|WEB)"
+        r"-\d+",
+        cid,
+    ):
+        return "SCF"
     if cid.startswith("CC") or cid.startswith("P1") or cid.startswith("A1"):
         return "SOC 2"
     if re.match(r"^\d+\.\d+", cid) or cid.startswith("A."):

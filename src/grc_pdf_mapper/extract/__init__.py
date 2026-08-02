@@ -22,6 +22,10 @@ _CONTROL_ID_RE = re.compile(
     r"(?<![A-Za-z-])("
     r"(?:AC|AT|AU|CA|CM|CP|IA|IR|MA|MP|PE|PL|PM|PS|PT|RA|SA|SC|SI|SR)"
     r"-\d+(?:\(\d+\))?|"
+    # SCF family-control ids (e.g. IAC-01, CRY-05.3, GOV-01)
+    r"(?:AAT|AST|BCD|CAP|CFG|CHG|CLD|CPL|CRY|DCH|EMB|END|GOV|HRS|IAC|IAO|"
+    r"IRO|MDM|MNT|MON|NET|OPS|PES|PRI|PRM|RSK|SAT|SEA|TDA|THR|TPM|VPM|WEB)"
+    r"-\d+(?:\.\d+)?|"
     r"A\.?\d+(?:\.\d+)+|"
     r"CC\d+\.\d+|"
     r"PR\.(?:AA|AT|CM|DS|IP|PT)-\d+|"

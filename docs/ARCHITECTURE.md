@@ -26,7 +26,7 @@ Corporate PDF / Markdown
  Control statement miner
         │
         ▼
- Crosswalk (OpenCRE · OSA · OSCAL · FedRAMP CR26 KSI · seed)
+ Crosswalk (SCF API · FedRAMP CR26 KSI · OpenCRE · OSA · OSCAL · seed)
         │
         ├─ Lineage store
         ├─ Impact / assessment alerts
@@ -43,12 +43,18 @@ marker, explicit framework citations, and topic keywords.
 ## Crosswalk strategy
 
 1. Explicit citations win.
-2. FedRAMP CR26 KSIs map from NIST controls and topic language, with class A–D status.
-3. OpenCRE / OSA enrich when online.
-4. NIST OSCAL supplies 800-53 titles.
-5. Seed maps keep offline workflows useful.
+2. **SCF API** (Secure Controls Framework) is the primary backbone: cited
+   controls resolve to SCF ids, then fan out across NIST / ISO / SOC 2 /
+   CSF / CIS / PCI (live API online; bundled seed offline).
+3. FedRAMP CR26 KSIs map from NIST controls and topic language, with class A–D status.
+4. OpenCRE / OSA enrich when online.
+5. NIST OSCAL supplies 800-53 titles.
+6. Seed maps keep offline workflows useful.
 
-Every mapping records its `source`.
+Every mapping records its `source` (`scf-api`, `seed`, `fedramp-cr26-ksi`, …).
+
+SCF data is CC BY-ND 4.0 from [securecontrolsframework.com](https://securecontrolsframework.com).
+API: [GRCEngClub/scf-api](https://github.com/GRCEngClub/scf-api) (ethanolivertroy).
 
 ## Document lineage
 
