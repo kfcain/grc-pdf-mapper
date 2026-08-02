@@ -1,0 +1,166 @@
+name: Document Change Impact
+
+on:
+  pull_request:
+    paths:
+      - "lab/policies/**"
+      - "policies/**"
+      - "**/*policy*.md"
+      - "**/*procedure*.md"
+      - "**/*standard*.md"
+  workflow_dispatch:
+    inputs:
+      doc_path:
+        description: "Policy path to compare against default branch"
+        required: true
+        default: "lab/policies/access-control.md"
+      doc_id:
+        description: "Stable document id"
+        required: true
+        default: "pol-ac-001"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  impact:
+    name: Framework & assessment impact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install grc-pdf-mapper
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Resolve changed policy files
+        id: changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "files=${{ inputs.doc_path }}" >> "$GITHUB_OUTPUT"
+            echo "doc_id=${{ inputs.doc_id }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          mapfile -t FILES < <(git diff --name-only --diff-filter=AM "$BASE_SHA"...HEAD \
+            | grep -E '(^lab/policies/|^policies/|policy|procedure|standard).*\.(md|markdown|txt)$' \
+            || true)
+
+          if [ "${#FILES[@]}" -eq 0 ]; then
+            echo "files=" >> "$GITHUB_OUTPUT"
+            echo "No controlled document changes detected."
+            exit 0
+          fi
+
+          # Lab default: first changed file; map known path to doc id.
+          FILE="${FILES[0]}"
+          DOC_ID="$(basename "$FILE" | sed 's/\.[^.]*$//' | tr '[:upper:]' '[:lower:]' | tr ' _' '-')"
+          if [[ "$FILE" == *access-control* ]]; then
+            DOC_ID="pol-ac-001"
+          fi
+          echo "files=$FILE" >> "$GITHUB_OUTPUT"
+          echo "doc_id=$DOC_ID" >> "$GITHUB_OUTPUT"
+          printf 'Changed controlled docs:\n'
+          printf ' - %s\n' "${FILES[@]}"
+
+      - name: Materialize base and head copies
+        if: steps.changes.outputs.files != ''
+        id: copies
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILE="${{ steps.changes.outputs.files }}"
+          mkdir -p /tmp/doc-impact
+          HEAD_COPY="/tmp/doc-impact/head.md"
+          BASE_COPY="/tmp/doc-impact/base.md"
+          cp "$FILE" "$HEAD_COPY"
+
+          BASE_REF="${{ github.event.pull_request.base.sha || github.event.repository.default_branch }}"
+          if git cat-file -e "${BASE_REF}:${FILE}" 2>/dev/null; then
+            git show "${BASE_REF}:${FILE}" > "$BASE_COPY"
+          else
+            printf '%s\n' '# New controlled document' '' 'This file did not exist on the base branch.' > "$BASE_COPY"
+          fi
+
+          echo "base=$BASE_COPY" >> "$GITHUB_OUTPUT"
+          echo "head=$HEAD_COPY" >> "$GITHUB_OUTPUT"
+
+      - name: Run document impact analysis
+        id: impact
+        if: steps.changes.outputs.files != ''
+        continue-on-error: true
+        env:
+          ASSESSMENTS_PATH: lab/assessments.json
+        run: |
+          python scripts/ci_doc_impact.py \
+            --base-file "${{ steps.copies.outputs.base }}" \
+            --head-file "${{ steps.copies.outputs.head }}" \
+            --doc-id "${{ steps.changes.outputs.doc_id }}" \
+            --assessments "${ASSESSMENTS_PATH}" \
+            --fail-on high \
+            --comment-out impact-comment.md \
+            --json-out impact-alert.json \
+            --offline
+
+      - name: Upload impact artifacts
+        if: steps.changes.outputs.files != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: document-change-impact
+          path: |
+            impact-comment.md
+            impact-alert.json
+            .grc-lineage-ci/alerts/
+          if-no-files-found: warn
+
+      - name: Comment on pull request
+        if: steps.changes.outputs.files != '' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.existsSync('impact-comment.md')
+              ? fs.readFileSync('impact-comment.md', 'utf8')
+              : '## Document change impact\n\nNo impact report was generated.';
+            const marker = '<!-- grc-pdf-mapper-impact -->';
+            const finalBody = `${marker}\n${body}`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find(c => c.user.type === 'Bot' && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: finalBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: finalBody,
+              });
+            }
+
+      - name: Fail job on high/critical impact
+        if: steps.changes.outputs.files != '' && steps.impact.outcome == 'failure'
+        run: |
+          echo "::error::Document language change may affect frameworks or assessments. See the PR comment and impact artifacts."
+          exit 1

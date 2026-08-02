@@ -43,9 +43,7 @@ Gallery source: [`examples/viewer/`](examples/viewer/). Published from [`docs/`]
 Regenerate demo artifacts:
 
 ```bash
-bash examples/generate_viewer_data.sh
-# then refresh the Pages root:
-cp -a examples/viewer/index.html docs/index.html && cp -a examples/viewer/data docs/data
+bash examples/sync_pages_gallery.sh
 ```
 
 ## Labs

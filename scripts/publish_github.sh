@@ -13,19 +13,18 @@ else
   git push -u origin HEAD
 fi
 
-# Host examples/viewer on GitHub Pages (Actions source).
+# Host docs/ (examples gallery) on GitHub Pages.
 gh api -X POST "repos/{owner}/{repo}/pages" \
-  -f build_type=workflow \
+  -f build_type=legacy \
   -f source[branch]=main \
-  -f source[path]=/ \
+  -f source[path]=/docs \
   2>/dev/null || gh api -X PUT "repos/{owner}/{repo}/pages" \
-  -f build_type=workflow \
-  -f source[branch]=main \
-  -f source[path]=/ \
-  2>/dev/null || true
+  --input - <<'JSON' 2>/dev/null || true
+{"build_type":"legacy","source":{"branch":"main","path":"/docs"}}
+JSON
 
 OWNER="$(gh repo view --json owner -q .owner.login)"
 REPO="$(gh repo view --json name -q .name)"
+gh repo edit "$OWNER/$REPO" --homepage "https://${OWNER}.github.io/${REPO}/" 2>/dev/null || true
 echo "Repository: https://github.com/${OWNER}/${REPO}"
 echo "Examples gallery: https://${OWNER}.github.io/${REPO}/"
-gh browse
