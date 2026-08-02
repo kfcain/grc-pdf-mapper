@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GRC PDF Mapper · Examples</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #10231c;
+      --paper: #f3efe4;
+      --panel: #fffdf8;
+      --line: #cfc6b4;
+      --accent: #0f6b5c;
+      --accent-2: #b45309;
+      --warn: #9f1239;
+      --ok: #166534;
+      --muted: #5b645e;
+      --shadow: 0 18px 50px rgba(16, 35, 28, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Source Sans 3", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(15, 107, 92, 0.12), transparent 34%),
+        radial-gradient(circle at 88% 0%, rgba(180, 83, 9, 0.10), transparent 28%),
+        linear-gradient(180deg, #ebe4d4 0%, var(--paper) 42%, #e7e1d3 100%);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    header.hero {
+      display: grid;
+      gap: 0.75rem;
+      padding: 2rem 0 1.5rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.5rem;
+    }
+    .brand {
+      font-family: "Newsreader", Georgia, serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    .lede {
+      max-width: 42rem;
+      color: var(--muted);
+      font-size: 1.08rem;
+      margin: 0;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.35rem;
+    }
+    .chip {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.75rem;
+      border: 1px solid var(--line);
+      background: rgba(255,253,248,0.7);
+      padding: 0.28rem 0.55rem;
+    }
+    nav.tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0 1.25rem;
+    }
+    nav.tabs button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      padding: 0.55rem 0.85rem;
+      font: 600 0.92rem "Source Sans 3", sans-serif;
+      cursor: pointer;
+    }
+    nav.tabs button[aria-selected="true"] {
+      background: var(--ink);
+      color: #f7f3ea;
+      border-color: var(--ink);
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .file-list, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .file-list { padding: 0.75rem; }
+    .file-list h2 {
+      margin: 0 0 0.6rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .file-list button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: 0;
+      background: transparent;
+      padding: 0.45rem 0.4rem;
+      font: 400 0.86rem/1.3 "IBM Plex Mono", ui-monospace, monospace;
+      color: var(--ink);
+      cursor: pointer;
+      border-bottom: 1px solid rgba(207,198,180,0.55);
+    }
+    .file-list button[aria-current="true"] {
+      background: rgba(15, 107, 92, 0.1);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .panel { padding: 1rem 1rem 1.25rem; min-height: 28rem; }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: baseline;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-head h1 {
+      margin: 0;
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .sev {
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.45rem;
+      border: 1px solid currentColor;
+    }
+    .sev.critical, .sev.high { color: var(--warn); }
+    .sev.medium { color: var(--accent-2); }
+    .sev.low, .sev.info { color: var(--ok); }
+    pre {
+      margin: 0;
+      overflow: auto;
+      max-height: 70vh;
+      font: 400 0.82rem/1.45 "IBM Plex Mono", ui-monospace, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .summary {
+      margin: 0 0 0.9rem;
+      padding: 0.75rem 0.85rem;
+      background: rgba(15, 107, 92, 0.08);
+      border-left: 3px solid var(--accent);
+      font-size: 0.98rem;
+    }
+    .empty { color: var(--muted); padding: 2rem 0; }
+    footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <p class="brand">GRC PDF Mapper</p>
+      <p class="lede">Example outputs from document impact analysis, policy-as-code lock-step checks, and FedRAMP CR26 KSI class mappings.</p>
+      <div class="meta">
+        <span class="chip">uses Firecrawl pdf-inspector</span>
+        <span class="chip">static gallery</span>
+        <span class="chip">offline samples</span>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs" aria-label="Example sections"></nav>
+
+    <div class="layout">
+      <aside class="file-list">
+        <h2>Files</h2>
+        <div id="files"></div>
+      </aside>
+      <section class="panel">
+        <div class="panel-head">
+          <h1 id="filename">Select a file</h1>
+          <span id="badge" class="sev info" hidden></span>
+        </div>
+        <p id="summary" class="summary" hidden></p>
+        <pre id="content" class="empty">Load data/manifest.json by serving this folder over HTTP.</pre>
+      </section>
+    </div>
+
+    <footer>
+      PDF extraction capability from
+      <a href="https://github.com/firecrawl/pdf-inspector">Firecrawl pdf-inspector</a>.
+      Regenerate samples with <code>bash examples/generate_viewer_data.sh</code>.
+    </footer>
+  </div>
+
+  <script>
+    const state = { manifest: null, sectionId: null, file: null };
+
+    async function boot() {
+      try {
+        const res = await fetch("./data/manifest.json");
+        if (!res.ok) throw new Error("missing manifest");
+        state.manifest = await res.json();
+        renderTabs();
+        selectSection(state.manifest.sections[0].id);
+      } catch (err) {
+        document.getElementById("content").textContent =
+          "Could not load data/manifest.json.\\n\\nServe this folder over HTTP:\\n  python3 -m http.server 8765 --directory examples/viewer\\n\\nThen regenerate samples if needed:\\n  bash examples/generate_viewer_data.sh";
+      }
+    }
+
+    function renderTabs() {
+      const tabs = document.getElementById("tabs");
+      tabs.innerHTML = "";
+      for (const section of state.manifest.sections) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = section.title;
+        btn.dataset.id = section.id;
+        btn.addEventListener("click", () => selectSection(section.id));
+        tabs.appendChild(btn);
+      }
+    }
+
+    function selectSection(id) {
+      state.sectionId = id;
+      for (const btn of document.querySelectorAll("#tabs button")) {
+        btn.setAttribute("aria-selected", String(btn.dataset.id === id));
+      }
+      const section = state.manifest.sections.find((s) => s.id === id);
+      const files = document.getElementById("files");
+      files.innerHTML = "";
+      for (const name of section.files) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = name;
+        btn.addEventListener("click", () => loadFile(name));
+        files.appendChild(btn);
+      }
+      if (section.files.length) loadFile(section.files[0]);
+    }
+
+    async function loadFile(name) {
+      state.file = name;
+      for (const btn of document.querySelectorAll("#files button")) {
+        btn.setAttribute("aria-current", String(btn.textContent === name));
+      }
+      document.getElementById("filename").textContent = name;
+      const res = await fetch("./data/" + name);
+      const text = await res.text();
+      const badge = document.getElementById("badge");
+      const summary = document.getElementById("summary");
+      badge.hidden = true;
+      summary.hidden = true;
+
+      if (name.endsWith(".json")) {
+        try {
+          const data = JSON.parse(text);
+          if (data.severity) {
+            badge.hidden = false;
+            badge.className = "sev " + String(data.severity).toLowerCase();
+            badge.textContent = String(data.severity).toUpperCase();
+          }
+          if (data.summary) {
+            summary.hidden = false;
+            summary.textContent = data.summary;
+          }
+          document.getElementById("content").textContent = JSON.stringify(data, null, 2);
+          return;
+        } catch (_) {}
+      }
+      document.getElementById("content").textContent = text;
+    }
+
+    boot();
+  </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+{
+  "links": [
+    {
+      "link_id": "lnk-mfa-privileged",
+      "doc_id": "pol-ac-001",
+      "statement_anchor": "Privileged accounts must use multi-factor authentication",
+      "statement_keywords": ["privileged", "multi-factor"],
+      "control_ids": ["IA-2", "AC-3", "CC6.1", "KSI-IAM-APM", "KSI-IAM-ELP"],
+      "iac_paths": ["lab/iac/access_control/main.tf"],
+      "terraform_addresses": [
+        "aws_iam_policy.require_mfa",
+        "aws_iam_account_password_policy.org_baseline"
+      ],
+      "terraform_resource_types": ["aws_iam_policy"],
+      "tags": {
+        "capability": "mfa-enforcement"
+      },
+      "owner": "Identity Engineering",
+      "direction": "bidirectional",
+      "notes": "IAM deny-without-MFA policy implements privileged MFA obligation."
+    },
+    {
+      "link_id": "lnk-unique-accounts",
+      "doc_id": "pol-ac-001",
+      "statement_anchor": "User accounts must be uniquely assigned to an individual",
+      "statement_keywords": ["uniquely assigned"],
+      "control_ids": ["AC-2", "KSI-IAM-AAM", "KSI-IAM-SNU"],
+      "iac_paths": ["lab/iac/access_control/main.tf"],
+      "terraform_addresses": ["aws_iam_user.example_human_user"],
+      "terraform_resource_types": ["aws_iam_user"],
+      "owner": "Identity Engineering",
+      "direction": "bidirectional",
+      "notes": "Human IAM users must map 1:1; no shared interactive admins."
+    },
+    {
+      "link_id": "lnk-orphaned-disable",
+      "doc_id": "pol-ac-001",
+      "statement_anchor": "Orphaned accounts shall be disabled within 24 hours of detection",
+      "statement_keywords": ["orphaned", "24 hours"],
+      "control_ids": ["AC-2", "KSI-IAM-AAM", "KSI-IAM-SUS"],
+      "iac_paths": ["lab/iac/access_control/main.tf"],
+      "terraform_addresses": ["aws_iam_role.orphaned_account_janitor"],
+      "terraform_resource_types": ["aws_iam_role"],
+      "owner": "IAM Automation",
+      "direction": "bidirectional",
+      "notes": "Automation role backs the 24-hour disable SLA in policy."
+    },
+    {
+      "link_id": "lnk-auth-logging",
+      "doc_id": "pol-ac-001",
+      "statement_anchor": "Authentication events must be logged centrally",
+      "statement_keywords": ["authentication events", "logged centrally"],
+      "control_ids": ["AU-2", "AU-6", "KSI-MLA-LET", "KSI-MLA-RVL"],
+      "iac_paths": ["lab/iac/access_control/main.tf"],
+      "terraform_addresses": ["aws_cloudtrail.auth_events"],
+      "terraform_resource_types": ["aws_cloudtrail"],
+      "owner": "Security Operations",
+      "direction": "bidirectional",
+      "notes": "CloudTrail management events provide central auth logging evidence."
+    }
+  ]
+}

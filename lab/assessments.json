@@ -1,0 +1,79 @@
+{
+  "assessments": [
+    {
+      "assessment_id": "soc2-type2-2026",
+      "name": "SOC 2 Type II 2026",
+      "frameworks": ["SOC 2", "NIST 800-53", "NIST CSF 2.0"],
+      "doc_ids": ["pol-ac-001"],
+      "owner": "GRC Lead",
+      "status": "active",
+      "due_date": "2026-12-31"
+    },
+    {
+      "assessment_id": "iso27001-surveillance-2026",
+      "name": "ISO 27001 Surveillance 2026",
+      "frameworks": ["ISO 27001", "NIST 800-53"],
+      "doc_ids": ["pol-ac-001"],
+      "owner": "ISMS Manager",
+      "status": "active",
+      "due_date": "2026-09-30"
+    },
+    {
+      "assessment_id": "customer-trust-questionnaire",
+      "name": "Enterprise Customer Trust Questionnaire Pack",
+      "frameworks": ["SOC 2", "ISO 27001", "NIST CSF 2.0"],
+      "doc_ids": ["pol-ac-001"],
+      "owner": "Trust & Compliance",
+      "status": "active"
+    },
+    {
+      "assessment_id": "internal-change-control-review",
+      "name": "Internal Document Change-Control Review",
+      "frameworks": ["NIST 800-53", "ISO 27001", "SOC 2", "NIST CSF 2.0", "FedRAMP KSI"],
+      "doc_ids": [],
+      "owner": "Document Control Office",
+      "status": "active"
+    },
+    {
+      "assessment_id": "fedramp-20x-class-a",
+      "name": "FedRAMP 20x Class A Certification",
+      "frameworks": ["FedRAMP KSI", "NIST 800-53", "FedRAMP"],
+      "doc_ids": ["pol-ac-001"],
+      "owner": "FedRAMP Program Manager",
+      "status": "active",
+      "fedramp_class": "a",
+      "certification_type": "20x"
+    },
+    {
+      "assessment_id": "fedramp-20x-class-b",
+      "name": "FedRAMP 20x Class B Certification",
+      "frameworks": ["FedRAMP KSI", "NIST 800-53", "FedRAMP"],
+      "doc_ids": ["pol-ac-001"],
+      "owner": "FedRAMP Program Manager",
+      "status": "active",
+      "fedramp_class": "b",
+      "certification_type": "20x"
+    },
+    {
+      "assessment_id": "fedramp-20x-class-c",
+      "name": "FedRAMP 20x Class C Certification",
+      "frameworks": ["FedRAMP KSI", "NIST 800-53", "FedRAMP"],
+      "doc_ids": ["pol-ac-001"],
+      "owner": "FedRAMP Program Manager",
+      "status": "active",
+      "due_date": "2026-12-31",
+      "fedramp_class": "c",
+      "certification_type": "20x"
+    },
+    {
+      "assessment_id": "fedramp-20x-class-d",
+      "name": "FedRAMP 20x Class D Certification",
+      "frameworks": ["FedRAMP KSI", "NIST 800-53", "FedRAMP"],
+      "doc_ids": ["pol-ac-001"],
+      "owner": "FedRAMP Program Manager",
+      "status": "active",
+      "fedramp_class": "d",
+      "certification_type": "20x"
+    }
+  ]
+}

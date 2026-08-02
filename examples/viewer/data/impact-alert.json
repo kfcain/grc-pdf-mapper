@@ -1,0 +1,269 @@
+{
+  "alert_id": "44021b867ef3fe70",
+  "created_at": "2026-08-02T18:06:39.722129Z",
+  "doc_id": "pol-ac-001",
+  "older_snapshot_id": "9a9f56d6d0f96b50d3a8",
+  "newer_snapshot_id": "b2d24c7df14c0ae5703e",
+  "version_from": "v2.1",
+  "version_to": "v2.2",
+  "severity": "critical",
+  "summary": "[CRITICAL] Document 'pol-ac-001' language changed (6 risked obligation deltas). Frameworks possibly affected: CIS Controls, FedRAMP KSI, ISO 27001, NIST 800-53. Assessments possibly affected: SOC 2 Type II 2026, ISO 27001 Surveillance 2026, Enterprise Customer Trust Questionnaire Pack.",
+  "verbiage_changes": [
+    {
+      "change_kind": "obligation_rewritten",
+      "before_text": "Security operations shall review privileged access anomalies weekly.",
+      "after_text": "Security operations shall review privileged access anomalies daily.",
+      "before_strength": "must",
+      "after_strength": "must",
+      "before_statement_id": "pol-ac-001:6742dee184e8093f",
+      "after_statement_id": "pol-ac-001:b9e495f2fdafcb26",
+      "similarity": 0.948,
+      "risk_note": "Control language was rewritten. Re-validate mapped controls and evidence."
+    },
+    {
+      "change_kind": "obligation_removed",
+      "before_text": "Older runbooks may still mention ISO 27001:2013 and NIST CSF 1.1.",
+      "after_text": null,
+      "before_strength": "may",
+      "after_strength": null,
+      "before_statement_id": "pol-ac-001:4580818a60db4136",
+      "after_statement_id": null,
+      "similarity": 0.0,
+      "risk_note": "Control language was removed. Evidence for mapped controls may fail."
+    },
+    {
+      "change_kind": "sla_changed",
+      "before_text": "Orphaned accounts shall be disabled within 24 hours of detection.",
+      "after_text": "Orphaned accounts shall be disabled within 4 hours of detection.",
+      "before_strength": "must",
+      "after_strength": "must",
+      "before_statement_id": "pol-ac-001:af399ddeb0d66516",
+      "after_statement_id": "pol-ac-001:64b4849f11c3df87",
+      "similarity": 0.992,
+      "risk_note": "Response window tightened from within 24 hours to within 4 hours."
+    },
+    {
+      "change_kind": "obligation_rewritten",
+      "before_text": "Account reviews must occur at least quarterly.",
+      "after_text": "Account reviews must occur at least monthly.",
+      "before_strength": "must",
+      "after_strength": "must",
+      "before_statement_id": "pol-ac-001:ef89e54aa9c91878",
+      "after_statement_id": "pol-ac-001:d2c7beb7ab940b91",
+      "similarity": 0.889,
+      "risk_note": "Control language was rewritten. Re-validate mapped controls and evidence."
+    },
+    {
+      "change_kind": "obligation_removed",
+      "before_text": "Owners must update those references during the next revision cycle.",
+      "after_text": null,
+      "before_strength": "must",
+      "after_strength": null,
+      "before_statement_id": "pol-ac-001:4dd63f0049761b6e",
+      "after_statement_id": null,
+      "similarity": 0.0,
+      "risk_note": "Control language was removed. Evidence for mapped controls may fail."
+    },
+    {
+      "change_kind": "sla_changed",
+      "before_text": "Temporary elevated access should expire within 24 hours.",
+      "after_text": "Temporary elevated access should expire within 8 hours.",
+      "before_strength": "should",
+      "after_strength": "should",
+      "before_statement_id": "pol-ac-001:e9b82fed203e2b76",
+      "after_statement_id": "pol-ac-001:f3e2ac6f0e50c681",
+      "similarity": 0.973,
+      "risk_note": "Response window tightened from within 24 hours to within 8 hours."
+    },
+    {
+      "change_kind": "obligation_added",
+      "before_text": null,
+      "after_text": "All external framework citations must reference ISO/IEC 27001:2022 and NIST CSF 2.0.",
+      "before_strength": null,
+      "after_strength": "must",
+      "before_statement_id": null,
+      "after_statement_id": "pol-ac-001:0265e97042597aa9",
+      "similarity": 0.0,
+      "risk_note": "New obligation added. Confirm owners and evidence still align."
+    },
+    {
+      "change_kind": "obligation_added",
+      "before_text": null,
+      "after_text": "Joiner-mover-leaver workflows must update access within one business day of an HR status change.",
+      "before_strength": null,
+      "after_strength": "must",
+      "before_statement_id": null,
+      "after_statement_id": "pol-ac-001:d32fabfb686db0b9",
+      "similarity": 0.0,
+      "risk_note": "New obligation added. Confirm owners and evidence still align."
+    }
+  ],
+  "frameworks_impacted": [
+    {
+      "framework": "CIS Controls",
+      "control_ids": [
+        "CIS 5.1"
+      ],
+      "risk": "critical",
+      "reason": "Control language was rewritten. Re-validate mapped controls and evidence.; Control language was removed. Evidence for mapped controls may fail.; Response window tightened from within 24 hours to within 4 hours."
+    },
+    {
+      "framework": "FedRAMP KSI",
+      "control_ids": [
+        "KSI-IAM-AAM",
+        "KSI-IAM-APM",
+        "KSI-IAM-ELP",
+        "KSI-IAM-JIT",
+        "KSI-IAM-SNU",
+        "KSI-IAM-SUS"
+      ],
+      "risk": "medium",
+      "reason": "Control language was rewritten. Re-validate mapped controls and evidence.; Response window tightened from within 24 hours to within 4 hours."
+    },
+    {
+      "framework": "ISO 27001",
+      "control_ids": [
+        "5.15",
+        "8.15",
+        "8.5"
+      ],
+      "risk": "critical",
+      "reason": "Control language was rewritten. Re-validate mapped controls and evidence.; Control language was removed. Evidence for mapped controls may fail.; Response window tightened from within 24 hours to within 4 hours."
+    },
+    {
+      "framework": "NIST 800-53",
+      "control_ids": [
+        "AC-2",
+        "AC-3",
+        "AU-2",
+        "AU-6",
+        "IA-2"
+      ],
+      "risk": "critical",
+      "reason": "Control language was rewritten. Re-validate mapped controls and evidence.; Control language was removed. Evidence for mapped controls may fail.; Response window tightened from within 24 hours to within 4 hours."
+    },
+    {
+      "framework": "NIST CSF 2.0",
+      "control_ids": [
+        "DE.CM-01",
+        "PR.AA-01"
+      ],
+      "risk": "critical",
+      "reason": "Control language was rewritten. Re-validate mapped controls and evidence.; Control language was removed. Evidence for mapped controls may fail.; Response window tightened from within 24 hours to within 4 hours."
+    },
+    {
+      "framework": "SOC 2",
+      "control_ids": [
+        "CC6.1",
+        "CC7.2"
+      ],
+      "risk": "critical",
+      "reason": "Control language was rewritten. Re-validate mapped controls and evidence.; Control language was removed. Evidence for mapped controls may fail.; Response window tightened from within 24 hours to within 4 hours."
+    }
+  ],
+  "assessments_impacted": [
+    {
+      "assessment_id": "soc2-type2-2026",
+      "assessment_name": "SOC 2 Type II 2026",
+      "frameworks_at_risk": [
+        "NIST 800-53",
+        "NIST CSF 2.0",
+        "SOC 2"
+      ],
+      "risk": "critical",
+      "reason": "Policy language change may affect NIST 800-53, NIST CSF 2.0, SOC 2 evidence for assessment 'SOC 2 Type II 2026'."
+    },
+    {
+      "assessment_id": "iso27001-surveillance-2026",
+      "assessment_name": "ISO 27001 Surveillance 2026",
+      "frameworks_at_risk": [
+        "ISO 27001",
+        "NIST 800-53"
+      ],
+      "risk": "critical",
+      "reason": "Policy language change may affect ISO 27001, NIST 800-53 evidence for assessment 'ISO 27001 Surveillance 2026'."
+    },
+    {
+      "assessment_id": "customer-trust-questionnaire",
+      "assessment_name": "Enterprise Customer Trust Questionnaire Pack",
+      "frameworks_at_risk": [
+        "ISO 27001",
+        "NIST CSF 2.0",
+        "SOC 2"
+      ],
+      "risk": "critical",
+      "reason": "Policy language change may affect ISO 27001, NIST CSF 2.0, SOC 2 evidence for assessment 'Enterprise Customer Trust Questionnaire Pack'."
+    },
+    {
+      "assessment_id": "internal-change-control-review",
+      "assessment_name": "Internal Document Change-Control Review",
+      "frameworks_at_risk": [
+        "FedRAMP KSI",
+        "ISO 27001",
+        "NIST 800-53",
+        "NIST CSF 2.0",
+        "SOC 2"
+      ],
+      "risk": "critical",
+      "reason": "Policy language change may affect FedRAMP KSI, ISO 27001, NIST 800-53, NIST CSF 2.0, SOC 2 evidence for assessment 'Internal Document Change-Control Review'."
+    },
+    {
+      "assessment_id": "fedramp-20x-class-a",
+      "assessment_name": "FedRAMP 20x Class A Certification",
+      "frameworks_at_risk": [
+        "FedRAMP",
+        "FedRAMP KSI",
+        "NIST 800-53"
+      ],
+      "risk": "critical",
+      "reason": "Policy language change may affect FedRAMP, FedRAMP KSI, NIST 800-53 evidence for assessment 'FedRAMP 20x Class A Certification'. FedRAMP Class A certification documentation / KSI evidence may need update."
+    },
+    {
+      "assessment_id": "fedramp-20x-class-b",
+      "assessment_name": "FedRAMP 20x Class B Certification",
+      "frameworks_at_risk": [
+        "FedRAMP",
+        "FedRAMP KSI",
+        "NIST 800-53"
+      ],
+      "risk": "critical",
+      "reason": "Policy language change may affect FedRAMP, FedRAMP KSI, NIST 800-53 evidence for assessment 'FedRAMP 20x Class B Certification'. FedRAMP Class B certification documentation / KSI evidence may need update."
+    },
+    {
+      "assessment_id": "fedramp-20x-class-c",
+      "assessment_name": "FedRAMP 20x Class C Certification",
+      "frameworks_at_risk": [
+        "FedRAMP",
+        "FedRAMP KSI",
+        "NIST 800-53"
+      ],
+      "risk": "critical",
+      "reason": "Policy language change may affect FedRAMP, FedRAMP KSI, NIST 800-53 evidence for assessment 'FedRAMP 20x Class C Certification'. FedRAMP Class C certification documentation / KSI evidence may need update."
+    },
+    {
+      "assessment_id": "fedramp-20x-class-d",
+      "assessment_name": "FedRAMP 20x Class D Certification",
+      "frameworks_at_risk": [
+        "FedRAMP",
+        "FedRAMP KSI",
+        "NIST 800-53"
+      ],
+      "risk": "critical",
+      "reason": "Policy language change may affect FedRAMP, FedRAMP KSI, NIST 800-53 evidence for assessment 'FedRAMP 20x Class D Certification'. FedRAMP Class D certification documentation / KSI evidence may need update."
+    }
+  ],
+  "recommended_actions": [
+    "Review the changed obligation language with the control owner.",
+    "Update the control narrative and evidence links before the next assessment window.",
+    "Do not publish this version as approved until GRC confirms audit impact.",
+    "Re-run crosswalk coverage for: CIS Controls, FedRAMP KSI, ISO 27001, NIST 800-53, NIST CSF 2.0, SOC 2",
+    "Notify assessment owners: Enterprise Customer Trust Questionnaire Pack, FedRAMP 20x Class A Certification, FedRAMP 20x Class B Certification, FedRAMP 20x Class C Certification, FedRAMP 20x Class D Certification, ISO 27001 Surveillance 2026, Internal Document Change-Control Review, SOC 2 Type II 2026",
+    "FedRAMP Class B documentation must stay current: SDR-CSX-KMT (Key Security Indicator Metrics), CPO-CSO-OSA (Overall Summary of Assessment in Certification Package), CPO-CSX-CPM (Certification Package Maintenance for 20x). Update the Certification Package / Security Decision Record with the policy change.",
+    "Certification Package maintenance cadence for Class B: every 1 months.",
+    "FedRAMP Class C documentation must stay current: FRC-CSX-VVK (Automated Verification and Validation of Key Security Indicators), FRC-CSX-MOT (Metrics Over Time for Key Security Indicators), SDR-CSX-KMT (Key Security Indicator Metrics), CPO-CSO-OSA (Overall Summary of Assessment in Certification Package). Update the Certification Package / Security Decision Record with the policy change.",
+    "Certification Package maintenance cadence for Class C: every 2 weeks.",
+    "FedRAMP Class D documentation must stay current: FRC-CSX-VVK (Automated Verification and Validation of Key Security Indicators), FRC-CSX-MOT (Metrics Over Time for Key Security Indicators), SDR-CSX-KMT (Key Security Indicator Metrics), CPO-CSO-OSA (Overall Summary of Assessment in Certification Package). Update the Certification Package / Security Decision Record with the policy change.",
+    "Certification Package maintenance cadence for Class D: every 1 weeks."
+  ],
+  "metadata": {}
+}

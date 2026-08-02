@@ -1,0 +1,13 @@
+# Document Control + GRC review gates for controlled docs.
+# Replace team handles with your org teams after fork.
+
+* @document-control @grc-team
+
+lab/policies/** @document-control @grc-team @security-governance
+lab/iac/** @security-engineering @platform-eng @grc-team
+lab/policy-as-code-links.json @grc-team @security-engineering
+lab/assessments.json @grc-team
+lab/DOCUMENT-CHANGE-CONTROL.md @document-control
+lab/POLICY-AS-CODE.md @grc-team @platform-eng
+.github/workflows/doc-change-impact.yml @grc-team @platform-eng
+.github/workflows/policy-as-code-lockstep.yml @grc-team @platform-eng @security-engineering

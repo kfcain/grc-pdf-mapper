@@ -1,0 +1,2123 @@
+{
+  "source": {
+    "title": "FedRAMP Consolidated Rules for 2026",
+    "version": "2026.07.14.01",
+    "last_updated": "2026-07-14",
+    "upstream": "https://github.com/FedRAMP/rules/blob/main/fedramp-consolidated-rules.json",
+    "ruleset": "CR26 / FedRAMP Consolidated Rules for 2026"
+  },
+  "classes": {
+    "a": {
+      "name": "Class A",
+      "legacy": null,
+      "notes": "20x Pilot / minimal assurance; KSI automation MAY"
+    },
+    "b": {
+      "name": "Class B",
+      "legacy": "Low",
+      "notes": "KSI automation SHOULD (min 1 method per KSI)"
+    },
+    "c": {
+      "name": "Class C",
+      "legacy": "Moderate",
+      "notes": "KSI automation MUST (min 2 methods per KSI)"
+    },
+    "d": {
+      "name": "Class D",
+      "legacy": "High",
+      "notes": "KSI automation MUST (min 4 methods per KSI)"
+    }
+  },
+  "domains": {
+    "CED": {
+      "id": "KSI-CED",
+      "name": "Cybersecurity Education",
+      "short_name": "CED",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-CED-RAT",
+          "name": "Reviewing All Training",
+          "statement": "The effectiveness of relevant cybersecurity education and training is persistently reviewed, including at least general training for all employees, role-specific training for employees in high risk roles, training for development and engineering staff on secure software delivery, and training for staff involved with incident response or disaster recovery.",
+          "controls_raw": [
+            "cp-3",
+            "ir-2",
+            "ps-6",
+            "at-2",
+            "at-2.2",
+            "at-2.3",
+            "at-3.5",
+            "at-4",
+            "ir-2.3",
+            "at-3",
+            "sr-11.1"
+          ],
+          "controls_nist": [
+            "CP-3",
+            "IR-2",
+            "PS-6",
+            "AT-2",
+            "AT-2(2)",
+            "AT-2(3)",
+            "AT-3(5)",
+            "AT-4",
+            "IR-2(3)",
+            "AT-3",
+            "SR-11(1)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The effectiveness of relevant cybersecurity education and training is persistently reviewed, including at least general training for all employees, role-specific training for employees in high risk roles, training for development and engineering staff on secure software delivery, and training for staff involved with incident response or disaster recovery.",
+            "b": "The effectiveness of relevant cybersecurity education and training is persistently reviewed, including at least general training for all employees, role-specific training for employees in high risk roles, training for development and engineering staff on secure software delivery, and training for staff involved with incident response or disaster recovery.",
+            "c": "The effectiveness of relevant cybersecurity education and training is persistently reviewed, including at least general training for all employees, role-specific training for employees in high risk roles, training for development and engineering staff on secure software delivery, and training for staff involved with incident response or disaster recovery.",
+            "d": "The effectiveness of relevant cybersecurity education and training is persistently reviewed, including at least general training for all employees, role-specific training for employees in high risk roles, training for development and engineering staff on secure software delivery, and training for staff involved with incident response or disaster recovery."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "CMT": {
+      "id": "KSI-CMT",
+      "name": "Change Management",
+      "short_name": "CMT",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-CMT-LMC",
+          "name": "Logging Changes",
+          "statement": "Modifications to the cloud service offering are logged and monitored.",
+          "controls_raw": [
+            "au-2",
+            "cm-3",
+            "cm-3.2",
+            "cm-4.2",
+            "cm-6",
+            "cm-8.3",
+            "ma-2"
+          ],
+          "controls_nist": [
+            "AU-2",
+            "CM-3",
+            "CM-3(2)",
+            "CM-4(2)",
+            "CM-6",
+            "CM-8(3)",
+            "MA-2"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Modifications to the cloud service offering are logged and monitored.",
+            "b": "Modifications to the cloud service offering are logged and monitored.",
+            "c": "Modifications to the cloud service offering are logged and monitored.",
+            "d": "Modifications to the cloud service offering are logged and monitored."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CMT-RMV",
+          "name": "Redeploying vs Modifying",
+          "statement": "Changes to machine-based information resources are executed through the redeployment of version controlled resources rather than direct modification wherever reasonable.",
+          "controls_raw": [
+            "cm-2",
+            "cm-3",
+            "cm-5",
+            "cm-6",
+            "cm-7",
+            "cm-8.1",
+            "si-3"
+          ],
+          "controls_nist": [
+            "CM-2",
+            "CM-3",
+            "CM-5",
+            "CM-6",
+            "CM-7",
+            "CM-8(1)",
+            "SI-3"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Changes to machine-based information resources are executed through the redeployment of version controlled resources rather than direct modification wherever reasonable.",
+            "b": "Changes to machine-based information resources are executed through the redeployment of version controlled resources rather than direct modification wherever reasonable.",
+            "c": "Changes to machine-based information resources are executed through the redeployment of version controlled resources rather than direct modification wherever reasonable.",
+            "d": "Changes to machine-based information resources are executed through the redeployment of version controlled resources rather than direct modification wherever reasonable."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CMT-RVP",
+          "name": "Reviewing Change Procedures",
+          "statement": "The effectiveness of documented change management procedures is persistently reviewed.",
+          "controls_raw": [
+            "cm-3",
+            "cm-3.2",
+            "cm-3.4",
+            "cm-5",
+            "cm-7.1",
+            "cm-9"
+          ],
+          "controls_nist": [
+            "CM-3",
+            "CM-3(2)",
+            "CM-3(4)",
+            "CM-5",
+            "CM-7(1)",
+            "CM-9"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The effectiveness of documented change management procedures is persistently reviewed.",
+            "b": "The effectiveness of documented change management procedures is persistently reviewed.",
+            "c": "The effectiveness of documented change management procedures is persistently reviewed.",
+            "d": "The effectiveness of documented change management procedures is persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CMT-VTD",
+          "name": "Validating Throughout Deployment",
+          "statement": "Persistent testing and validation of changes throughout deployment is automated.",
+          "controls_raw": [
+            "cm-3",
+            "cm-3.2",
+            "cm-4.2",
+            "si-2"
+          ],
+          "controls_nist": [
+            "CM-3",
+            "CM-3(2)",
+            "CM-4(2)",
+            "SI-2"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Persistent testing and validation of changes throughout deployment is automated.",
+            "b": "Persistent testing and validation of changes throughout deployment is automated.",
+            "c": "Persistent testing and validation of changes throughout deployment is automated.",
+            "d": "Persistent testing and validation of changes throughout deployment is automated."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "CNA": {
+      "id": "KSI-CNA",
+      "name": "Cloud Native Architecture",
+      "short_name": "CNA",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-CNA-DFP",
+          "name": "Defining Functionality and Privileges",
+          "statement": "The functionality and privileges for infrastructure and services are strictly defined.",
+          "controls_raw": [
+            "cm-2",
+            "si-3"
+          ],
+          "controls_nist": [
+            "CM-2",
+            "SI-3"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The functionality and privileges for infrastructure and services are strictly defined.",
+            "b": "The functionality and privileges for infrastructure and services are strictly defined.",
+            "c": "The functionality and privileges for infrastructure and services are strictly defined.",
+            "d": "The functionality and privileges for infrastructure and services are strictly defined."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CNA-EIS",
+          "name": "Enforcing Intended State",
+          "statement": null,
+          "controls_raw": [
+            "ca-2.1",
+            "ca-7.1"
+          ],
+          "controls_nist": [
+            "CA-2(1)",
+            "CA-7(1)"
+          ],
+          "class_applicability": {
+            "a": "optional",
+            "b": "optional",
+            "c": "required",
+            "d": "required"
+          },
+          "class_statements": {
+            "a": "Class A: treat as optional unless adopted for pilot evidence.",
+            "b": "**Optional:** Automated services are used to persistently assess the security of all machine-based information resources and automatically enforce their intended operational state.",
+            "c": "Automated services are used to persistently assess the security of all machine-based information resources and automatically enforce their intended operational state.",
+            "d": "Automated services are used to persistently assess the security of all machine-based information resources and automatically enforce their intended operational state."
+          },
+          "varies_by_class": true,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CNA-IBP",
+          "name": "Implementing Best Practices",
+          "statement": "The use and configuration of third-party machine-based information resources is persistently compared against the original provider's best practices and guidance.",
+          "controls_raw": [
+            "ac-17.3",
+            "cm-2",
+            "pl-10"
+          ],
+          "controls_nist": [
+            "AC-17(3)",
+            "CM-2",
+            "PL-10"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The use and configuration of third-party machine-based information resources is persistently compared against the original provider's best practices and guidance.",
+            "b": "The use and configuration of third-party machine-based information resources is persistently compared against the original provider's best practices and guidance.",
+            "c": "The use and configuration of third-party machine-based information resources is persistently compared against the original provider's best practices and guidance.",
+            "d": "The use and configuration of third-party machine-based information resources is persistently compared against the original provider's best practices and guidance."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CNA-MAT",
+          "name": "Minimizing Attack Surface",
+          "statement": "Machine-based information resources are persistently reviewed to ensure they have a minimal attack surface and that lateral movement is minimized if compromised.",
+          "controls_raw": [
+            "ac-17.3",
+            "ac-18.1",
+            "ac-18.3",
+            "ac-20.1",
+            "ca-9",
+            "sc-7.3",
+            "sc-7.4",
+            "sc-7.5",
+            "sc-7.8",
+            "sc-8",
+            "sc-10",
+            "si-10",
+            "si-11",
+            "si-16"
+          ],
+          "controls_nist": [
+            "AC-17(3)",
+            "AC-18(1)",
+            "AC-18(3)",
+            "AC-20(1)",
+            "CA-9",
+            "SC-7(3)",
+            "SC-7(4)",
+            "SC-7(5)",
+            "SC-7(8)",
+            "SC-8",
+            "SC-10",
+            "SI-10",
+            "SI-11",
+            "SI-16"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Machine-based information resources are persistently reviewed to ensure they have a minimal attack surface and that lateral movement is minimized if compromised.",
+            "b": "Machine-based information resources are persistently reviewed to ensure they have a minimal attack surface and that lateral movement is minimized if compromised.",
+            "c": "Machine-based information resources are persistently reviewed to ensure they have a minimal attack surface and that lateral movement is minimized if compromised.",
+            "d": "Machine-based information resources are persistently reviewed to ensure they have a minimal attack surface and that lateral movement is minimized if compromised."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CNA-OFA",
+          "name": "Optimizing for Availability",
+          "statement": "Machine-based information resources are persistently reviewed to ensure they are appropriately optimized for high availability and rapid recovery.",
+          "controls_raw": [],
+          "controls_nist": [],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Machine-based information resources are persistently reviewed to ensure they are appropriately optimized for high availability and rapid recovery.",
+            "b": "Machine-based information resources are persistently reviewed to ensure they are appropriately optimized for high availability and rapid recovery.",
+            "c": "Machine-based information resources are persistently reviewed to ensure they are appropriately optimized for high availability and rapid recovery.",
+            "d": "Machine-based information resources are persistently reviewed to ensure they are appropriately optimized for high availability and rapid recovery."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CNA-RNT",
+          "name": "Restricting Network Traffic",
+          "statement": "Machine-based information resources are persistently reviewed to ensure they are appropriately configured to limit inbound and outbound network traffic.",
+          "controls_raw": [
+            "ac-17.3",
+            "ca-9",
+            "cm-7.1",
+            "sc-7.5",
+            "si-8"
+          ],
+          "controls_nist": [
+            "AC-17(3)",
+            "CA-9",
+            "CM-7(1)",
+            "SC-7(5)",
+            "SI-8"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Machine-based information resources are persistently reviewed to ensure they are appropriately configured to limit inbound and outbound network traffic.",
+            "b": "Machine-based information resources are persistently reviewed to ensure they are appropriately configured to limit inbound and outbound network traffic.",
+            "c": "Machine-based information resources are persistently reviewed to ensure they are appropriately configured to limit inbound and outbound network traffic.",
+            "d": "Machine-based information resources are persistently reviewed to ensure they are appropriately configured to limit inbound and outbound network traffic."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CNA-RVP",
+          "name": "Reviewing Protections",
+          "statement": "The effectiveness of protection against denial of service attacks and other unwanted activity for machine-based information resources is persistently reviewed.",
+          "controls_raw": [
+            "sc-5",
+            "si-8",
+            "si-8.2"
+          ],
+          "controls_nist": [
+            "SC-5",
+            "SI-8",
+            "SI-8(2)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The effectiveness of protection against denial of service attacks and other unwanted activity for machine-based information resources is persistently reviewed.",
+            "b": "The effectiveness of protection against denial of service attacks and other unwanted activity for machine-based information resources is persistently reviewed.",
+            "c": "The effectiveness of protection against denial of service attacks and other unwanted activity for machine-based information resources is persistently reviewed.",
+            "d": "The effectiveness of protection against denial of service attacks and other unwanted activity for machine-based information resources is persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-CNA-ULN",
+          "name": "Using Logical Networking",
+          "statement": "Logical networking and related capabilities are used and persistently reviewed to enforce traffic flow controls.",
+          "controls_raw": [
+            "ac-12",
+            "ac-17.3",
+            "ca-9",
+            "sc-4",
+            "sc-7",
+            "sc-7.7",
+            "sc-8",
+            "sc-10"
+          ],
+          "controls_nist": [
+            "AC-12",
+            "AC-17(3)",
+            "CA-9",
+            "SC-4",
+            "SC-7",
+            "SC-7(7)",
+            "SC-8",
+            "SC-10"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Logical networking and related capabilities are used and persistently reviewed to enforce traffic flow controls.",
+            "b": "Logical networking and related capabilities are used and persistently reviewed to enforce traffic flow controls.",
+            "c": "Logical networking and related capabilities are used and persistently reviewed to enforce traffic flow controls.",
+            "d": "Logical networking and related capabilities are used and persistently reviewed to enforce traffic flow controls."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "IAM": {
+      "id": "KSI-IAM",
+      "name": "Identity and Access Management",
+      "short_name": "IAM",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-IAM-AAM",
+          "name": "Automating Account Management",
+          "statement": "The lifecycle and privileges of all accounts, roles, and groups are securely managed using automation.",
+          "controls_raw": [
+            "ac-2.2",
+            "ac-2.3",
+            "ac-2.13",
+            "ac-6.7",
+            "ia-4.4",
+            "ia-12",
+            "ia-12.2",
+            "ia-12.3",
+            "ia-12.5"
+          ],
+          "controls_nist": [
+            "AC-2(2)",
+            "AC-2(3)",
+            "AC-2(13)",
+            "AC-6(7)",
+            "IA-4(4)",
+            "IA-12",
+            "IA-12(2)",
+            "IA-12(3)",
+            "IA-12(5)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The lifecycle and privileges of all accounts, roles, and groups are securely managed using automation.",
+            "b": "The lifecycle and privileges of all accounts, roles, and groups are securely managed using automation.",
+            "c": "The lifecycle and privileges of all accounts, roles, and groups are securely managed using automation.",
+            "d": "The lifecycle and privileges of all accounts, roles, and groups are securely managed using automation."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-IAM-APM",
+          "name": "Adopting Passwordless Methods",
+          "statement": "Secure passwordless methods are used for user authentication and authorization when feasible, otherwise strong passwords with phishing-resistant MFA is used.",
+          "controls_raw": [
+            "ac-3",
+            "ia-5.1",
+            "ia-5.2",
+            "ia-5.6",
+            "ia-6",
+            "ac-2",
+            "ia-2",
+            "ia-2.1",
+            "ia-2.2",
+            "ia-2.8",
+            "ia-5",
+            "ia-8",
+            "sc-23"
+          ],
+          "controls_nist": [
+            "AC-3",
+            "IA-5(1)",
+            "IA-5(2)",
+            "IA-5(6)",
+            "IA-6",
+            "AC-2",
+            "IA-2",
+            "IA-2(1)",
+            "IA-2(2)",
+            "IA-2(8)",
+            "IA-5",
+            "IA-8",
+            "SC-23"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Secure passwordless methods are used for user authentication and authorization when feasible, otherwise strong passwords with phishing-resistant MFA is used.",
+            "b": "Secure passwordless methods are used for user authentication and authorization when feasible, otherwise strong passwords with phishing-resistant MFA is used.",
+            "c": "Secure passwordless methods are used for user authentication and authorization when feasible, otherwise strong passwords with phishing-resistant MFA is used.",
+            "d": "Secure passwordless methods are used for user authentication and authorization when feasible, otherwise strong passwords with phishing-resistant MFA is used."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-IAM-ELP",
+          "name": "Ensuring Least Privilege",
+          "statement": "Identity and access management measures are used and persistently reviewed to ensure each user or device can only access the resources they need.",
+          "controls_raw": [
+            "ac-2.5",
+            "ac-2.6",
+            "ac-3",
+            "ac-4",
+            "ac-6",
+            "ac-12",
+            "ac-14",
+            "ac-17",
+            "ac-17.1",
+            "ac-17.2",
+            "ac-17.3",
+            "ac-20",
+            "ac-20.1",
+            "cm-2.7",
+            "cm-9",
+            "ia-2",
+            "ia-3",
+            "ia-4",
+            "ia-4.4",
+            "ia-5.2",
+            "ia-5.6",
+            "ia-11",
+            "ps-2",
+            "ps-3",
+            "ps-4",
+            "ps-5",
+            "ps-6",
+            "sc-4",
+            "sc-20",
+            "sc-21",
+            "sc-22",
+            "sc-23",
+            "sc-39",
+            "si-3"
+          ],
+          "controls_nist": [
+            "AC-2(5)",
+            "AC-2(6)",
+            "AC-3",
+            "AC-4",
+            "AC-6",
+            "AC-12",
+            "AC-14",
+            "AC-17",
+            "AC-17(1)",
+            "AC-17(2)",
+            "AC-17(3)",
+            "AC-20",
+            "AC-20(1)",
+            "CM-2(7)",
+            "CM-9",
+            "IA-2",
+            "IA-3",
+            "IA-4",
+            "IA-4(4)",
+            "IA-5(2)",
+            "IA-5(6)",
+            "IA-11",
+            "PS-2",
+            "PS-3",
+            "PS-4",
+            "PS-5",
+            "PS-6",
+            "SC-4",
+            "SC-20",
+            "SC-21",
+            "SC-22",
+            "SC-23",
+            "SC-39",
+            "SI-3"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Identity and access management measures are used and persistently reviewed to ensure each user or device can only access the resources they need.",
+            "b": "Identity and access management measures are used and persistently reviewed to ensure each user or device can only access the resources they need.",
+            "c": "Identity and access management measures are used and persistently reviewed to ensure each user or device can only access the resources they need.",
+            "d": "Identity and access management measures are used and persistently reviewed to ensure each user or device can only access the resources they need."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-IAM-JIT",
+          "name": "Authorizing Just-in-Time",
+          "statement": "A least-privileged, role and attribute-based, and just-in-time security authorization model is used and persistently reviewed for all user and non-user accounts and services.",
+          "controls_raw": [
+            "ac-2",
+            "ac-2.1",
+            "ac-2.2",
+            "ac-2.3",
+            "ac-2.4",
+            "ac-2.6",
+            "ac-3",
+            "ac-4",
+            "ac-5",
+            "ac-6",
+            "ac-6.1",
+            "ac-6.2",
+            "ac-6.5",
+            "ac-6.7",
+            "ac-6.9",
+            "ac-6.10",
+            "ac-7",
+            "ac-20.1",
+            "ac-17",
+            "au-9.4",
+            "cm-5",
+            "cm-7",
+            "cm-7.2",
+            "cm-7.5",
+            "cm-9",
+            "ia-4",
+            "ia-4.4",
+            "ia-7",
+            "ps-2",
+            "ps-3",
+            "ps-4",
+            "ps-5",
+            "ps-6",
+            "ps-9",
+            "ra-5.5",
+            "sc-2",
+            "sc-23",
+            "sc-39"
+          ],
+          "controls_nist": [
+            "AC-2",
+            "AC-2(1)",
+            "AC-2(2)",
+            "AC-2(3)",
+            "AC-2(4)",
+            "AC-2(6)",
+            "AC-3",
+            "AC-4",
+            "AC-5",
+            "AC-6",
+            "AC-6(1)",
+            "AC-6(2)",
+            "AC-6(5)",
+            "AC-6(7)",
+            "AC-6(9)",
+            "AC-6(10)",
+            "AC-7",
+            "AC-20(1)",
+            "AC-17",
+            "AU-9(4)",
+            "CM-5",
+            "CM-7",
+            "CM-7(2)",
+            "CM-7(5)",
+            "CM-9",
+            "IA-4",
+            "IA-4(4)",
+            "IA-7",
+            "PS-2",
+            "PS-3",
+            "PS-4",
+            "PS-5",
+            "PS-6",
+            "PS-9",
+            "RA-5(5)",
+            "SC-2",
+            "SC-23",
+            "SC-39"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "A least-privileged, role and attribute-based, and just-in-time security authorization model is used and persistently reviewed for all user and non-user accounts and services.",
+            "b": "A least-privileged, role and attribute-based, and just-in-time security authorization model is used and persistently reviewed for all user and non-user accounts and services.",
+            "c": "A least-privileged, role and attribute-based, and just-in-time security authorization model is used and persistently reviewed for all user and non-user accounts and services.",
+            "d": "A least-privileged, role and attribute-based, and just-in-time security authorization model is used and persistently reviewed for all user and non-user accounts and services."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-IAM-SNU",
+          "name": "Securing Non-User Authentication",
+          "statement": "Appropriately secure authentication methods are used and persistently reviewed for non-user accounts and services.",
+          "controls_raw": [
+            "ac-2",
+            "ac-2.2",
+            "ac-4",
+            "ac-6.5",
+            "ia-3",
+            "ia-5.2",
+            "ra-5.5"
+          ],
+          "controls_nist": [
+            "AC-2",
+            "AC-2(2)",
+            "AC-4",
+            "AC-6(5)",
+            "IA-3",
+            "IA-5(2)",
+            "RA-5(5)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Appropriately secure authentication methods are used and persistently reviewed for non-user accounts and services.",
+            "b": "Appropriately secure authentication methods are used and persistently reviewed for non-user accounts and services.",
+            "c": "Appropriately secure authentication methods are used and persistently reviewed for non-user accounts and services.",
+            "d": "Appropriately secure authentication methods are used and persistently reviewed for non-user accounts and services."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-IAM-SUS",
+          "name": "Responding to Suspicious Activity",
+          "statement": "Accounts with privileged access are disabled or otherwise secured in response to suspicious activity.",
+          "controls_raw": [
+            "ac-2",
+            "ac-2.1",
+            "ac-2.3",
+            "ac-2.13",
+            "ac-7",
+            "ps-4",
+            "ps-8"
+          ],
+          "controls_nist": [
+            "AC-2",
+            "AC-2(1)",
+            "AC-2(3)",
+            "AC-2(13)",
+            "AC-7",
+            "PS-4",
+            "PS-8"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Accounts with privileged access are disabled or otherwise secured in response to suspicious activity.",
+            "b": "Accounts with privileged access are disabled or otherwise secured in response to suspicious activity.",
+            "c": "Accounts with privileged access are disabled or otherwise secured in response to suspicious activity.",
+            "d": "Accounts with privileged access are disabled or otherwise secured in response to suspicious activity."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "INR": {
+      "id": "KSI-INR",
+      "name": "Incident Response",
+      "short_name": "INR",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-INR-AAR",
+          "name": "Generating After Action Reports",
+          "statement": "Incident after action reports are generated and lessons learned are persistently incorporated.",
+          "controls_raw": [
+            "ir-3",
+            "ir-4",
+            "ir-4.1",
+            "ir-8"
+          ],
+          "controls_nist": [
+            "IR-3",
+            "IR-4",
+            "IR-4(1)",
+            "IR-8"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Incident after action reports are generated and lessons learned are persistently incorporated.",
+            "b": "Incident after action reports are generated and lessons learned are persistently incorporated.",
+            "c": "Incident after action reports are generated and lessons learned are persistently incorporated.",
+            "d": "Incident after action reports are generated and lessons learned are persistently incorporated."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-INR-RIR",
+          "name": "Reviewing Incident Response Procedures",
+          "statement": "The effectiveness of documented incident response procedures is persistently reviewed.",
+          "controls_raw": [
+            "ir-4",
+            "ir-4.1",
+            "ir-6",
+            "ir-6.1",
+            "ir-6.3",
+            "ir-7",
+            "ir-7.1",
+            "ir-8",
+            "ir-8.1",
+            "si-4.5"
+          ],
+          "controls_nist": [
+            "IR-4",
+            "IR-4(1)",
+            "IR-6",
+            "IR-6(1)",
+            "IR-6(3)",
+            "IR-7",
+            "IR-7(1)",
+            "IR-8",
+            "IR-8(1)",
+            "SI-4(5)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The effectiveness of documented incident response procedures is persistently reviewed.",
+            "b": "The effectiveness of documented incident response procedures is persistently reviewed.",
+            "c": "The effectiveness of documented incident response procedures is persistently reviewed.",
+            "d": "The effectiveness of documented incident response procedures is persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-INR-RPI",
+          "name": "Reviewing Past Incidents",
+          "statement": "Past incidents are persistently reviewed for patterns or vulnerabilities that were not previously apparent or identified.",
+          "controls_raw": [
+            "ir-3",
+            "ir-4",
+            "ir-4.1",
+            "ir-5",
+            "ir-8"
+          ],
+          "controls_nist": [
+            "IR-3",
+            "IR-4",
+            "IR-4(1)",
+            "IR-5",
+            "IR-8"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Past incidents are persistently reviewed for patterns or vulnerabilities that were not previously apparent or identified.",
+            "b": "Past incidents are persistently reviewed for patterns or vulnerabilities that were not previously apparent or identified.",
+            "c": "Past incidents are persistently reviewed for patterns or vulnerabilities that were not previously apparent or identified.",
+            "d": "Past incidents are persistently reviewed for patterns or vulnerabilities that were not previously apparent or identified."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "MLA": {
+      "id": "KSI-MLA",
+      "name": "Monitoring, Logging, and Auditing",
+      "short_name": "MLA",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-MLA-ALA",
+          "name": "Authorizing Log Access",
+          "statement": null,
+          "controls_raw": [
+            "si-11"
+          ],
+          "controls_nist": [
+            "SI-11"
+          ],
+          "class_applicability": {
+            "a": "optional",
+            "b": "optional",
+            "c": "required",
+            "d": "required"
+          },
+          "class_statements": {
+            "a": "Class A: treat as optional unless adopted for pilot evidence.",
+            "b": "**Optional:** A least-privileged, role and attribute-based, and just-in-time access authorization model is used and persistently reviewed for access to log data based on organizationally defined data sensitivity.",
+            "c": "A least-privileged, role and attribute-based, and just-in-time access authorization model is used and persistently reviewed for access to log data based on organizationally defined data sensitivity.",
+            "d": "A least-privileged, role and attribute-based, and just-in-time access authorization model is used and persistently reviewed for access to log data based on organizationally defined data sensitivity."
+          },
+          "varies_by_class": true,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-MLA-EVC",
+          "name": "Evaluating Configurations",
+          "statement": "The configuration of machine-based information resources, especially infrastructure as code, is persistently evaluated and tested.",
+          "controls_raw": [
+            "ca-7",
+            "cm-2",
+            "cm-6",
+            "si-7.7"
+          ],
+          "controls_nist": [
+            "CA-7",
+            "CM-2",
+            "CM-6",
+            "SI-7(7)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The configuration of machine-based information resources, especially infrastructure as code, is persistently evaluated and tested.",
+            "b": "The configuration of machine-based information resources, especially infrastructure as code, is persistently evaluated and tested.",
+            "c": "The configuration of machine-based information resources, especially infrastructure as code, is persistently evaluated and tested.",
+            "d": "The configuration of machine-based information resources, especially infrastructure as code, is persistently evaluated and tested."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-MLA-LET",
+          "name": "Logging Event Types",
+          "statement": "A list of information resources and event types that will be logged, monitored, and audited is maintained and persistently reviewed to ensure these activities occur.",
+          "controls_raw": [
+            "ac-2.4",
+            "ac-6.9",
+            "ac-17.1",
+            "ac-20.1",
+            "au-2",
+            "au-7.1",
+            "au-12",
+            "si-4.4",
+            "si-4.5",
+            "si-7.7"
+          ],
+          "controls_nist": [
+            "AC-2(4)",
+            "AC-6(9)",
+            "AC-17(1)",
+            "AC-20(1)",
+            "AU-2",
+            "AU-7(1)",
+            "AU-12",
+            "SI-4(4)",
+            "SI-4(5)",
+            "SI-7(7)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "A list of information resources and event types that will be logged, monitored, and audited is maintained and persistently reviewed to ensure these activities occur.",
+            "b": "A list of information resources and event types that will be logged, monitored, and audited is maintained and persistently reviewed to ensure these activities occur.",
+            "c": "A list of information resources and event types that will be logged, monitored, and audited is maintained and persistently reviewed to ensure these activities occur.",
+            "d": "A list of information resources and event types that will be logged, monitored, and audited is maintained and persistently reviewed to ensure these activities occur."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-MLA-OSM",
+          "name": "Operating SIEM Capability",
+          "statement": "A Security Information and Event Management (SIEM) or similar system(s) is used and persistently reviewed for centralized, tamper-resistant logging of events, activities, and changes.",
+          "controls_raw": [
+            "ac-17.1",
+            "ac-20.1",
+            "au-2",
+            "au-3",
+            "au-3.1",
+            "au-4",
+            "au-5",
+            "au-6.1",
+            "au-6.3",
+            "au-7",
+            "au-7.1",
+            "au-8",
+            "au-9",
+            "au-11",
+            "ir-4.1",
+            "si-4.2",
+            "si-4.4",
+            "si-7.7"
+          ],
+          "controls_nist": [
+            "AC-17(1)",
+            "AC-20(1)",
+            "AU-2",
+            "AU-3",
+            "AU-3(1)",
+            "AU-4",
+            "AU-5",
+            "AU-6(1)",
+            "AU-6(3)",
+            "AU-7",
+            "AU-7(1)",
+            "AU-8",
+            "AU-9",
+            "AU-11",
+            "IR-4(1)",
+            "SI-4(2)",
+            "SI-4(4)",
+            "SI-7(7)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "A Security Information and Event Management (SIEM) or similar system(s) is used and persistently reviewed for centralized, tamper-resistant logging of events, activities, and changes.",
+            "b": "A Security Information and Event Management (SIEM) or similar system(s) is used and persistently reviewed for centralized, tamper-resistant logging of events, activities, and changes.",
+            "c": "A Security Information and Event Management (SIEM) or similar system(s) is used and persistently reviewed for centralized, tamper-resistant logging of events, activities, and changes.",
+            "d": "A Security Information and Event Management (SIEM) or similar system(s) is used and persistently reviewed for centralized, tamper-resistant logging of events, activities, and changes."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-MLA-RVL",
+          "name": "Reviewing Logs",
+          "statement": "Logs are persistently reviewed and audited.",
+          "controls_raw": [
+            "ac-2.4",
+            "ac-6.9",
+            "au-2",
+            "au-6",
+            "au-6.1",
+            "si-4",
+            "si-4.4"
+          ],
+          "controls_nist": [
+            "AC-2(4)",
+            "AC-6(9)",
+            "AU-2",
+            "AU-6",
+            "AU-6(1)",
+            "SI-4",
+            "SI-4(4)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Logs are persistently reviewed and audited.",
+            "b": "Logs are persistently reviewed and audited.",
+            "c": "Logs are persistently reviewed and audited.",
+            "d": "Logs are persistently reviewed and audited."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "PIY": {
+      "id": "KSI-PIY",
+      "name": "Policy and Inventory",
+      "short_name": "PIY",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-PIY-GIV",
+          "name": "Generating Inventories",
+          "statement": "Authoritative sources are used to automatically generate real-time inventories of all information resources when needed.",
+          "controls_raw": [
+            "cm-2.2",
+            "cm-7.5",
+            "cm-8",
+            "cm-8.1",
+            "cm-12",
+            "cm-12.1",
+            "cp-2.8"
+          ],
+          "controls_nist": [
+            "CM-2(2)",
+            "CM-7(5)",
+            "CM-8",
+            "CM-8(1)",
+            "CM-12",
+            "CM-12(1)",
+            "CP-2(8)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Authoritative sources are used to automatically generate real-time inventories of all information resources when needed.",
+            "b": "Authoritative sources are used to automatically generate real-time inventories of all information resources when needed.",
+            "c": "Authoritative sources are used to automatically generate real-time inventories of all information resources when needed.",
+            "d": "Authoritative sources are used to automatically generate real-time inventories of all information resources when needed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-PIY-RES",
+          "name": "Reviewing Executive Support",
+          "statement": "Executive support for achieving the provider's security goals is persistently reviewed and demonstrated.",
+          "controls_raw": [],
+          "controls_nist": [],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Executive support for achieving the provider's security goals is persistently reviewed and demonstrated.",
+            "b": "Executive support for achieving the provider's security goals is persistently reviewed and demonstrated.",
+            "c": "Executive support for achieving the provider's security goals is persistently reviewed and demonstrated.",
+            "d": "Executive support for achieving the provider's security goals is persistently reviewed and demonstrated."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-PIY-RIS",
+          "name": "Reviewing Investments in Security",
+          "statement": "The effectiveness of the provider's investments in achieving security goals is persistently reviewed.",
+          "controls_raw": [
+            "ac-5",
+            "ca-2",
+            "cp-2.1",
+            "cp-4.1",
+            "ir-3.2",
+            "pm-3",
+            "sa-2",
+            "sa-3",
+            "sr-2.1"
+          ],
+          "controls_nist": [
+            "AC-5",
+            "CA-2",
+            "CP-2(1)",
+            "CP-4(1)",
+            "IR-3(2)",
+            "PM-3",
+            "SA-2",
+            "SA-3",
+            "SR-2(1)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The effectiveness of the provider's investments in achieving security goals is persistently reviewed.",
+            "b": "The effectiveness of the provider's investments in achieving security goals is persistently reviewed.",
+            "c": "The effectiveness of the provider's investments in achieving security goals is persistently reviewed.",
+            "d": "The effectiveness of the provider's investments in achieving security goals is persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-PIY-RSD",
+          "name": "Reviewing Security in the SDLC",
+          "statement": "The effectiveness of building security and privacy considerations into the Software Development Lifecycle and aligning with CISA Secure By Design principles is persistently reviewed.",
+          "controls_raw": [
+            "ac-5",
+            "au-3.3",
+            "cm-3.4",
+            "pl-8",
+            "pm-7",
+            "sa-3",
+            "sa-8",
+            "sc-4",
+            "sc-18",
+            "si-10",
+            "si-11",
+            "si-16"
+          ],
+          "controls_nist": [
+            "AC-5",
+            "AU-3(3)",
+            "CM-3(4)",
+            "PL-8",
+            "PM-7",
+            "SA-3",
+            "SA-8",
+            "SC-4",
+            "SC-18",
+            "SI-10",
+            "SI-11",
+            "SI-16"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The effectiveness of building security and privacy considerations into the Software Development Lifecycle and aligning with CISA Secure By Design principles is persistently reviewed.",
+            "b": "The effectiveness of building security and privacy considerations into the Software Development Lifecycle and aligning with CISA Secure By Design principles is persistently reviewed.",
+            "c": "The effectiveness of building security and privacy considerations into the Software Development Lifecycle and aligning with CISA Secure By Design principles is persistently reviewed.",
+            "d": "The effectiveness of building security and privacy considerations into the Software Development Lifecycle and aligning with CISA Secure By Design principles is persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-PIY-RVD",
+          "name": "Reviewing Vulnerability Disclosures",
+          "statement": "The effectiveness of the provider's vulnerability disclosure program is persistently reviewed.",
+          "controls_raw": [
+            "ra-5.11"
+          ],
+          "controls_nist": [
+            "RA-5(11)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The effectiveness of the provider's vulnerability disclosure program is persistently reviewed.",
+            "b": "The effectiveness of the provider's vulnerability disclosure program is persistently reviewed.",
+            "c": "The effectiveness of the provider's vulnerability disclosure program is persistently reviewed.",
+            "d": "The effectiveness of the provider's vulnerability disclosure program is persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "RPL": {
+      "id": "KSI-RPL",
+      "name": "Recovery Planning",
+      "short_name": "RPL",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-RPL-ABO",
+          "name": "Aligning Backups with Objectives",
+          "statement": "The alignment of machine-based information resource backups with defined recovery objectives is persistently reviewed.",
+          "controls_raw": [
+            "cm-2.3",
+            "cp-6",
+            "cp-9",
+            "cp-10",
+            "cp-10.2",
+            "si-12"
+          ],
+          "controls_nist": [
+            "CM-2(3)",
+            "CP-6",
+            "CP-9",
+            "CP-10",
+            "CP-10(2)",
+            "SI-12"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The alignment of machine-based information resource backups with defined recovery objectives is persistently reviewed.",
+            "b": "The alignment of machine-based information resource backups with defined recovery objectives is persistently reviewed.",
+            "c": "The alignment of machine-based information resource backups with defined recovery objectives is persistently reviewed.",
+            "d": "The alignment of machine-based information resource backups with defined recovery objectives is persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-RPL-ARP",
+          "name": "Aligning Recovery Plan",
+          "statement": "The alignment of recovery plans with defined recovery objectives is persistently reviewed.",
+          "controls_raw": [
+            "cp-2",
+            "cp-2.1",
+            "cp-2.3",
+            "cp-4.1",
+            "cp-6",
+            "cp-6.1",
+            "cp-6.3",
+            "cp-7",
+            "cp-7.1",
+            "cp-7.2",
+            "cp-7.3",
+            "cp-8",
+            "cp-8.1",
+            "cp-8.2",
+            "cp-10",
+            "cp-10.2"
+          ],
+          "controls_nist": [
+            "CP-2",
+            "CP-2(1)",
+            "CP-2(3)",
+            "CP-4(1)",
+            "CP-6",
+            "CP-6(1)",
+            "CP-6(3)",
+            "CP-7",
+            "CP-7(1)",
+            "CP-7(2)",
+            "CP-7(3)",
+            "CP-8",
+            "CP-8(1)",
+            "CP-8(2)",
+            "CP-10",
+            "CP-10(2)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The alignment of recovery plans with defined recovery objectives is persistently reviewed.",
+            "b": "The alignment of recovery plans with defined recovery objectives is persistently reviewed.",
+            "c": "The alignment of recovery plans with defined recovery objectives is persistently reviewed.",
+            "d": "The alignment of recovery plans with defined recovery objectives is persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-RPL-RRO",
+          "name": "Reviewing Recovery Objectives",
+          "statement": "The desired Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO) are defined and persistently reviewed for alignment with the provider's business needs and capabilities.",
+          "controls_raw": [
+            "cp-2.3",
+            "cp-10"
+          ],
+          "controls_nist": [
+            "CP-2(3)",
+            "CP-10"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The desired Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO) are defined and persistently reviewed for alignment with the provider's business needs and capabilities.",
+            "b": "The desired Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO) are defined and persistently reviewed for alignment with the provider's business needs and capabilities.",
+            "c": "The desired Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO) are defined and persistently reviewed for alignment with the provider's business needs and capabilities.",
+            "d": "The desired Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO) are defined and persistently reviewed for alignment with the provider's business needs and capabilities."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-RPL-TRC",
+          "name": "Testing Recovery Capabilities",
+          "statement": "The capability to recover from incidents and contingencies aligned with defined recovery objectives is persistently tested.",
+          "controls_raw": [
+            "cp-2.1",
+            "cp-2.3",
+            "cp-4",
+            "cp-4.1",
+            "cp-6",
+            "cp-6.1",
+            "cp-9.1",
+            "cp-10",
+            "ir-3",
+            "ir-3.2"
+          ],
+          "controls_nist": [
+            "CP-2(1)",
+            "CP-2(3)",
+            "CP-4",
+            "CP-4(1)",
+            "CP-6",
+            "CP-6(1)",
+            "CP-9(1)",
+            "CP-10",
+            "IR-3",
+            "IR-3(2)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The capability to recover from incidents and contingencies aligned with defined recovery objectives is persistently tested.",
+            "b": "The capability to recover from incidents and contingencies aligned with defined recovery objectives is persistently tested.",
+            "c": "The capability to recover from incidents and contingencies aligned with defined recovery objectives is persistently tested.",
+            "d": "The capability to recover from incidents and contingencies aligned with defined recovery objectives is persistently tested."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "SCR": {
+      "id": "KSI-SCR",
+      "name": "Supply Chain Risk",
+      "short_name": "SCR",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-SCR-MIT",
+          "name": "Mitigating Supply Chain Risk",
+          "statement": "Persistently identify, review, and mitigate potential supply chain risks.",
+          "controls_raw": [
+            "ac-20",
+            "ra-3.1",
+            "sa-9",
+            "sa-10",
+            "sa-11",
+            "sa-15.3",
+            "sa-22",
+            "si-7.1",
+            "sr-5",
+            "sr-6",
+            "ca-7.4",
+            "sc-18"
+          ],
+          "controls_nist": [
+            "AC-20",
+            "RA-3(1)",
+            "SA-9",
+            "SA-10",
+            "SA-11",
+            "SA-15(3)",
+            "SA-22",
+            "SI-7(1)",
+            "SR-5",
+            "SR-6",
+            "CA-7(4)",
+            "SC-18"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Persistently identify, review, and mitigate potential supply chain risks.",
+            "b": "Persistently identify, review, and mitigate potential supply chain risks.",
+            "c": "Persistently identify, review, and mitigate potential supply chain risks.",
+            "d": "Persistently identify, review, and mitigate potential supply chain risks."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-SCR-MON",
+          "name": "Monitoring Supply Chain Risk",
+          "statement": "Third party software information resources are automatically monitored for upstream vulnerabilities using mechanisms that may include contractual notification requirements or active monitoring services.",
+          "controls_raw": [
+            "ac-20",
+            "ca-3",
+            "ir-6.3",
+            "ps-7",
+            "ra-5",
+            "sa-9",
+            "si-5",
+            "sr-5",
+            "sr-6",
+            "sr-8"
+          ],
+          "controls_nist": [
+            "AC-20",
+            "CA-3",
+            "IR-6(3)",
+            "PS-7",
+            "RA-5",
+            "SA-9",
+            "SI-5",
+            "SR-5",
+            "SR-6",
+            "SR-8"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Third party software information resources are automatically monitored for upstream vulnerabilities using mechanisms that may include contractual notification requirements or active monitoring services.",
+            "b": "Third party software information resources are automatically monitored for upstream vulnerabilities using mechanisms that may include contractual notification requirements or active monitoring services.",
+            "c": "Third party software information resources are automatically monitored for upstream vulnerabilities using mechanisms that may include contractual notification requirements or active monitoring services.",
+            "d": "Third party software information resources are automatically monitored for upstream vulnerabilities using mechanisms that may include contractual notification requirements or active monitoring services."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    },
+    "SVC": {
+      "id": "KSI-SVC",
+      "name": "Service Configuration",
+      "short_name": "SVC",
+      "status": "stable",
+      "indicators": [
+        {
+          "id": "KSI-SVC-ACM",
+          "name": "Automating Configuration Management",
+          "statement": "The configuration of machine-based information resources is managed using automation and persistently reviewed for drift.",
+          "controls_raw": [
+            "ac-2.4",
+            "cm-2",
+            "cm-2.2",
+            "cm-2.3",
+            "cm-6",
+            "cm-7.1",
+            "pl-9",
+            "pl-10",
+            "sa-5",
+            "si-5",
+            "sr-10"
+          ],
+          "controls_nist": [
+            "AC-2(4)",
+            "CM-2",
+            "CM-2(2)",
+            "CM-2(3)",
+            "CM-6",
+            "CM-7(1)",
+            "PL-9",
+            "PL-10",
+            "SA-5",
+            "SI-5",
+            "SR-10"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "The configuration of machine-based information resources is managed using automation and persistently reviewed for drift.",
+            "b": "The configuration of machine-based information resources is managed using automation and persistently reviewed for drift.",
+            "c": "The configuration of machine-based information resources is managed using automation and persistently reviewed for drift.",
+            "d": "The configuration of machine-based information resources is managed using automation and persistently reviewed for drift."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-SVC-ASM",
+          "name": "Automating Secret Management",
+          "statement": "Management, protection, and regular rotation of digital keys, certificates, and other secrets is automated and persistently reviewed.",
+          "controls_raw": [
+            "ac-17.2",
+            "ia-5.2",
+            "ia-5.6",
+            "sc-12",
+            "sc-17"
+          ],
+          "controls_nist": [
+            "AC-17(2)",
+            "IA-5(2)",
+            "IA-5(6)",
+            "SC-12",
+            "SC-17"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Management, protection, and regular rotation of digital keys, certificates, and other secrets is automated and persistently reviewed.",
+            "b": "Management, protection, and regular rotation of digital keys, certificates, and other secrets is automated and persistently reviewed.",
+            "c": "Management, protection, and regular rotation of digital keys, certificates, and other secrets is automated and persistently reviewed.",
+            "d": "Management, protection, and regular rotation of digital keys, certificates, and other secrets is automated and persistently reviewed."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-SVC-EIS",
+          "name": "Evaluating and Improving Security",
+          "statement": "Information resources are persistently evaluated for opportunities to improve security and those improvements are persistently made.",
+          "controls_raw": [
+            "cm-7.1",
+            "cm-12.1",
+            "ma-2",
+            "pl-8",
+            "sc-7",
+            "sc-39",
+            "si-2.2",
+            "si-4",
+            "sr-10"
+          ],
+          "controls_nist": [
+            "CM-7(1)",
+            "CM-12(1)",
+            "MA-2",
+            "PL-8",
+            "SC-7",
+            "SC-39",
+            "SI-2(2)",
+            "SI-4",
+            "SR-10"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Information resources are persistently evaluated for opportunities to improve security and those improvements are persistently made.",
+            "b": "Information resources are persistently evaluated for opportunities to improve security and those improvements are persistently made.",
+            "c": "Information resources are persistently evaluated for opportunities to improve security and those improvements are persistently made.",
+            "d": "Information resources are persistently evaluated for opportunities to improve security and those improvements are persistently made."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-SVC-PRR",
+          "name": "Preventing Residual Risk",
+          "statement": null,
+          "controls_raw": [
+            "sc-4"
+          ],
+          "controls_nist": [
+            "SC-4"
+          ],
+          "class_applicability": {
+            "a": "optional",
+            "b": "optional",
+            "c": "required",
+            "d": "required"
+          },
+          "class_statements": {
+            "a": "Class A: treat as optional unless adopted for pilot evidence.",
+            "b": "**Optional:** Plans, procedures, and the state of information resources are persistently reviewed after making changes to limit and remove unwanted residual elements that would likely negatively affect the confidentiality, integrity, or availability of federal customer data.",
+            "c": "Plans, procedures, and the state of information resources are persistently reviewed after making changes to limit and remove unwanted residual elements that would likely negatively affect the confidentiality, integrity, or availability of federal customer data.",
+            "d": "Plans, procedures, and the state of information resources are persistently reviewed after making changes to limit and remove unwanted residual elements that would likely negatively affect the confidentiality, integrity, or availability of federal customer data."
+          },
+          "varies_by_class": true,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-SVC-RUD",
+          "name": "Removing Unwanted Data",
+          "statement": null,
+          "controls_raw": [
+            "si-12.3",
+            "si-18.4"
+          ],
+          "controls_nist": [
+            "SI-12(3)",
+            "SI-18(4)"
+          ],
+          "class_applicability": {
+            "a": "optional",
+            "b": "optional",
+            "c": "required",
+            "d": "required"
+          },
+          "class_statements": {
+            "a": "Class A: treat as optional unless adopted for pilot evidence.",
+            "b": "**Optional:** Unwanted federal customer data is removed promptly when requested by an agency in alignment with customer agreements, including from backups if appropriate; this typically applies when a customer spills information or when a customer seeks to remove information from a service due to a change in usage.",
+            "c": "Unwanted federal customer data is removed promptly when requested by an agency in alignment with customer agreements, including from backups if appropriate; this typically applies when a customer spills information or when a customer seeks to remove information from a service due to a change in usage.",
+            "d": "Unwanted federal customer data is removed promptly when requested by an agency in alignment with customer agreements, including from backups if appropriate; this typically applies when a customer spills information or when a customer seeks to remove information from a service due to a change in usage."
+          },
+          "varies_by_class": true,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-SVC-SIN",
+          "name": "Securing Information",
+          "statement": "Information is encrypted or otherwise secured from unwanted access or modification.",
+          "controls_raw": [
+            "ac-1",
+            "ac-17.2",
+            "cp-9.8",
+            "sc-8",
+            "sc-8.1",
+            "sc-13",
+            "sc-20",
+            "sc-21",
+            "sc-22",
+            "sc-23",
+            "sc-28",
+            "sc-28.1"
+          ],
+          "controls_nist": [
+            "AC-1",
+            "AC-17(2)",
+            "CP-9(8)",
+            "SC-8",
+            "SC-8(1)",
+            "SC-13",
+            "SC-20",
+            "SC-21",
+            "SC-22",
+            "SC-23",
+            "SC-28",
+            "SC-28(1)"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Information is encrypted or otherwise secured from unwanted access or modification.",
+            "b": "Information is encrypted or otherwise secured from unwanted access or modification.",
+            "c": "Information is encrypted or otherwise secured from unwanted access or modification.",
+            "d": "Information is encrypted or otherwise secured from unwanted access or modification."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-SVC-VCM",
+          "name": "Validating Communications",
+          "statement": null,
+          "controls_raw": [
+            "sc-23",
+            "si-7.1"
+          ],
+          "controls_nist": [
+            "SC-23",
+            "SI-7(1)"
+          ],
+          "class_applicability": {
+            "a": "optional",
+            "b": "optional",
+            "c": "required",
+            "d": "required"
+          },
+          "class_statements": {
+            "a": "Class A: treat as optional unless adopted for pilot evidence.",
+            "b": "**Optional:** The authenticity and integrity of communications between machine-based information resources is persistently validated using automation.",
+            "c": "The authenticity and integrity of communications between machine-based information resources is persistently validated using automation.",
+            "d": "The authenticity and integrity of communications between machine-based information resources is persistently validated using automation."
+          },
+          "varies_by_class": true,
+          "documentation_sensitive": true
+        },
+        {
+          "id": "KSI-SVC-VRI",
+          "name": "Validating Resource Integrity",
+          "statement": "Use cryptographic methods to validate the integrity of machine-based information resources.",
+          "controls_raw": [
+            "cm-2.2",
+            "cm-8.3",
+            "sc-13",
+            "sc-23",
+            "si-7",
+            "si-7.1",
+            "sr-10"
+          ],
+          "controls_nist": [
+            "CM-2(2)",
+            "CM-8(3)",
+            "SC-13",
+            "SC-23",
+            "SI-7",
+            "SI-7(1)",
+            "SR-10"
+          ],
+          "class_applicability": {
+            "a": "applicable",
+            "b": "applicable",
+            "c": "applicable",
+            "d": "applicable"
+          },
+          "class_statements": {
+            "a": "Use cryptographic methods to validate the integrity of machine-based information resources.",
+            "b": "Use cryptographic methods to validate the integrity of machine-based information resources.",
+            "c": "Use cryptographic methods to validate the integrity of machine-based information resources.",
+            "d": "Use cryptographic methods to validate the integrity of machine-based information resources."
+          },
+          "varies_by_class": false,
+          "documentation_sensitive": true
+        }
+      ]
+    }
+  },
+  "documentation_requirements": [
+    {
+      "id": "FRC-CSX-VVK",
+      "name": "Automated Verification and Validation of Key Security Indicators",
+      "family": "FRC",
+      "requires_documentation": true,
+      "statement": null,
+      "by_class": {
+        "a": {
+          "force": "MAY",
+          "statement": "Providers seeking 20x Class A Certification MAY implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "b": {
+          "force": "SHOULD",
+          "statement": "Providers seeking 20x Class B Certification SHOULD implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators with at least 1 automated method for each Key Security Indicator.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "c": {
+          "force": "MUST",
+          "statement": "Providers seeking 20x Class C Certification MUST implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators with at least 2 automated methods for each Key Security Indicator.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "d": {
+          "force": "MUST",
+          "statement": "Providers seeking 20x Class D Certification MUST implement automated methods to persistently verify and validate the accuracy and completeness of Key Security Indicators with at least 4 automated methods for each Key Security Indicator.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        }
+      }
+    },
+    {
+      "id": "FRC-CSX-MOT",
+      "name": "Metrics Over Time for Key Security Indicators",
+      "family": "FRC",
+      "requires_documentation": true,
+      "statement": null,
+      "by_class": {
+        "a": {
+          "force": "MAY",
+          "statement": "Providers seeking 20x Class A Certification MAY supply historical metrics for Key Security Indicators.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "b": {
+          "force": "SHOULD",
+          "statement": "Providers seeking 20x Class B Certification SHOULD supply historical metrics for Key Security Indicators.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "c": {
+          "force": "MUST",
+          "statement": "Providers seeking 20x Class C Certification MUST supply historical metrics including status from persistent validation over at least the past 6 months for all Key Security Indicators.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "d": {
+          "force": "MUST",
+          "statement": "Providers seeking 20x Class D Certification MUST provide historical metrics including status from persistent validation over at least the past 18 months for all Key Security Indicators.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        }
+      }
+    },
+    {
+      "id": "SDR-CSX-KMT",
+      "name": "Key Security Indicator Metrics",
+      "family": "SDR",
+      "requires_documentation": true,
+      "statement": null,
+      "by_class": {
+        "a": {
+          "force": "MAY",
+          "statement": "Providers with 20x Class A Certifications MAY also include historical metrics in their Security Decision Record.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "b": {
+          "force": "MUST",
+          "statement": "Providers with 20x Class B Certifications MUST also include historical metrics in their Security Decision Record, supplying at least the following information for each applicable Key Security Indicator:",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": [
+            "Summary of each metric over the past 30 days",
+            "Summary of metric up to the past year (where available)"
+          ]
+        },
+        "c": {
+          "force": "MUST",
+          "statement": "Providers with 20x Class C Certifications MUST also include historical metrics in their Security Decision Record, supplying at least the following information for each applicable Key Security Indicator:",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": [
+            "Summary of each metric over the past 30 days",
+            "Summary of metric up to the past year (where available)",
+            "All daily metric data up to the past year (where available)"
+          ]
+        },
+        "d": {
+          "force": "MUST",
+          "statement": "Providers with 20x Class D Certifications MUST significantly supersede the minimum requirements for lower Classes, with specifics to be set during the 20x Phase 4 Pilot.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        }
+      }
+    },
+    {
+      "id": "CPO-CSO-OSA",
+      "name": "Overall Summary of Assessment in Certification Package",
+      "family": "CPO",
+      "requires_documentation": true,
+      "statement": null,
+      "by_class": {
+        "a": {
+          "force": "MAY",
+          "statement": "Providers seeking Class A Certification MAY also include an overall summary of their FedRAMP independent assessment in their Certification Package Overview.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "b": {
+          "force": "MUST",
+          "statement": "Providers seeking Class B Certification MUST also include the overall summary of their FedRAMP independent assessment, supplied by the assessor per IVV-IAS-OSA (Overall Summary of Assessment), in their Certification Package Overview.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "c": {
+          "force": "MUST",
+          "statement": "Providers seeking Class C Certification MUST also include the overall summary of their FedRAMP independent assessment, supplied by the assessor per IVV-IAS-OSA (Overall Summary of Assessment), in their Certification Package Overview.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        },
+        "d": {
+          "force": "MUST",
+          "statement": "Providers seeking Class D Certification MUST also include the overall summary of their FedRAMP independent assessment, supplied by the assessor per IVV-IAS-OSA (Overall Summary of Assessment), in their Certification Package Overview.",
+          "timeframe_type": null,
+          "timeframe_num": null,
+          "following_information": null
+        }
+      }
+    },
+    {
+      "id": "CPO-CSX-CPM",
+      "name": "Certification Package Maintenance for 20x",
+      "family": "CPO",
+      "requires_documentation": true,
+      "statement": null,
+      "by_class": {
+        "a": {
+          "force": "SHOULD",
+          "statement": "Providers with 20x Class A Certifications SHOULD persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every 3 months.",
+          "timeframe_type": "months",
+          "timeframe_num": 3,
+          "following_information": null
+        },
+        "b": {
+          "force": "MUST",
+          "statement": "Providers with 20x Class B Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every month.",
+          "timeframe_type": "months",
+          "timeframe_num": 1,
+          "following_information": null
+        },
+        "c": {
+          "force": "MUST",
+          "statement": "Providers with 20x Class C Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every 2 weeks.",
+          "timeframe_type": "weeks",
+          "timeframe_num": 2,
+          "following_information": null
+        },
+        "d": {
+          "force": "MUST",
+          "statement": "Providers with 20x Class D Certifications MUST persistently maintain their FedRAMP Certification Package to ensure it is up to date and complete at least once every week.",
+          "timeframe_type": "weeks",
+          "timeframe_num": 1,
+          "following_information": null
+        }
+      }
+    },
+    {
+      "id": "CPO-CSO-OVR",
+      "name": "Overview of the Cloud Service Offering",
+      "family": "CPO",
+      "requires_documentation": true,
+      "statement": "Providers MUST supply a Certification Package Overview within their FedRAMP Certification Package, in both human-readable and JSON formats, that includes at least all of the information required by the following rules:",
+      "by_class": {}
+    },
+    {
+      "id": "CPO-CSO-MTD",
+      "name": "Certification Package Overview Metadata",
+      "family": "CPO",
+      "requires_documentation": true,
+      "statement": "Providers MUST also include the following basic metadata in their Certification Package Overview:",
+      "by_class": {}
+    }
+  ]
+}
