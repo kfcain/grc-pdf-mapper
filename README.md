@@ -12,10 +12,45 @@ GRC tooling for policy documents. Uses [Firecrawl pdf-inspector](https://github.
 
 ## Install
 
+These commands install this repository into your Python environment in
+**editable** mode (`-e`): code changes apply without reinstall.
+
+| Extra | What it adds |
+|---|---|
+| *(none)* | Core library + `grc-pdf` CLI |
+| `dev` | `pytest` (for tests) |
+| `pdf` | [pdf-inspector](https://github.com/firecrawl/pdf-inspector) for PDF ingest |
+
+From the repository root (`grc-pdf-mapper/`):
+
 ```bash
-pip install -e ".[dev]"
-# Optional PDF support:
-pip install -e ".[pdf,dev]"
+cd grc-pdf-mapper
+
+python3 -m pip install -e ".[dev]"
+```
+
+Optional PDF support (Markdown works without this):
+
+```bash
+python3 -m pip install -e ".[pdf,dev]"
+```
+
+Then confirm:
+
+```bash
+grc-pdf --help
+```
+
+If `grc-pdf` is not found, add your user script path (common on Linux):
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Or run as a module:
+
+```bash
+python3 -m grc_pdf_mapper --help
 ```
 
 ## Quick start

@@ -59,7 +59,7 @@ def _ingest_pdf(path: Path, raw: bytes, source_hash: str) -> IngestResult:
     except ImportError as exc:  # pragma: no cover - optional dep
         raise RuntimeError(
             "PDF ingest needs the optional pdf-inspector package. "
-            "Install with: pip install 'grc-pdf-mapper[pdf]'"
+            "From the repo root run: python3 -m pip install -e '.[pdf]'"
         ) from exc
 
     result = pdf_inspector.process_pdf_bytes(raw)

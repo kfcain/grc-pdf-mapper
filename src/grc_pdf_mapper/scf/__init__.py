@@ -66,8 +66,19 @@ def is_scf_control_id(control_id: str) -> bool:
 
 @lru_cache(maxsize=1)
 def load_offline_seed() -> dict[str, Any]:
-    path = Path(__file__).with_name("offline_seed.json")
-    return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        from importlib.resources import files
+
+        resource = files("grc_pdf_mapper.scf").joinpath("offline_seed.json")
+        return json.loads(resource.read_text(encoding="utf-8"))
+    except (FileNotFoundError, ModuleNotFoundError, OSError):
+        path = Path(__file__).with_name("offline_seed.json")
+        if not path.exists():
+            raise FileNotFoundError(
+                "Missing SCF offline seed (offline_seed.json). "
+                "Reinstall from the repo root: python3 -m pip install -e '.[dev]'"
+            ) from None
+        return json.loads(path.read_text(encoding="utf-8"))
 
 
 def normalize_nist_id(control_id: str) -> str:

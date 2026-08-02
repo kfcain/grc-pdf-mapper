@@ -26,6 +26,9 @@ grc-pdf = "grc_pdf_mapper.cli:app"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+grc_pdf_mapper = ["py.typed", "**/*.json"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
