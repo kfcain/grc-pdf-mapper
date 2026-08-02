@@ -34,14 +34,15 @@ grc-pdf evidence report.json AC-2
 
 ## View examples
 
-Open the static gallery (no build step):
+Hosted gallery on GitHub Pages after the repository is published:
 
-```bash
-python3 -m http.server 8765 --directory examples/viewer
-# then open http://127.0.0.1:8765
-```
+https://OWNER.github.io/grc-pdf-mapper/
 
-Or regenerate demo artifacts and refresh the gallery:
+Replace `OWNER` with the GitHub account that owns the repository.
+
+The gallery source is [`examples/viewer/`](examples/viewer/). Each push to `main` deploys it with [`.github/workflows/pages-examples.yml`](.github/workflows/pages-examples.yml).
+
+Regenerate demo artifacts:
 
 ```bash
 bash examples/generate_viewer_data.sh

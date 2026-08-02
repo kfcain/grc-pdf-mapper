@@ -202,7 +202,7 @@
           <span id="badge" class="sev info" hidden></span>
         </div>
         <p id="summary" class="summary" hidden></p>
-        <pre id="content" class="empty">Load data/manifest.json by serving this folder over HTTP.</pre>
+        <pre id="content" class="empty">Loading hosted example data…</pre>
       </section>
     </div>
 
@@ -225,7 +225,7 @@
         selectSection(state.manifest.sections[0].id);
       } catch (err) {
         document.getElementById("content").textContent =
-          "Could not load data/manifest.json.\\n\\nServe this folder over HTTP:\\n  python3 -m http.server 8765 --directory examples/viewer\\n\\nThen regenerate samples if needed:\\n  bash examples/generate_viewer_data.sh";
+          "Could not load data/manifest.json from this host.\\n\\nOpen the GitHub Pages gallery for this repository, or regenerate samples:\\n  bash examples/generate_viewer_data.sh";
       }
     }
 

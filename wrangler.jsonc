@@ -1,0 +1,8 @@
+{
+  "name": "grc-pdf-mapper-examples",
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    "directory": "./examples/viewer",
+    "not_found_handling": "single-page-application"
+  }
+}
