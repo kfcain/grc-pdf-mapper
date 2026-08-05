@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>GRC Mapper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div class="brand-block">
+        <p class="brand">GRC Mapper</p>
+        <p class="tag">Local policy parse · control map</p>
+      </div>
+      <label class="offline-toggle" title="Use bundled maps only">
+        <input type="checkbox" id="offline" checked />
+        <span>Offline maps</span>
+      </label>
+    </header>
+
+    <main>
+      <section class="intake" aria-labelledby="intake-title">
+        <h1 id="intake-title" class="sr-only">Upload a policy document</h1>
+        <div
+          id="drop"
+          class="drop"
+          tabindex="0"
+          role="button"
+          aria-controls="file-input"
+          aria-describedby="drop-hint"
+        >
+          <input
+            id="file-input"
+            type="file"
+            accept=".md,.markdown,.txt,.pdf,.doc,.docx,.docm,.ppt,.pptx,.pptm,.pps,.ppsx,.ppsm,.pot,.xls,.xlsx,.xlsm,.xlsb,.odt,.ods,.odp,.rtf,.epub,.csv"
+            hidden
+          />
+          <p class="drop-lead">Drop a policy file here</p>
+          <p id="drop-hint" class="drop-hint">
+            Markdown, PDF, Word, Excel, PowerPoint, OpenDocument, RTF, EPUB, or CSV
+          </p>
+          <button type="button" id="browse" class="btn">Choose file</button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="results" class="results" hidden>
+        <div class="summary">
+          <div class="summary-main">
+            <h2 id="doc-title">Document</h2>
+            <p id="doc-meta" class="meta"></p>
+          </div>
+          <dl class="stats">
+            <div>
+              <dt>Statements</dt>
+              <dd id="stat-statements">0</dd>
+            </div>
+            <div>
+              <dt>Frameworks</dt>
+              <dd id="stat-frameworks">0</dd>
+            </div>
+            <div>
+              <dt>Engine</dt>
+              <dd id="stat-engine" class="mono">—</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Result views">
+          <button type="button" class="tab is-active" role="tab" aria-selected="true" data-tab="obligations" id="tab-obligations">Obligations</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="markdown" id="tab-markdown">Markdown</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="json" id="tab-json">JSON</button>
+        </div>
+
+        <div id="panel-obligations" class="panel" role="tabpanel" aria-labelledby="tab-obligations">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Strength</th>
+                  <th scope="col">Obligation</th>
+                  <th scope="col">Controls</th>
+                </tr>
+              </thead>
+              <tbody id="obligation-rows"></tbody>
+            </table>
+          </div>
+          <p id="empty-obligations" class="empty" hidden>No control statements were found in this file.</p>
+        </div>
+
+        <div id="panel-markdown" class="panel" role="tabpanel" aria-labelledby="tab-markdown" hidden>
+          <pre id="markdown-view" class="code-block"></pre>
+        </div>
+
+        <div id="panel-json" class="panel" role="tabpanel" aria-labelledby="tab-json" hidden>
+          <div class="panel-actions">
+            <button type="button" id="download-json" class="btn btn-ghost">Download report</button>
+          </div>
+          <pre id="json-view" class="code-block"></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>Runs on this machine only · <code>grc-pdf ui</code></span>
+    </footer>
+  </div>
+  <script src="/assets/app.js" type="module"></script>
+</body>
+</html>
