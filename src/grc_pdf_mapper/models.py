@@ -47,7 +47,7 @@ class CrosswalkHit(BaseModel):
 
 
 class IngestResult(BaseModel):
-    """Output of PDF or Markdown ingest."""
+    """Output of document ingest (Markdown, PDF, or office via anydoc)."""
 
     source_path: str
     source_hash: str
@@ -58,6 +58,7 @@ class IngestResult(BaseModel):
     pages_needing_ocr: list[int] = Field(default_factory=list)
     title: str | None = None
     engine: str = "markdown"
+    detected_format: str | None = None
 
 
 class DocumentSnapshot(BaseModel):

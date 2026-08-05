@@ -1,0 +1,4 @@
+control,id,statement
+MFA,AC-2,The organization must enforce MFA for privileged production access.
+Logging,AU-2,The organization shall log authentication events for privileged accounts.
+Session,AC-12,The system must terminate privileged sessions after inactivity.
