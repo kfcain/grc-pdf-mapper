@@ -8,7 +8,11 @@ const rowsEl = document.getElementById("obligation-rows");
 const emptyEl = document.getElementById("empty-obligations");
 const markdownView = document.getElementById("markdown-view");
 const jsonView = document.getElementById("json-view");
+const csvFrameworksView = document.getElementById("csv-frameworks-view");
+const csvControlsView = document.getElementById("csv-controls-view");
 const downloadJson = document.getElementById("download-json");
+const downloadCsvFrameworks = document.getElementById("download-csv-frameworks");
+const downloadCsvControls = document.getElementById("download-csv-controls");
 
 let lastPayload = null;
 
@@ -32,6 +36,7 @@ async function analyzeFile(file) {
   const body = new FormData();
   body.append("file", file, file.name);
   body.append("offline", offlineEl.checked ? "true" : "false");
+  body.append("format", "json");
 
   try {
     const res = await fetch("/api/analyze", { method: "POST", body });
@@ -83,6 +88,8 @@ function renderResults(data) {
 
   markdownView.textContent = data.markdown_preview || data.markdown || "";
   jsonView.textContent = JSON.stringify(data.report || data, null, 2);
+  csvFrameworksView.textContent = data.csv?.frameworks || "";
+  csvControlsView.textContent = data.csv?.controls || "";
   results.hidden = false;
   activateTab("obligations");
 }
@@ -108,6 +115,16 @@ function activateTab(name) {
   for (const panel of document.querySelectorAll(".panel")) {
     panel.hidden = panel.id !== `panel-${name}`;
   }
+}
+
+function downloadText(filename, text, mime) {
+  const blob = new Blob([text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 browse.addEventListener("click", (event) => {
@@ -154,13 +171,27 @@ document.querySelectorAll(".tab").forEach((tab) => {
 
 downloadJson.addEventListener("click", () => {
   if (!lastPayload?.report) return;
-  const blob = new Blob([JSON.stringify(lastPayload.report, null, 2)], {
-    type: "application/json",
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${lastPayload.doc_id || "report"}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  downloadText(
+    `${lastPayload.doc_id || "report"}.json`,
+    JSON.stringify(lastPayload.report, null, 2),
+    "application/json"
+  );
+});
+
+downloadCsvFrameworks.addEventListener("click", () => {
+  if (!lastPayload?.csv?.frameworks) return;
+  downloadText(
+    `${lastPayload.doc_id || "report"}-frameworks.csv`,
+    lastPayload.csv.frameworks,
+    "text/csv;charset=utf-8"
+  );
+});
+
+downloadCsvControls.addEventListener("click", () => {
+  if (!lastPayload?.csv?.controls) return;
+  downloadText(
+    `${lastPayload.doc_id || "report"}-framework-controls.csv`,
+    lastPayload.csv.controls,
+    "text/csv;charset=utf-8"
+  );
 });

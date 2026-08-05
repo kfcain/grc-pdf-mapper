@@ -58,7 +58,7 @@ python3 -m pip install -e ".[docs,ui]"
 grc-pdf ui
 ```
 
-Open http://127.0.0.1:8765/ (the command opens a tab by default). Drop a policy file or choose one. The page shows obligations, framework hits, Markdown, and downloadable JSON. The server binds to localhost only.
+Open http://127.0.0.1:8765/ (the command opens a tab by default). Drop a policy file or choose one. The page shows obligations, framework hits, CSV exports, Markdown, and downloadable JSON. The server binds to localhost only.
 
 ```bash
 grc-pdf ui --port 8765 --no-browser
@@ -86,7 +86,8 @@ grc-pdf --help
 
 ```bash
 grc-pdf analyze tests/fixtures/access_control_policy_v1.md \
-  --doc-id pol-ac-001 --version v2.1 --offline --json report.json
+  --doc-id pol-ac-001 --version v2.1 --offline --json report.json \
+  --csv-frameworks frameworks.csv --csv-controls controls.csv
 
 grc-pdf analyze tests/fixtures/access_control_policy.docx \
   --doc-id pol-ac-docx --version v1 --offline --no-commit

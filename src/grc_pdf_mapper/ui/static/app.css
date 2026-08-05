@@ -316,7 +316,25 @@ body {
 .panel-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
+}
+
+.csv-actions {
+  flex-wrap: wrap;
+}
+
+.csv-lead {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.csv-heading {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .table-wrap {

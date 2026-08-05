@@ -59,6 +59,50 @@ def test_analyze_markdown_upload(client: TestClient):
         for row in payload["statements"]
         for c in row["controls"]
     )
+    assert payload["csv"]["frameworks"].startswith("framework,")
+    assert payload["csv"]["controls"].startswith("framework,")
+    assert "control_id" in payload["csv"]["controls"].splitlines()[0]
+
+
+def test_analyze_csv_frameworks_format(client: TestClient):
+    path = FIXTURES / "access_control_policy_v1.md"
+    with path.open("rb") as handle:
+        res = client.post(
+            "/api/analyze",
+            files={"file": (path.name, handle, "text/markdown")},
+            data={"offline": "true", "format": "csv-frameworks"},
+        )
+    assert res.status_code == 200, res.text
+    assert "text/csv" in res.headers["content-type"]
+    assert res.text.startswith("framework,")
+    assert "attachment" in res.headers.get("content-disposition", "")
+
+
+def test_analyze_csv_controls_format(client: TestClient):
+    path = FIXTURES / "access_control_policy_v1.md"
+    with path.open("rb") as handle:
+        res = client.post(
+            "/api/analyze",
+            files={"file": (path.name, handle, "text/markdown")},
+            data={"offline": "true", "format": "csv-controls"},
+        )
+    assert res.status_code == 200, res.text
+    assert "text/csv" in res.headers["content-type"]
+    header = res.text.splitlines()[0]
+    assert "control_id" in header
+    assert "obligations" in header
+
+
+def test_export_controls_endpoint(client: TestClient):
+    path = FIXTURES / "access_control_policy_v1.md"
+    with path.open("rb") as handle:
+        res = client.post(
+            "/api/export/controls.csv",
+            files={"file": (path.name, handle, "text/markdown")},
+            data={"offline": "true"},
+        )
+    assert res.status_code == 200, res.text
+    assert res.text.startswith("framework,")
 
 
 def test_analyze_rejects_bad_type(client: TestClient):

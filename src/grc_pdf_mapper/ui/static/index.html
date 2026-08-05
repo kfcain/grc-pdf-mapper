@@ -73,6 +73,7 @@
 
         <div class="tabs" role="tablist" aria-label="Result views">
           <button type="button" class="tab is-active" role="tab" aria-selected="true" data-tab="obligations" id="tab-obligations">Obligations</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="csv" id="tab-csv">CSV</button>
           <button type="button" class="tab" role="tab" aria-selected="false" data-tab="markdown" id="tab-markdown">Markdown</button>
           <button type="button" class="tab" role="tab" aria-selected="false" data-tab="json" id="tab-json">JSON</button>
         </div>
@@ -91,6 +92,18 @@
             </table>
           </div>
           <p id="empty-obligations" class="empty" hidden>No control statements were found in this file.</p>
+        </div>
+
+        <div id="panel-csv" class="panel" role="tabpanel" aria-labelledby="tab-csv" hidden>
+          <div class="panel-actions csv-actions">
+            <button type="button" id="download-csv-frameworks" class="btn btn-ghost">Download frameworks CSV</button>
+            <button type="button" id="download-csv-controls" class="btn">Download controls CSV</button>
+          </div>
+          <p class="csv-lead">Mapping export from the crosswalk API results.</p>
+          <h3 class="csv-heading">Framework level</h3>
+          <pre id="csv-frameworks-view" class="code-block"></pre>
+          <h3 class="csv-heading">Framework control level</h3>
+          <pre id="csv-controls-view" class="code-block"></pre>
         </div>
 
         <div id="panel-markdown" class="panel" role="tabpanel" aria-labelledby="tab-markdown" hidden>
