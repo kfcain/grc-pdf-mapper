@@ -21,6 +21,7 @@ pdf = ["pdf-inspector>=0.2"]
 anydoc = ["firecrawl-anydoc>=0.1"]
 # Full local ingest: PDF class/OCR hints + office formats (Word/Excel/…).
 docs = ["pdf-inspector>=0.2", "firecrawl-anydoc>=0.1"]
+ui = ["fastapi>=0.115", "uvicorn[standard]>=0.30", "python-multipart>=0.0.9"]
 dev = ["pytest>=8.0", "pytest-httpx>=0.30"]
 
 [project.scripts]
@@ -30,7 +31,7 @@ grc-pdf = "grc_pdf_mapper.cli:app"
 where = ["src"]
 
 [tool.setuptools.package-data]
-grc_pdf_mapper = ["py.typed", "**/*.json"]
+grc_pdf_mapper = ["py.typed", "**/*.json", "ui/static/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

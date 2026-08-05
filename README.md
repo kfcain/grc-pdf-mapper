@@ -27,6 +27,7 @@ These commands install this repository into your Python environment in
 | `pdf` | [pdf-inspector](https://github.com/firecrawl/pdf-inspector) for PDF class / OCR hints |
 | `anydoc` | [anydoc](https://github.com/firecrawl/anydoc) for office formats (+ PDF fallback) |
 | `docs` | Both `pdf` and `anydoc` |
+| `ui` | Local dark GUI (`grc-pdf ui`) via FastAPI + uvicorn |
 
 From the repository root (`grc-pdf-mapper/`):
 
@@ -39,7 +40,7 @@ python3 -m pip install -e ".[dev]"
 Optional document ingest (Markdown works without these):
 
 ```bash
-python3 -m pip install -e ".[docs,dev]"
+python3 -m pip install -e ".[docs,ui,dev]"
 ```
 
 Office-only (no pdf-inspector):
@@ -48,10 +49,19 @@ Office-only (no pdf-inspector):
 python3 -m pip install -e ".[anydoc,dev]"
 ```
 
-Then confirm:
+## Local GUI
+
+Install UI deps, then open a dark local workbench in the browser:
 
 ```bash
-grc-pdf --help
+python3 -m pip install -e ".[docs,ui]"
+grc-pdf ui
+```
+
+Open http://127.0.0.1:8765/ (the command opens a tab by default). Drop a policy file or choose one. The page shows obligations, framework hits, Markdown, and downloadable JSON. The server binds to localhost only.
+
+```bash
+grc-pdf ui --port 8765 --no-browser
 ```
 
 If `grc-pdf` is not found, add your user script path (common on Linux):
@@ -64,6 +74,12 @@ Or run as a module:
 
 ```bash
 python3 -m grc_pdf_mapper --help
+```
+
+Confirm the CLI:
+
+```bash
+grc-pdf --help
 ```
 
 ## Quick start
@@ -158,6 +174,7 @@ grc-pdf scf-map IAC-01 --offline
 ```bash
 grc-pdf impact <doc-id> <older-snap> <newer-snap>
 grc-pdf watch ./policies/access-control.md --doc-id pol-ac-001
+grc-pdf ui
 grc-pdf sync-check
 grc-pdf pac-impact iac-changed --base-tf base.tf --head-tf head.tf
 grc-pdf fedramp-ksi --class c --control IA-2

@@ -392,6 +392,26 @@ def watch_cmd(
         console.print(f"Poll complete. Alerts emitted: {len(alerts)}")
 
 
+@app.command("ui")
+def ui_cmd(
+    host: str = typer.Option("127.0.0.1", help="Bind address (local only by default)"),
+    port: int = typer.Option(8765, help="Port"),
+    no_browser: bool = typer.Option(False, help="Do not open a browser tab"),
+) -> None:
+    """Open a local dark GUI to upload a policy and view parse results."""
+    try:
+        from grc_pdf_mapper.ui import run_ui
+    except ImportError as exc:
+        console.print(
+            "[red]UI dependencies missing.[/red] "
+            "From the repo root run: python3 -m pip install -e '.[ui]'"
+        )
+        raise typer.Exit(1) from exc
+
+    console.print(f"Starting GRC Mapper UI at http://{host}:{port}/")
+    run_ui(host=host, port=port, open_browser=not no_browser)
+
+
 @app.command("assessments-init")
 def assessments_init_cmd(
     out: Path = typer.Option(Path("assessments.json")),
