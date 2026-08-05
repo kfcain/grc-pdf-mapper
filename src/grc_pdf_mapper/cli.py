@@ -20,6 +20,7 @@ from grc_pdf_mapper.analytics import (
     stale_framework_refs,
 )
 from grc_pdf_mapper.assessments import AssessmentRegistry
+from grc_pdf_mapper.export import report_csv_exports
 from grc_pdf_mapper.impact import analyze_impact
 from grc_pdf_mapper.lineage import PolicyLineageStore
 from grc_pdf_mapper.oscal import to_assessment_results, to_component_definition
@@ -51,6 +52,16 @@ def analyze_cmd(
     assessments: Optional[Path] = typer.Option(None, help="Assessment registry JSON"),
     webhook: Optional[str] = typer.Option(None, help="Webhook URL for real-time alerts"),
     json_out: Optional[Path] = typer.Option(None, "--json", help="Write full report JSON"),
+    csv_frameworks: Optional[Path] = typer.Option(
+        None,
+        "--csv-frameworks",
+        help="Write framework-level mapping CSV",
+    ),
+    csv_controls: Optional[Path] = typer.Option(
+        None,
+        "--csv-controls",
+        help="Write framework-control-level mapping CSV",
+    ),
 ) -> None:
     """Ingest a policy document, extract obligations, and map controls."""
     lineage = PolicyLineageStore(store)
@@ -93,6 +104,15 @@ def analyze_cmd(
     if json_out:
         json_out.write_text(report.model_dump_json(indent=2), encoding="utf-8")
         console.print(f"Wrote {json_out}")
+
+    if csv_frameworks or csv_controls:
+        csv_bundle = report_csv_exports(report)
+        if csv_frameworks:
+            csv_frameworks.write_text(csv_bundle["frameworks"], encoding="utf-8")
+            console.print(f"Wrote {csv_frameworks}")
+        if csv_controls:
+            csv_controls.write_text(csv_bundle["controls"], encoding="utf-8")
+            console.print(f"Wrote {csv_controls}")
 
 
 @app.command("history")
@@ -390,6 +410,26 @@ def watch_cmd(
     alerts = watcher.run(interval_seconds=interval, once=once)
     if once:
         console.print(f"Poll complete. Alerts emitted: {len(alerts)}")
+
+
+@app.command("ui")
+def ui_cmd(
+    host: str = typer.Option("127.0.0.1", help="Bind address (local only by default)"),
+    port: int = typer.Option(8765, help="Port"),
+    no_browser: bool = typer.Option(False, help="Do not open a browser tab"),
+) -> None:
+    """Open a local dark GUI to upload a policy and view parse results."""
+    try:
+        from grc_pdf_mapper.ui import run_ui
+    except ImportError as exc:
+        console.print(
+            "[red]UI dependencies missing.[/red] "
+            "From the repo root run: python3 -m pip install -e '.[ui]'"
+        )
+        raise typer.Exit(1) from exc
+
+    console.print(f"Starting GRC Mapper UI at http://{host}:{port}/")
+    run_ui(host=host, port=port, open_browser=not no_browser)
 
 
 @app.command("assessments-init")
