@@ -1,6 +1,11 @@
 # GRC PDF Mapper
 
-GRC tooling for policy documents. Uses [Firecrawl pdf-inspector](https://github.com/firecrawl/pdf-inspector) to classify PDFs and extract Markdown locally.
+GRC tooling for policy documents. Ingests Markdown natively; uses
+[Firecrawl anydoc](https://github.com/firecrawl/anydoc) for Word, PowerPoint,
+Excel, OpenDocument, RTF, EPUB, and CSV; and uses
+[Firecrawl pdf-inspector](https://github.com/firecrawl/pdf-inspector) for PDF
+classification and extraction (anydoc is the PDF fallback when pdf-inspector is
+not installed).
 
 ## What it does
 
@@ -19,7 +24,9 @@ These commands install this repository into your Python environment in
 |---|---|
 | *(none)* | Core library + `grc-pdf` CLI |
 | `dev` | `pytest` (for tests) |
-| `pdf` | [pdf-inspector](https://github.com/firecrawl/pdf-inspector) for PDF ingest |
+| `pdf` | [pdf-inspector](https://github.com/firecrawl/pdf-inspector) for PDF class / OCR hints |
+| `anydoc` | [anydoc](https://github.com/firecrawl/anydoc) for office formats (+ PDF fallback) |
+| `docs` | Both `pdf` and `anydoc` |
 
 From the repository root (`grc-pdf-mapper/`):
 
@@ -29,10 +36,16 @@ cd grc-pdf-mapper
 python3 -m pip install -e ".[dev]"
 ```
 
-Optional PDF support (Markdown works without this):
+Optional document ingest (Markdown works without these):
 
 ```bash
-python3 -m pip install -e ".[pdf,dev]"
+python3 -m pip install -e ".[docs,dev]"
+```
+
+Office-only (no pdf-inspector):
+
+```bash
+python3 -m pip install -e ".[anydoc,dev]"
 ```
 
 Then confirm:
@@ -58,6 +71,9 @@ python3 -m grc_pdf_mapper --help
 ```bash
 grc-pdf analyze tests/fixtures/access_control_policy_v1.md \
   --doc-id pol-ac-001 --version v2.1 --offline --json report.json
+
+grc-pdf analyze tests/fixtures/access_control_policy.docx \
+  --doc-id pol-ac-docx --version v1 --offline --no-commit
 
 grc-pdf analyze tests/fixtures/access_control_policy_v2.md \
   --doc-id pol-ac-001 --version v2.2 --offline
@@ -99,13 +115,23 @@ bash lab/simulate_pac_lockstep.sh
 ## Pipeline
 
 ```
-PDF / Markdown
-    → pdf-inspector (or Markdown ingest)
+Markdown / PDF / Word / Excel / RTF / …
+    → Markdown or txt (native)
+    → pdf-inspector (PDF; class + OCR hints)
+    → anydoc (office formats; PDF fallback)
     → control statement miner
     → crosswalk (seed / OpenCRE / OSA / OSCAL / FedRAMP KSI)
     → lineage store
     → alerts · blast radius · questionnaire · evidence · OSCAL · sync
 ```
+
+## Supported ingest formats
+
+| Engine | Formats |
+|---|---|
+| Native | `.md`, `.markdown`, `.txt` |
+| pdf-inspector | `.pdf` (preferred when installed) |
+| anydoc | `.doc` `.docx` `.docm` · `.ppt` `.pptx` … · `.xls` `.xlsx` … · `.odt` `.ods` `.odp` · `.rtf` · `.epub` · `.csv` · `.pdf` (fallback) |
 
 ## Crosswalk sources
 
@@ -157,9 +183,18 @@ tests/                # pytest suite
 pytest -q
 ```
 
+Office ingest tests need `firecrawl-anydoc`:
+
+```bash
+python3 -m pip install -e ".[anydoc,dev]"
+pytest -q tests/test_ingest_anydoc.py
+```
+
 ## Attribution
 
-PDF classification and extraction use [Firecrawl pdf-inspector](https://github.com/firecrawl/pdf-inspector).
+Office conversion uses [Firecrawl anydoc](https://github.com/firecrawl/anydoc).
+
+PDF classification and extraction use [Firecrawl pdf-inspector](https://github.com/firecrawl/pdf-inspector) when installed.
 
 Control mappings use the [Secure Controls Framework](https://securecontrolsframework.com) via the [SCF API](https://grcengclub.github.io/scf-api/) (CC BY-ND 4.0).
 

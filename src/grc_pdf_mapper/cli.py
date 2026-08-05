@@ -28,7 +28,11 @@ from grc_pdf_mapper.watch import PolicyWatcher
 
 app = typer.Typer(
     name="grc-pdf",
-    help="Extract control statements from policy PDFs and map them to GRC frameworks.",
+    help=(
+        "Extract control statements from policy documents "
+        "(Markdown, PDF, Word, Excel, and other office formats) "
+        "and map them to GRC frameworks."
+    ),
     no_args_is_help=True,
 )
 console = Console()
@@ -48,7 +52,7 @@ def analyze_cmd(
     webhook: Optional[str] = typer.Option(None, help="Webhook URL for real-time alerts"),
     json_out: Optional[Path] = typer.Option(None, "--json", help="Write full report JSON"),
 ) -> None:
-    """Ingest a PDF/Markdown policy, extract obligations, and map controls."""
+    """Ingest a policy document, extract obligations, and map controls."""
     lineage = PolicyLineageStore(store)
     registry = AssessmentRegistry(assessments) if assessments else AssessmentRegistry()
     report = analyze_document(
@@ -66,7 +70,8 @@ def analyze_cmd(
 
     console.print(f"[bold]Document[/bold]: {report.doc_id}")
     console.print(f"Snapshot: {report.snapshot_id}")
-    console.print(f"Engine: {report.ingest.engine}  type={report.ingest.pdf_type}")
+    fmt = report.ingest.detected_format or report.ingest.pdf_type or "-"
+    console.print(f"Engine: {report.ingest.engine}  format={fmt}")
     console.print(f"Statements: {len(report.statements)}")
     console.print(f"Frameworks: {', '.join(report.frameworks_covered) or '(none)'}")
     if report.gaps:

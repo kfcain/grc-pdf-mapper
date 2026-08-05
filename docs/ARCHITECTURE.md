@@ -2,8 +2,8 @@
 
 ## Problem
 
-Organizations keep policies as PDFs and Markdown. Auditors and certification
-programs need:
+Organizations keep policies as PDFs, Markdown, and office files (Word, Excel,
+and related formats). Auditors and certification programs need:
 
 - Control language tied to NIST / ISO / SOC 2 / CSF / FedRAMP KSI
 - Version history and change impact
@@ -12,15 +12,19 @@ programs need:
 
 ## Approach
 
-Use [Firecrawl pdf-inspector](https://github.com/firecrawl/pdf-inspector) as the
-local PDF classification and Markdown extraction engine, then apply a GRC
-semantics layer on top.
+Normalize every supported file into Markdown, then apply a GRC semantics layer.
+
+- [Firecrawl anydoc](https://github.com/firecrawl/anydoc) converts Word,
+  PowerPoint, Excel, OpenDocument, RTF, EPUB, and CSV (and PDF as fallback).
+- [Firecrawl pdf-inspector](https://github.com/firecrawl/pdf-inspector) is the
+  preferred PDF path when installed (classification + OCR page hints).
+- Markdown and plain text ingest natively.
 
 ```
-Corporate PDF / Markdown
+Corporate Markdown / PDF / Word / Excel / RTF / …
         │
         ▼
- pdf-inspector (classify + extract)
+ Native Markdown  ·  pdf-inspector (PDF)  ·  anydoc (office / PDF fallback)
         │
         ▼
  Control statement miner
