@@ -8,6 +8,9 @@ on:
       - "lab/policy-as-code-links.json"
       - "**/*.tf"
       - "policies/**"
+      - "**/*policy*.md"
+      - "**/*procedure*.md"
+      - "**/*standard*.md"
   workflow_dispatch:
 
 permissions:
@@ -45,17 +48,12 @@ jobs:
             if [[ "$f" == *.tf || "$f" == lab/iac/* ]]; then
               TF_FILES+=("$f")
             fi
-            if [[ "$f" == lab/policies/* || "$f" == *policy*.md ]]; then
+            if [[ "$f" == lab/policies/* || "$f" == *policy*.md || "$f" == *procedure*.md || "$f" == *standard*.md ]]; then
               DOC_FILES+=("$f")
             fi
           done
           echo "tf_changed=${#TF_FILES[@]}" >> "$GITHUB_OUTPUT"
           echo "doc_changed=${#DOC_FILES[@]}" >> "$GITHUB_OUTPUT"
-          if [ "${#TF_FILES[@]}" -gt 0 ]; then
-            echo "tf_file=${TF_FILES[0]}" >> "$GITHUB_OUTPUT"
-          else
-            echo "tf_file=lab/iac/access_control/main.tf" >> "$GITHUB_OUTPUT"
-          fi
           if [ "${#DOC_FILES[@]}" -gt 0 ]; then
             echo "doc_file=${DOC_FILES[0]}" >> "$GITHUB_OUTPUT"
           else
@@ -63,70 +61,60 @@ jobs:
           fi
           printf 'Changed files:\n'; printf ' - %s\n' "${CHANGED[@]:-}"
 
-      - name: Completeness scan
-        id: complete
-        continue-on-error: true
-        run: |
-          python scripts/ci_pac_sync.py \
-            --mode completeness \
-            --links lab/policy-as-code-links.json \
-            --policy lab/policies/access-control.md \
-            --terraform-root lab/iac \
-            --doc-id pol-ac-001 \
-            --fail-on high \
-            --comment-out pac-comment.md \
-            --json-out pac-alert.json
-
-      - name: IaC change → documentation prompt
-        id: iac
-        if: steps.detect.outputs.tf_changed != '0'
-        continue-on-error: true
+      - name: Materialize complete base and head trees
+        id: trees
         shell: bash
         run: |
           set -euo pipefail
-          FILE="${{ steps.detect.outputs.tf_file }}"
-          mkdir -p /tmp/pac
-          cp "$FILE" /tmp/pac/head.tf
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          if git cat-file -e "${BASE_SHA}:${FILE}" 2>/dev/null; then
-            git show "${BASE_SHA}:${FILE}" > /tmp/pac/base.tf
-          else
-            printf '# empty base\n' > /tmp/pac/base.tf
-          fi
-          python scripts/ci_pac_sync.py \
-            --mode iac-changed \
-            --links lab/policy-as-code-links.json \
-            --policy lab/policies/access-control.md \
-            --doc-id pol-ac-001 \
-            --base-tf /tmp/pac/base.tf \
-            --head-tf /tmp/pac/head.tf \
-            --fail-on high \
-            --comment-out pac-comment.md \
-            --json-out pac-alert.json
+          BASE_SHA="${{ github.event.pull_request.base.sha || github.sha }}"
+          BASE_TF_ROOT="/tmp/pac/base-tf"
+          HEAD_TF_ROOT="/tmp/pac/head-tf"
+          mkdir -p "$BASE_TF_ROOT" "$HEAD_TF_ROOT"
 
-      - name: Doc change → IaC verification prompt
-        id: doc
-        if: steps.detect.outputs.doc_changed != '0'
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
+          while IFS= read -r FILE; do
+            if [[ "$FILE" != *.tf ]]; then
+              continue
+            fi
+            mkdir -p "$BASE_TF_ROOT/$(dirname "$FILE")"
+            git show "${BASE_SHA}:${FILE}" > "$BASE_TF_ROOT/$FILE"
+          done < <(git ls-tree -r --name-only "$BASE_SHA")
+
+          while IFS= read -r FILE; do
+            mkdir -p "$HEAD_TF_ROOT/$(dirname "$FILE")"
+            cp "$FILE" "$HEAD_TF_ROOT/$FILE"
+          done < <(git ls-files '*.tf')
+
           FILE="${{ steps.detect.outputs.doc_file }}"
-          mkdir -p /tmp/pac
-          cp "$FILE" /tmp/pac/head.md
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          if git cat-file -e "${BASE_SHA}:${FILE}" 2>/dev/null; then
-            git show "${BASE_SHA}:${FILE}" > /tmp/pac/base.md
+          if [ -f "$FILE" ]; then
+            cp "$FILE" /tmp/pac/head-policy.md
           else
-            printf '# empty base\n' > /tmp/pac/base.md
+            printf '%s\n' '# Removed controlled document' > /tmp/pac/head-policy.md
           fi
+          if git cat-file -e "${BASE_SHA}:${FILE}" 2>/dev/null; then
+            git show "${BASE_SHA}:${FILE}" > /tmp/pac/base-policy.md
+          else
+            printf '%s\n' '# New controlled document' > /tmp/pac/base-policy.md
+          fi
+
+          echo "base_tf_root=$BASE_TF_ROOT" >> "$GITHUB_OUTPUT"
+          echo "head_tf_root=$HEAD_TF_ROOT" >> "$GITHUB_OUTPUT"
+          echo "base_policy=/tmp/pac/base-policy.md" >> "$GITHUB_OUTPUT"
+          echo "head_policy=/tmp/pac/head-policy.md" >> "$GITHUB_OUTPUT"
+
+      - name: Evaluate complete policy and Terraform change set
+        id: evaluate
+        continue-on-error: true
+        run: |
           python scripts/ci_pac_sync.py \
-            --mode doc-changed \
+            --mode change-set \
             --links lab/policy-as-code-links.json \
-            --terraform-root lab/iac \
             --doc-id pol-ac-001 \
-            --base-policy /tmp/pac/base.md \
-            --head-policy /tmp/pac/head.md \
+            --base-policy "${{ steps.trees.outputs.base_policy }}" \
+            --head-policy "${{ steps.trees.outputs.head_policy }}" \
+            --base-tf-root "${{ steps.trees.outputs.base_tf_root }}" \
+            --head-tf-root "${{ steps.trees.outputs.head_tf_root }}" \
+            --terraform-root "${{ steps.trees.outputs.head_tf_root }}" \
+            --assessments lab/assessments.json \
             --fail-on high \
             --comment-out pac-comment.md \
             --json-out pac-alert.json
@@ -174,7 +162,7 @@ jobs:
             }
 
       - name: Enforce lock-step gate
-        if: steps.complete.outcome == 'failure' || steps.iac.outcome == 'failure' || steps.doc.outcome == 'failure'
+        if: steps.evaluate.outcome == 'failure'
         run: |
           echo "::error::Documentation and policy-as-code are out of lock-step. Update both sides in the same PR."
           exit 1

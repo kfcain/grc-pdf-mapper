@@ -41,6 +41,9 @@ def test_framework_and_control_csv_from_mappings():
         "statement_count",
         "statement_ids",
         "strengths",
+        "statement_kinds",
+        "classifier_confidences",
+        "classifier_reasons",
         "obligations",
     } <= set(ctrl_rows[0])
     assert any(row["control_id"] for row in ctrl_rows)

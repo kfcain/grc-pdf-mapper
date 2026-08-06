@@ -120,6 +120,7 @@ bash examples/sync_pages_gallery.sh
 |---|---|
 | Document change control + GitHub Actions | [`lab/README.md`](lab/README.md) |
 | Policy-as-code lock-step (docs ↔ Terraform) | [`lab/POLICY-AS-CODE.md`](lab/POLICY-AS-CODE.md) |
+| Production cross-repository monitoring | [`docs/PRODUCTION-CROSS-REPO.md`](docs/PRODUCTION-CROSS-REPO.md) |
 | FedRAMP CR26 KSI (Classes A–D) | [`lab/FEDRAMP-CR26-KSI.md`](lab/FEDRAMP-CR26-KSI.md) |
 
 Local simulations:
@@ -178,10 +179,42 @@ grc-pdf watch ./policies/access-control.md --doc-id pol-ac-001
 grc-pdf ui
 grc-pdf sync-check
 grc-pdf pac-impact iac-changed --base-tf base.tf --head-tf head.tf
+grc-pdf pac-impact change-set \
+  --base-policy base-policy.md --head-policy head-policy.md \
+  --base-tf-root /tmp/base-repository --head-tf-root . \
+  --assessments lab/assessments.json --json pac-alert.json
+grc-pdf classifier-validate tests/fixtures/classifier_corpus.json \
+  --minimum-score 0.95 --json classifier-validation.json
+grc-pdf production-monitor examples/production-monitor.json \
+  --state /protected/grc-state/production.json \
+  --fail-on medium --json production-monitor-report.json
 grc-pdf fedramp-ksi --class c --control IA-2
 grc-pdf fedramp-docs --class c --must-only
 grc-pdf scf-map AC-2
 ```
+
+`change-set` scans every `.tf` file below both Terraform roots. It evaluates
+the policy and Terraform changes together, keeps resources in separate module
+directories distinct, and enriches affected policy-to-code links with SCF and
+SCF framework crosswalks. Add `--online-scf` to use the live SCF API. The
+default uses the bundled offline SCF data.
+
+The policy classifier joins wrapped paragraphs and shared-modal lists, keeps
+Markdown table rows and heading scope, and separates obligations from prohibitions, recommendations,
+permissions, responsibilities, and citations, and records confidence plus
+evidence reasons. The Terraform classifier assigns security domains, candidate
+controls, enforcement roles, configuration posture, confidence, and reasons to each security-relevant
+resource. Changed Terraform classifications are enriched through SCF in the
+same change-set report.
+
+`production-monitor` evaluates one or more documentation repositories and any
+number of production IaC repositories. It pins each input to a full Git commit ID, uses
+repository-qualified Terraform identities, checks classifier output against
+exact human-reviewed domains and policy semantics, rejects unpinned or linked source
+files, records file and catalog digests, and sends deduplicated
+webhook events for a mismatch or recovery. See the
+[production guide](docs/PRODUCTION-CROSS-REPO.md) and the
+[GitHub Actions example](examples/github/production-cross-repo-lockstep.yml).
 
 ## Project layout
 

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "monitor_id": "production-control-lockstep",
+  "tool_revision_env": "GRC_TOOL_REVISION",
+  "repositories": [
+    {
+      "name": "production-docs",
+      "kind": "documentation",
+      "root": "../../sources/docs",
+      "repository_url": "https://github.com/your-org/production-docs",
+      "expected_revision_env": "GRC_DOCS_SHA",
+      "require_clean": true
+    },
+    {
+      "name": "production-platform-iac",
+      "kind": "iac",
+      "root": "../../sources/platform-iac",
+      "repository_url": "https://github.com/your-org/platform-iac",
+      "expected_revision_env": "GRC_PLATFORM_IAC_SHA",
+      "require_clean": true
+    },
+    {
+      "name": "production-security-iac",
+      "kind": "iac",
+      "root": "../../sources/security-iac",
+      "repository_url": "https://github.com/your-org/security-iac",
+      "expected_revision_env": "GRC_SECURITY_IAC_SHA",
+      "require_clean": true
+    }
+  ],
+  "links_path": "../../sources/docs/.grc/policy-as-code-links.json",
+  "assessments_path": "../../sources/docs/.grc/assessments.json",
+  "state_path": "../../.grc-monitor/state.json",
+  "require_existing_state": true,
+  "targets": [
+    {
+      "target_id": "production-access-control",
+      "doc_id": "pol-ac-prod",
+      "policy_repository": "production-docs",
+      "policy_path": "policies/access-control.md",
+      "terraform_roots": [
+        {
+          "repository": "production-platform-iac",
+          "path": "environments/production"
+        },
+        {
+          "repository": "production-security-iac",
+          "path": "environments/production"
+        }
+      ]
+    }
+  ],
+  "classifier_gate": {
+    "corpus_path": "../tests/fixtures/classifier_corpus.json",
+    "minimum_score": 0.95,
+    "review_below": 0.85,
+    "require_expected_domains": true,
+    "require_exact_domains": true
+  },
+  "notifications": {
+    "webhook_envs": [
+      "GRC_ALERT_WEBHOOK"
+    ],
+    "minimum_severity": "medium",
+    "notify_on_recovery": true,
+    "require_destination": true,
+    "timeout_seconds": 10.0,
+    "event_log_path": "../../.grc-monitor/notification-events.jsonl"
+  }
+}

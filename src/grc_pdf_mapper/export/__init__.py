@@ -63,6 +63,9 @@ def framework_controls_csv(mapped: Iterable[MappedStatement]) -> str:
                     "confidences": [],
                     "statement_ids": [],
                     "strengths": [],
+                    "statement_kinds": [],
+                    "classifier_confidences": [],
+                    "classifier_reasons": [],
                     "obligations": [],
                 }
                 by_ctrl[key] = entry
@@ -74,6 +77,13 @@ def framework_controls_csv(mapped: Iterable[MappedStatement]) -> str:
             if sid not in entry["statement_ids"]:
                 entry["statement_ids"].append(sid)
                 entry["strengths"].append(row.statement.strength.value)
+                entry["statement_kinds"].append(row.statement.statement_kind.value)
+                entry["classifier_confidences"].append(
+                    f"{row.statement.classification_confidence:.2f}"
+                )
+                entry["classifier_reasons"].append(
+                    "; ".join(row.statement.classification_reasons)
+                )
                 entry["obligations"].append(row.statement.text)
 
     buffer = io.StringIO()
@@ -88,6 +98,9 @@ def framework_controls_csv(mapped: Iterable[MappedStatement]) -> str:
             "statement_count",
             "statement_ids",
             "strengths",
+            "statement_kinds",
+            "classifier_confidences",
+            "classifier_reasons",
             "obligations",
         ]
     )
@@ -104,6 +117,9 @@ def framework_controls_csv(mapped: Iterable[MappedStatement]) -> str:
                 len(entry["statement_ids"]),
                 ";".join(entry["statement_ids"]),
                 ";".join(entry["strengths"]),
+                ";".join(entry["statement_kinds"]),
+                ";".join(entry["classifier_confidences"]),
+                " | ".join(entry["classifier_reasons"]),
                 " | ".join(entry["obligations"]),
             ]
         )

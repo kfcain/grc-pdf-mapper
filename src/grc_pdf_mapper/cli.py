@@ -441,22 +441,112 @@ def assessments_init_cmd(
     console.print(f"Wrote {path}")
 
 
+@app.command("classifier-validate")
+def classifier_validate_cmd(
+    corpus: Path = typer.Argument(..., exists=True, readable=True),
+    minimum_score: float = typer.Option(0.95, min=0.0, max=1.0),
+    json_out: Optional[Path] = typer.Option(None, "--json"),
+) -> None:
+    """Test all classifiers against a human-reviewed gold corpus."""
+    from grc_pdf_mapper.classifier_validation import evaluate_classifier_corpus
+
+    report = evaluate_classifier_corpus(corpus, minimum_score=minimum_score)
+    table = Table(title=f"Classifier validation: {report.corpus_version}")
+    table.add_column("Metric")
+    table.add_column("Accuracy")
+    table.add_column("Precision")
+    table.add_column("Recall")
+    table.add_column("F1")
+    for metric in report.metrics.values():
+        table.add_row(
+            metric.name,
+            f"{metric.accuracy:.3f}",
+            f"{metric.precision:.3f}",
+            f"{metric.recall:.3f}",
+            f"{metric.f1:.3f}",
+        )
+    console.print(table)
+    console.print(
+        f"Cases: {report.passed_case_count}/{report.case_count} passed. "
+        f"Gate: {'PASS' if report.passed else 'FAIL'}"
+    )
+    if json_out:
+        json_out.parent.mkdir(parents=True, exist_ok=True)
+        json_out.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+        console.print(f"Wrote {json_out}")
+    if not report.passed:
+        for failure in report.failures:
+            console.print(f"[red]{failure}[/red]")
+        raise typer.Exit(1)
+
+
+@app.command("production-monitor")
+def production_monitor_cmd(
+    config: Path = typer.Argument(..., exists=True, readable=True),
+    state: Optional[Path] = typer.Option(None, help="Override the durable state path"),
+    no_notify: bool = typer.Option(
+        False, "--no-notify", help="Do not send external notifications"
+    ),
+    fail_on: str = typer.Option("medium", help="info|low|medium|high|critical"),
+    json_out: Optional[Path] = typer.Option(None, "--json"),
+) -> None:
+    """Compare production documentation and IaC repository revisions."""
+    from grc_pdf_mapper.production_monitor import (
+        SEVERITY_RANK,
+        run_production_monitor,
+    )
+
+    if fail_on not in SEVERITY_RANK:
+        raise typer.BadParameter("fail-on must be info, low, medium, high, or critical")
+    report = run_production_monitor(
+        config,
+        notify=not no_notify,
+        state_path_override=state,
+    )
+    console.print(f"[bold]{report.status.value.upper()}[/bold] {report.summary}")
+    for repository in report.repositories:
+        console.print(
+            f"{repository.name}: {repository.revision} "
+            f"({'clean' if repository.clean else 'dirty'})"
+        )
+    for target in report.targets:
+        console.print(
+            f"{target.target_id}: {target.status.value}; "
+            f"{len(target.alert.gaps)} finding(s)"
+        )
+    if json_out:
+        json_out.parent.mkdir(parents=True, exist_ok=True)
+        json_out.write_text(report.model_dump_json(indent=2), encoding="utf-8")
+        console.print(f"Wrote {json_out}")
+    if report.notification.errors:
+        for error in report.notification.errors:
+            console.print(f"[red]Notification error: {error}[/red]")
+        raise typer.Exit(2)
+    if SEVERITY_RANK[report.severity.value] >= SEVERITY_RANK[fail_on]:
+        raise typer.Exit(1)
+
+
 @app.command("sync-check")
 def sync_check_cmd(
     policy: Path = typer.Option(Path("lab/policies/access-control.md")),
     terraform_root: Path = typer.Option(Path("lab/iac")),
     links: Path = typer.Option(Path("lab/policy-as-code-links.json")),
     doc_id: str = typer.Option("pol-ac-001"),
+    assessments: Optional[Path] = typer.Option(None),
+    online_scf: bool = typer.Option(False, "--online-scf"),
     json_out: Optional[Path] = typer.Option(None, "--json"),
 ) -> None:
     """Check that policy statements and Terraform remain in lock-step."""
     from grc_pdf_mapper.sync import completeness_scan, load_links
 
+    registry = AssessmentRegistry(assessments) if assessments else AssessmentRegistry()
     report = completeness_scan(
         links=load_links(links),
         policy_path=policy,
         terraform_root=terraform_root,
         doc_id=doc_id,
+        scf_offline=not online_scf,
+        assessments=registry.active(),
     )
     console.print(
         f"Links: {report.link_count}  Covered: {len(report.covered_links)}  "
@@ -479,31 +569,46 @@ def sync_check_cmd(
 
 @app.command("pac-impact")
 def pac_impact_cmd(
-    mode: str = typer.Argument(..., help="iac-changed|doc-changed"),
+    mode: str = typer.Argument(..., help="iac-changed|doc-changed|change-set"),
     links: Path = typer.Option(Path("lab/policy-as-code-links.json")),
     doc_id: str = typer.Option("pol-ac-001"),
     policy: Path = typer.Option(Path("lab/policies/access-control.md")),
     terraform_root: Path = typer.Option(Path("lab/iac")),
     base_tf: Optional[Path] = typer.Option(None, help="Base Terraform file"),
     head_tf: Optional[Path] = typer.Option(None, help="Head Terraform file"),
+    base_tf_root: Optional[Path] = typer.Option(None, help="Base Terraform tree"),
+    head_tf_root: Optional[Path] = typer.Option(None, help="Head Terraform tree"),
     base_policy: Optional[Path] = typer.Option(None),
     head_policy: Optional[Path] = typer.Option(None),
+    assessments: Optional[Path] = typer.Option(None),
+    online_scf: bool = typer.Option(False, "--online-scf"),
     json_out: Optional[Path] = typer.Option(None, "--json"),
 ) -> None:
     """Alert when IaC or docs change without the other side of the lifecycle."""
-    from grc_pdf_mapper.sync import analyze_doc_change_for_iac, analyze_iac_change, load_links
+    from grc_pdf_mapper.sync import (
+        analyze_doc_change_for_iac,
+        analyze_iac_change,
+        evaluate_change_set,
+        load_links,
+    )
 
     loaded = load_links(links)
+    registry = AssessmentRegistry(assessments) if assessments else AssessmentRegistry()
+    active_assessments = registry.active()
     if mode == "iac-changed":
-        if not head_tf:
-            console.print("--head-tf is required for iac-changed")
+        if not head_tf and not head_tf_root:
+            console.print("--head-tf or --head-tf-root is required for iac-changed")
             raise typer.Exit(2)
         alert = analyze_iac_change(
             links=loaded,
             base_tf_files=[base_tf] if base_tf else [],
-            head_tf_files=[head_tf],
+            head_tf_files=[head_tf] if head_tf else [],
+            base_tf_roots=[base_tf_root] if base_tf_root else [],
+            head_tf_roots=[head_tf_root] if head_tf_root else [],
             policy_path=policy,
             doc_id=doc_id,
+            scf_offline=not online_scf,
+            assessments=active_assessments,
         )
     elif mode == "doc-changed":
         older = (base_policy or policy).read_text(encoding="utf-8")
@@ -514,14 +619,45 @@ def pac_impact_cmd(
             older_markdown=older,
             newer_markdown=newer,
             terraform_root=terraform_root,
+            scf_offline=not online_scf,
+            assessments=active_assessments,
+        )
+    elif mode == "change-set":
+        if not base_tf_root or not head_tf_root:
+            console.print("--base-tf-root and --head-tf-root are required for change-set")
+            raise typer.Exit(2)
+        alert = evaluate_change_set(
+            links=loaded,
+            doc_id=doc_id,
+            base_policy_path=base_policy or policy,
+            head_policy_path=head_policy or policy,
+            base_tf_root=base_tf_root,
+            head_tf_root=head_tf_root,
+            scf_offline=not online_scf,
+            assessments=active_assessments,
         )
     else:
-        console.print("mode must be iac-changed or doc-changed")
+        console.print("mode must be iac-changed, doc-changed, or change-set")
         raise typer.Exit(2)
 
     console.print(f"[bold]{alert.severity.value.upper()}[/bold] {alert.summary}")
     for gap in alert.gaps[:12]:
         console.print(f"- [{gap.severity.value}] {gap.kind}: {gap.detail}")
+    for mapping in alert.control_mappings:
+        scf_ids = ", ".join(mapping.scf_control_ids) or "none"
+        console.print(f"- SCF {mapping.link_id}: {scf_ids}")
+    for mapping in alert.terraform_mappings:
+        console.print(
+            f"- Terraform {mapping.address}: "
+            f"domains={','.join(mapping.domains) or 'none'} "
+            f"SCF={','.join(mapping.scf_control_ids) or 'none'} "
+            f"confidence={mapping.confidence:.2f}"
+        )
+    for assessment in alert.assessments_impacted:
+        console.print(
+            f"- Assessment {assessment.assessment_name}: "
+            f"{', '.join(assessment.frameworks_at_risk)}"
+        )
     if json_out:
         json_out.write_text(alert.model_dump_json(indent=2), encoding="utf-8")
     if alert.severity.value in {"high", "critical"}:

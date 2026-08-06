@@ -1,0 +1,252 @@
+name: Production documentation and IaC lock-step
+
+on:
+  workflow_dispatch:
+    inputs:
+      bootstrap_state:
+        description: Create the first state after an approved aligned baseline
+        required: true
+        default: false
+        type: boolean
+  repository_dispatch:
+    types: [grc-production-source-changed]
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-grc-lockstep
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve trusted source revisions
+        id: source-revisions
+        shell: bash
+        env:
+          TOOL_SHA: ${{ vars.GRC_TOOL_SHA }}
+          DOCS_REPOSITORY: ${{ vars.GRC_DOCS_REPOSITORY }}
+          DOCS_REF: ${{ vars.GRC_DOCS_REF }}
+          PLATFORM_REPOSITORY: ${{ vars.GRC_PLATFORM_IAC_REPOSITORY }}
+          PLATFORM_REF: ${{ vars.GRC_PLATFORM_IAC_REF }}
+          SECURITY_REPOSITORY: ${{ vars.GRC_SECURITY_IAC_REPOSITORY }}
+          SECURITY_REF: ${{ vars.GRC_SECURITY_IAC_REF }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SOURCE_ALIAS: ${{ github.event.client_payload.source_alias }}
+          EVENT_SOURCE_SHA: ${{ github.event.client_payload.source_sha }}
+          GH_TOKEN: ${{ secrets.GRC_REPO_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          [[ "$TOOL_SHA" =~ ^[0-9a-fA-F]{40}$ ]] || {
+            echo "::error::The evaluator selector must be a full 40-character commit ID."
+            exit 2
+          }
+
+          resolve_ref() {
+            local repository="$1"
+            local source_ref="$2"
+            local encoded_ref
+            local revision
+            [[ "$repository" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || {
+              echo "::error::A protected source repository name is invalid."
+              exit 2
+            }
+            [[ -n "$source_ref" ]] || {
+              echo "::error::A protected source ref is empty."
+              exit 2
+            }
+            encoded_ref="$(jq -rn --arg value "$source_ref" '$value | @uri')"
+            revision="$(
+              curl --fail --silent --show-error \
+                --header "Authorization: Bearer $GH_TOKEN" \
+                --header "Accept: application/vnd.github+json" \
+                --header "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/$repository/commits/$encoded_ref" \
+                | jq -er '.sha | select(test("^[0-9a-fA-F]{40}$"))'
+            )"
+            printf '%s\n' "$revision"
+          }
+
+          docs_sha="$(resolve_ref "$DOCS_REPOSITORY" "$DOCS_REF")"
+          platform_sha="$(resolve_ref "$PLATFORM_REPOSITORY" "$PLATFORM_REF")"
+          security_sha="$(resolve_ref "$SECURITY_REPOSITORY" "$SECURITY_REF")"
+
+          if [[ "$EVENT_NAME" == "repository_dispatch" ]]; then
+            [[ "$EVENT_SOURCE_SHA" =~ ^[0-9a-fA-F]{40}$ ]] || {
+              echo "::error::repository_dispatch must contain a full source_sha."
+              exit 2
+            }
+            case "$EVENT_SOURCE_ALIAS" in
+              documentation) docs_sha="$EVENT_SOURCE_SHA" ;;
+              platform-iac) platform_sha="$EVENT_SOURCE_SHA" ;;
+              security-iac) security_sha="$EVENT_SOURCE_SHA" ;;
+              *)
+                echo "::error::repository_dispatch used an unknown source_alias."
+                exit 2
+                ;;
+            esac
+          elif [[ "$EVENT_NAME" != "schedule" && "$EVENT_NAME" != "workflow_dispatch" ]]; then
+            echo "::error::This trigger is not approved for source discovery."
+            exit 2
+          fi
+
+          for revision in "$docs_sha" "$platform_sha" "$security_sha"; do
+            [[ "$revision" =~ ^[0-9a-fA-F]{40}$ ]] || {
+              echo "::error::All source selectors must be full 40-character commit IDs."
+              exit 2
+            }
+          done
+          echo "docs_sha=${docs_sha,,}" >> "$GITHUB_OUTPUT"
+          echo "platform_sha=${platform_sha,,}" >> "$GITHUB_OUTPUT"
+          echo "security_sha=${security_sha,,}" >> "$GITHUB_OUTPUT"
+
+      - name: Check out trusted evaluator
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: kfcain/grc-pdf-mapper
+          ref: ${{ vars.GRC_TOOL_SHA }}
+          path: tool
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Check out production documentation
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: ${{ vars.GRC_DOCS_REPOSITORY }}
+          ref: ${{ steps.source-revisions.outputs.docs_sha }}
+          token: ${{ secrets.GRC_REPO_READ_TOKEN }}
+          path: sources/docs
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check out production platform IaC
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: ${{ vars.GRC_PLATFORM_IAC_REPOSITORY }}
+          ref: ${{ steps.source-revisions.outputs.platform_sha }}
+          token: ${{ secrets.GRC_REPO_READ_TOKEN }}
+          path: sources/platform-iac
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check out production security IaC
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: ${{ vars.GRC_SECURITY_IAC_REPOSITORY }}
+          ref: ${{ steps.source-revisions.outputs.security_sha }}
+          token: ${{ secrets.GRC_REPO_READ_TOKEN }}
+          path: sources/security-iac
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Restore monitor state
+        id: state-restore
+        uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        with:
+          path: .grc-monitor
+          key: grc-production-state-${{ github.run_id }}
+          restore-keys: |
+            grc-production-state-
+
+      - name: Require prior state or an explicit manual bootstrap
+        id: state-policy
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BOOTSTRAP_STATE: ${{ inputs.bootstrap_state }}
+        run: |
+          set -euo pipefail
+          if [[ -s .grc-monitor/state.json ]]; then
+            if jq -e '.bootstrap_complete != false' .grc-monitor/state.json >/dev/null; then
+              echo "bootstrapping=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "::warning::The stored state does not contain an accepted aligned baseline."
+          fi
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && "$BOOTSTRAP_STATE" == "true" ]]; then
+            echo "GRC_MONITOR_ALLOW_STATE_BOOTSTRAP=true" >> "$GITHUB_ENV"
+            echo "bootstrapping=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::The approved manual run will create the initial monitor state."
+            exit 0
+          fi
+          echo "::error::Protected monitor state is missing. A schedule or repository_dispatch event cannot create a baseline."
+          exit 2
+
+      - name: Set up Python
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install the trusted evaluator in a virtual environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv .grc-venv
+          . .grc-venv/bin/activate
+          python -m pip install \
+            --constraint ./tool/requirements-production.lock \
+            setuptools wheel
+          python -m pip install \
+            --no-build-isolation \
+            --constraint ./tool/requirements-production.lock \
+            './tool[docs]'
+
+      - name: Resolve and verify source revisions
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "GRC_TOOL_REVISION=$(git -C tool rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "GRC_DOCS_SHA=$(git -C sources/docs rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "GRC_PLATFORM_IAC_SHA=$(git -C sources/platform-iac rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "GRC_SECURITY_IAC_SHA=$(git -C sources/security-iac rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Evaluate production sources
+        id: monitor
+        continue-on-error: true
+        env:
+          GRC_ALERT_WEBHOOK: ${{ secrets.GRC_ALERT_WEBHOOK }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .grc-venv/bin/activate
+          mkdir -p evidence .grc-monitor
+          grc-pdf production-monitor tool/examples/production-monitor.json \
+            --state .grc-monitor/state.json \
+            --fail-on medium \
+            --json evidence/production-monitor-report.json
+
+      - name: Write evidence checksum
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s evidence/production-monitor-report.json
+          sha256sum evidence/production-monitor-report.json > evidence/SHA256SUMS
+
+      - name: Save monitor state
+        if: always() && (steps.monitor.outcome == 'success' || steps.monitor.outcome == 'failure')
+        uses: actions/cache/save@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        with:
+          path: .grc-monitor
+          key: grc-production-state-${{ github.run_id }}
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: production-policy-iac-evidence-${{ github.run_id }}
+          path: evidence
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce the result
+        if: steps.monitor.outcome == 'failure'
+        shell: bash
+        run: |
+          echo "::error::Production documentation and IaC are not in lock-step."
+          exit 1

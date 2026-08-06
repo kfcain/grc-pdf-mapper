@@ -63,7 +63,27 @@ grc-pdf pac-impact iac-changed \
 # Policy changed → demand IaC verification
 grc-pdf pac-impact doc-changed \
   --base-policy /tmp/base.md --head-policy /tmp/head.md
+
+# Complete repository change set: all .tf files + policy + SCF + assessments
+grc-pdf pac-impact change-set \
+  --base-policy /tmp/base-policy.md \
+  --head-policy lab/policies/access-control.md \
+  --base-tf-root /tmp/base-repository \
+  --head-tf-root . \
+  --assessments lab/assessments.json \
+  --json pac-alert.json
 ```
+
+The change-set mode scans each Terraform tree recursively. It compares all
+resource changes in one run. It then reconciles policy and Terraform changes
+by `link_id`. Each affected link includes SCF controls, SCF framework
+crosswalks, owners, and active assessments in the output.
+
+The report also classifies each changed security-relevant Terraform resource.
+It includes control domains, candidate control IDs, preventive/detective/
+corrective/recovery roles, SCF mappings, confidence, and the rule evidence that
+caused the classification. Policy statements and wording changes include the
+same confidence-and-reasons pattern.
 
 ## Annotation contract
 

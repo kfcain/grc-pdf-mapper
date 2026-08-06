@@ -62,6 +62,37 @@ def test_offline_scf_domain_fallback():
     assert any(h.framework == "SCF" and h.control_id.startswith("CRY") for h in hits)
 
 
+def test_offline_scf_does_not_create_phantom_control():
+    stmt = ControlStatement(
+        statement_id="unknown-scf",
+        text="The system must implement IAC-999.",
+        strength=ObligationStrength.MUST,
+        candidate_framework_ids=["IAC-999"],
+        classification_confidence=0.96,
+        content_hash="unknown-scf",
+    )
+    with ScfClient(offline=True) as scf:
+        hits = scf.map_statement(stmt)
+
+    assert hits == []
+
+
+def test_scf_hit_confidence_does_not_exceed_source_classifier():
+    stmt = ControlStatement(
+        statement_id="low-confidence",
+        text="The system may use access controls.",
+        strength=ObligationStrength.MAY,
+        candidate_framework_ids=["AC-2"],
+        classification_confidence=0.74,
+        content_hash="low-confidence",
+    )
+    with ScfClient(offline=True) as scf:
+        hits = scf.map_statement(stmt)
+
+    assert hits
+    assert max(hit.confidence for hit in hits) <= 0.74
+
+
 def test_crosswalk_client_includes_scf_offline():
     markdown = (FIXTURES / "access_control_policy_v1.md").read_text(encoding="utf-8")
     statements = extract_control_statements(markdown, doc_slug="pol-ac")

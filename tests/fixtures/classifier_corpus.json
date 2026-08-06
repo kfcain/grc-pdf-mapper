@@ -1,0 +1,843 @@
+{
+  "version": "2026-08-05.5",
+  "policy": [
+    {
+      "id": "policy-must-mfa",
+      "text": "All privileged accounts must use multi-factor authentication.",
+      "kind": "obligation",
+      "strength": "must",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "policy-shall-logging",
+      "text": "Authentication logs shall be sent to the SIEM.",
+      "kind": "obligation",
+      "strength": "shall",
+      "domains": ["access_control", "logging"]
+    },
+    {
+      "id": "policy-prohibition",
+      "text": "Encryption secrets must not be stored in source code.",
+      "kind": "prohibition",
+      "strength": "prohibited",
+      "action_polarity": "negative",
+      "domains": ["encryption"]
+    },
+    {
+      "id": "policy-recommendation",
+      "text": "Vulnerability patches should be applied after each approved scan.",
+      "kind": "recommendation",
+      "strength": "should",
+      "domains": ["vulnerability"]
+    },
+    {
+      "id": "policy-permission",
+      "text": "Administrators may request temporary access through the approved workflow.",
+      "kind": "permission",
+      "strength": "may",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "policy-nonnormative-may-cause",
+      "text": "System outages may cause delayed access.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-nonnormative-may-include",
+      "text": "The report may include account statistics.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-control-description",
+      "text": "The network segmentation control separates production from development.",
+      "kind": "control_description",
+      "strength": "descriptive",
+      "domains": ["network_security"]
+    },
+    {
+      "id": "policy-control-citation",
+      "text": "AC-2 defines the account management control.",
+      "kind": "citation",
+      "strength": "descriptive",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "policy-responsibility",
+      "text": "Security Operations is responsible for monitoring audit logs.",
+      "kind": "responsibility",
+      "strength": "must",
+      "domains": ["logging"]
+    },
+    {
+      "id": "policy-will-ensure",
+      "text": "The security team will ensure that backups are tested.",
+      "kind": "obligation",
+      "strength": "must",
+      "domains": ["backup"]
+    },
+    {
+      "id": "policy-descriptive-can",
+      "text": "Users can request access from the service desk.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-obligation-waiver",
+      "text": "Administrators do not have to use multi-factor authentication.",
+      "kind": "permission",
+      "strength": "may",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "policy-nonnormative-may-not",
+      "text": "The service may not be available during maintenance.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-normative-may-not",
+      "text": "Users may not share access credentials.",
+      "kind": "prohibition",
+      "strength": "prohibited",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "policy-first-may-later-must",
+      "text": "Outages may result in delays, but administrators must log the event.",
+      "kind": "obligation",
+      "strength": "must",
+      "domains": ["logging"]
+    },
+    {
+      "id": "policy-nonnormative-cannot",
+      "text": "Legacy devices cannot support multi-factor authentication.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-nonnormative-may-fail",
+      "text": "Encryption may fail during a hardware outage.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-nonnormative-control-may-fail",
+      "text": "The vulnerability control may fail during a hardware outage.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-shared-modal-list",
+      "text": "Administrators must:\n- use multi-factor authentication;\n- retain audit logs.",
+      "statements": [
+        {
+          "text_contains": "use multi-factor",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["access_control"]
+        },
+        {
+          "text_contains": "retain audit logs",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["logging"]
+        }
+      ]
+    },
+    {
+      "id": "policy-independent-modal-clauses",
+      "text": "Administrators must use multi-factor authentication and should review audit logs weekly.",
+      "statements": [
+        {
+          "text_contains": "must use multi-factor",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["access_control"]
+        },
+        {
+          "text_contains": "should review audit logs",
+          "kind": "recommendation",
+          "strength": "should",
+          "domains": ["logging"]
+        }
+      ]
+    },
+    {
+      "id": "policy-table-header-suppressed",
+      "text": "| Access Control Requirement | Owner |\n|---|---|\n| Multi-factor authentication must be enabled. | IAM |",
+      "kind": "obligation",
+      "strength": "must",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "policy-should-not-prohibition",
+      "text": "Administrators should not export access credentials.",
+      "kind": "recommendation",
+      "strength": "should",
+      "action_polarity": "negative",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "policy-epistemic-vendor-may-not-support",
+      "text": "The vendor may not support TLS 1.3.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-epistemic-system-may-generate",
+      "text": "The system may generate duplicate audit logs.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-epistemic-device-cannot-encrypt",
+      "text": "The device cannot encrypt archived records.",
+      "extract": false,
+      "domains": []
+    },
+    {
+      "id": "policy-waiver-not-required",
+      "text": "Multi-factor authentication is not required.",
+      "kind": "permission",
+      "strength": "may",
+      "action_polarity": "positive",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "policy-shared-modal-list-with-blank-line",
+      "text": "Administrators must:\n\n- use multi-factor authentication.\n- retain audit logs.",
+      "statements": [
+        {
+          "text_contains": "use multi-factor",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["access_control"]
+        },
+        {
+          "text_contains": "retain audit logs",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["logging"]
+        }
+      ]
+    },
+    {
+      "id": "policy-shared-modal-comma-actions",
+      "text": "Administrators must encrypt backups, and retain audit logs.",
+      "statements": [
+        {
+          "text_contains": "encrypt backups",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["backup", "encryption"]
+        },
+        {
+          "text_contains": "retain audit logs",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["logging"]
+        }
+      ]
+    },
+    {
+      "id": "policy-three-independent-modal-clauses",
+      "text": "Administrators must use MFA and should review audit logs weekly and may request exceptions.",
+      "statements": [
+        {
+          "text_contains": "must use MFA",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["access_control"],
+          "status": "classified"
+        },
+        {
+          "text_contains": "should review audit logs",
+          "kind": "recommendation",
+          "strength": "should",
+          "domains": ["logging"],
+          "status": "classified"
+        },
+        {
+          "text_contains": "may request exceptions",
+          "kind": "permission",
+          "strength": "may",
+          "domains": [],
+          "status": "review_required"
+        }
+      ]
+    },
+    {
+      "id": "policy-table-row-two-rules",
+      "text": "| Mandatory rule | Optional rule |\n|---|---|\n| Accounts must use MFA. | Contractors may use passwords. |",
+      "statements": [
+        {
+          "text_contains": "Accounts must use MFA",
+          "kind": "obligation",
+          "strength": "must",
+          "domains": ["access_control"]
+        },
+        {
+          "text_contains": "Contractors may use passwords",
+          "kind": "permission",
+          "strength": "may",
+          "domains": ["access_control"]
+        }
+      ]
+    },
+    {
+      "id": "policy-interrogative-modal",
+      "text": "Must administrators use multi-factor authentication?",
+      "extract": false,
+      "domains": []
+    }
+  ],
+  "terraform": [
+    {
+      "id": "tf-aws-iam-role",
+      "resource_type": "aws_iam_role",
+      "block": "{ name = \"prod-reader\" }",
+      "security_sensitive": true,
+      "domains": ["access_control"],
+      "control_ids": ["AC-2", "AC-3", "IA-2"]
+    },
+    {
+      "id": "tf-aws-cloudtrail",
+      "resource_type": "aws_cloudtrail",
+      "block": "{ name = \"audit\" }",
+      "security_sensitive": true,
+      "domains": ["logging"],
+      "control_ids": ["AU-2", "AU-6", "SI-4"]
+    },
+    {
+      "id": "tf-aws-kms-key",
+      "resource_type": "aws_kms_key",
+      "block": "{ description = \"production key\" }",
+      "security_sensitive": true,
+      "domains": ["encryption"],
+      "control_ids": ["SC-12", "SC-13", "SC-28"]
+    },
+    {
+      "id": "tf-aws-security-group",
+      "resource_type": "aws_security_group",
+      "block": "{ ingress { cidr_blocks = [\"0.0.0.0/0\"] } }",
+      "security_sensitive": true,
+      "domains": ["network_security"],
+      "control_ids": ["AC-4", "SC-7"],
+      "status": "review_required",
+      "posture": "review_required"
+    },
+    {
+      "id": "tf-aws-s3-bucket",
+      "resource_type": "aws_s3_bucket",
+      "block": "{ bucket = \"production-records\" }",
+      "security_sensitive": true,
+      "domains": ["data_protection"],
+      "control_ids": ["AC-3", "MP-4", "SC-28"]
+    },
+    {
+      "id": "tf-azure-monitor",
+      "resource_type": "azurerm_monitor_diagnostic_setting",
+      "block": "{ name = \"security-audit\" }",
+      "security_sensitive": true,
+      "domains": ["logging"],
+      "control_ids": ["AU-2", "AU-6", "SI-4"]
+    },
+    {
+      "id": "tf-gcp-firewall",
+      "resource_type": "google_compute_firewall",
+      "block": "{ direction = \"INGRESS\" }",
+      "security_sensitive": true,
+      "domains": ["network_security"],
+      "control_ids": ["AC-4", "SC-7"]
+    },
+    {
+      "id": "tf-aws-backup",
+      "resource_type": "aws_backup_vault",
+      "block": "{ name = \"production\" }",
+      "security_sensitive": true,
+      "domains": ["backup"],
+      "control_ids": ["CP-10", "CP-9"]
+    },
+    {
+      "id": "tf-aws-inspector",
+      "resource_type": "aws_inspector2_enabler",
+      "block": "{ account_ids = [] }",
+      "security_sensitive": true,
+      "domains": ["vulnerability"],
+      "control_ids": ["RA-5", "SI-2"]
+    },
+    {
+      "id": "tf-nonsecurity-random",
+      "resource_type": "random_pet",
+      "block": "{ length = 2 }",
+      "security_sensitive": false,
+      "domains": [],
+      "control_ids": []
+    },
+    {
+      "id": "tf-explicit-reviewed-label",
+      "resource_type": "custom_platform_guard",
+      "block": "{ enabled = true }",
+      "annotations": {
+        "domain": "identity and access management",
+        "control_id": "AC-3",
+        "role": "preventive"
+      },
+      "security_sensitive": true,
+      "domains": ["access_control"],
+      "control_ids": ["AC-3"]
+    },
+    {
+      "id": "tf-explicit-multi-value-label",
+      "resource_type": "custom_platform_guard",
+      "block": "{ enabled = true }",
+      "annotations": {
+        "domains": "access_control, logging",
+        "control_ids": "AC-2, IA-2",
+        "roles": "preventive, detective"
+      },
+      "security_sensitive": true,
+      "domains": ["access_control", "logging"],
+      "control_ids": ["AC-2", "IA-2"]
+    },
+    {
+      "id": "tf-disabled-encryption-is-violation",
+      "resource_type": "custom_storage_guard",
+      "block": "{ encrypted = false }",
+      "security_sensitive": true,
+      "domains": ["encryption"],
+      "control_ids": ["SC-12", "SC-13", "SC-28"],
+      "status": "misconfigured",
+      "posture": "violated"
+    },
+    {
+      "id": "tf-tag-only-link-sensitive",
+      "resource_type": "custom_platform_guard",
+      "block": "{ enabled = true }",
+      "tags": {"link_id": "lnk-custom"},
+      "security_sensitive": true,
+      "domains": [],
+      "control_ids": [],
+      "status": "classified",
+      "posture": "implemented"
+    },
+    {
+      "id": "tf-gcp-storage-bucket",
+      "resource_type": "google_storage_bucket",
+      "block": "{ name = \"records\" }",
+      "security_sensitive": true,
+      "domains": ["data_protection"],
+      "control_ids": ["AC-3", "MP-4", "SC-28"]
+    },
+    {
+      "id": "tf-gcp-service-account-key",
+      "resource_type": "google_service_account_key",
+      "block": "{ service_account_id = \"example\" }",
+      "security_sensitive": true,
+      "domains": ["access_control"],
+      "control_ids": ["AC-2", "AC-3", "IA-2"]
+    },
+    {
+      "id": "tf-gcp-security-policy",
+      "resource_type": "google_compute_security_policy",
+      "block": "{ name = \"edge\" }",
+      "security_sensitive": true,
+      "domains": ["network_security"],
+      "control_ids": ["AC-4", "SC-7"]
+    },
+    {
+      "id": "tf-gcp-logging-sink",
+      "resource_type": "google_logging_project_sink",
+      "block": "{ name = \"audit\" }",
+      "security_sensitive": true,
+      "domains": ["logging"],
+      "control_ids": ["AU-2", "AU-6", "SI-4"]
+    },
+    {
+      "id": "tf-gcp-secret-manager",
+      "resource_type": "google_secret_manager_secret",
+      "block": "{ secret_id = \"production\" }",
+      "security_sensitive": true,
+      "domains": ["encryption"],
+      "control_ids": ["SC-12", "SC-13", "SC-28"]
+    },
+    {
+      "id": "tf-azure-role-definition",
+      "resource_type": "azurerm_role_definition",
+      "block": "{ name = \"operator\" }",
+      "security_sensitive": true,
+      "domains": ["access_control"],
+      "control_ids": ["AC-2", "AC-3", "IA-2"]
+    },
+    {
+      "id": "tf-azure-log-workspace",
+      "resource_type": "azurerm_log_analytics_workspace",
+      "block": "{ name = \"security\" }",
+      "security_sensitive": true,
+      "domains": ["logging"],
+      "control_ids": ["AU-2", "AU-6", "SI-4"]
+    },
+    {
+      "id": "tf-aws-access-analyzer",
+      "resource_type": "aws_accessanalyzer_analyzer",
+      "block": "{ analyzer_name = \"external-access\" }",
+      "security_sensitive": true,
+      "domains": ["access_control"],
+      "control_ids": ["AC-2", "AC-6", "CA-7"]
+    },
+    {
+      "id": "tf-aws-config-recorder",
+      "resource_type": "aws_config_configuration_recorder",
+      "block": "{ name = \"production\" }",
+      "security_sensitive": true,
+      "domains": ["change", "logging"],
+      "control_ids": ["AU-2", "AU-6", "CM-2", "CM-3", "CM-6", "SI-4"]
+    },
+    {
+      "id": "tf-azure-action-group-not-logging",
+      "resource_type": "azurerm_monitor_action_group",
+      "block": "{ name = \"operations\" }",
+      "security_sensitive": false,
+      "domains": [],
+      "control_ids": []
+    },
+    {
+      "id": "tf-invalid-explicit-control-review",
+      "resource_type": "null_resource",
+      "block": "{ triggers = {} }",
+      "annotations": {"control_id": "NOT-A-CONTROL"},
+      "security_sensitive": true,
+      "domains": [],
+      "control_ids": [],
+      "status": "review_required",
+      "posture": "review_required"
+    },
+    {
+      "id": "tf-google-service-account",
+      "resource_type": "google_service_account",
+      "block": "{ account_id = \"automation\" }",
+      "security_sensitive": true,
+      "domains": ["access_control"],
+      "control_ids": ["AC-2", "AC-3", "IA-2"]
+    },
+    {
+      "id": "tf-azure-network-security-rule",
+      "resource_type": "azurerm_network_security_rule",
+      "block": "{ name = \"allow-internal\" }",
+      "security_sensitive": true,
+      "domains": ["network_security"],
+      "control_ids": ["AC-4", "SC-7"]
+    },
+    {
+      "id": "tf-azure-storage-container",
+      "resource_type": "azurerm_storage_container",
+      "block": "{ name = \"records\" }",
+      "security_sensitive": true,
+      "domains": ["data_protection"],
+      "control_ids": ["AC-3", "MP-4", "SC-28"]
+    },
+    {
+      "id": "tf-dead-text-is-not-evidence",
+      "resource_type": "null_resource",
+      "block": "{\n# encrypted = false\ncommand = <<EOF\nencrypted = false\n0.0.0.0/0\nEOF\n}",
+      "security_sensitive": false,
+      "domains": [],
+      "control_ids": [],
+      "status": "not_security_relevant",
+      "posture": "unknown"
+    }
+  ],
+  "changes": [
+    {
+      "id": "change-softened",
+      "before": "Privileged accounts must use multi-factor authentication.",
+      "after": "Privileged accounts should use multi-factor authentication.",
+      "kind": "obligation_softened"
+    },
+    {
+      "id": "change-scope-reduced",
+      "before": "All privileged accounts must use multi-factor authentication.",
+      "after": "Selected privileged accounts must use multi-factor authentication.",
+      "kind": "scope_reduced"
+    },
+    {
+      "id": "change-exception-added",
+      "before": "Privileged accounts must use multi-factor authentication.",
+      "after": "Privileged accounts must use multi-factor authentication where feasible.",
+      "kind": "obligation_softened"
+    },
+    {
+      "id": "change-reversed",
+      "before": "Administrators must not export production credentials.",
+      "after": "Administrators must export production credentials.",
+      "kind": "obligation_reversed"
+    },
+    {
+      "id": "change-sla-weakened",
+      "before": "Security incidents must be reviewed within 1 day.",
+      "after": "Security incidents must be reviewed within 7 days.",
+      "kind": "sla_changed"
+    },
+    {
+      "id": "change-hardened",
+      "before": "Vulnerability patches should be applied after each approved scan.",
+      "after": "Vulnerability patches must be applied after each approved scan.",
+      "kind": "obligation_hardened"
+    },
+    {
+      "id": "change-removed",
+      "before": "Audit logs must be retained for one year.",
+      "after": "",
+      "kind": "obligation_removed"
+    },
+    {
+      "id": "change-added",
+      "before": "",
+      "after": "Audit logs must be retained for one year.",
+      "kind": "obligation_added"
+    },
+    {
+      "id": "change-retention-weakened",
+      "before": "Audit logs must be retained for 365 days.",
+      "after": "Audit logs must be retained for 30 days.",
+      "kind": "retention_weakened"
+    },
+    {
+      "id": "change-minimum-weakened",
+      "before": "Passwords must contain at least 14 characters.",
+      "after": "Passwords must contain at least 8 characters.",
+      "kind": "threshold_weakened"
+    },
+    {
+      "id": "change-waiver-added",
+      "before": "Privileged users must use multi-factor authentication.",
+      "after": "Privileged users do not have to use multi-factor authentication.",
+      "kind": "obligation_softened"
+    },
+    {
+      "id": "change-table-row-scope",
+      "before": "| Scope | Rule |\n|---|---|\n| All accounts | Multi-factor authentication must be enabled. |",
+      "after": "| Scope | Rule |\n|---|---|\n| Selected accounts | Multi-factor authentication must be enabled. |",
+      "kind": "scope_reduced"
+    },
+    {
+      "id": "change-heading-scope",
+      "before": "# All production systems\n\nAccess must be logged.",
+      "after": "# Selected test systems\n\nAccess must be logged.",
+      "kind": "scope_reduced"
+    },
+    {
+      "id": "change-secondary-modal",
+      "before": "Administrators must use multi-factor authentication and should review audit logs weekly.",
+      "after": "Administrators must use multi-factor authentication and may review audit logs weekly.",
+      "kind": "obligation_softened"
+    },
+    {
+      "id": "change-dynamic-exception",
+      "before": "Privileged accounts must use multi-factor authentication.",
+      "after": "Privileged accounts must use multi-factor authentication unless the CISO approves.",
+      "kind": "obligation_softened"
+    },
+    {
+      "id": "change-only-selected-scope",
+      "before": "Privileged accounts must use multi-factor authentication.",
+      "after": "Only selected privileged accounts must use multi-factor authentication.",
+      "kind": "scope_reduced"
+    },
+    {
+      "id": "change-equivalent-cadence",
+      "before": "Administrators must review accounts every 30 days.",
+      "after": "Administrators must review accounts monthly.",
+      "kind": "non_material_rewording"
+    },
+    {
+      "id": "change-deadline-removed",
+      "before": "Security incidents must be reviewed within 24 hours.",
+      "after": "Security incidents must be reviewed.",
+      "kind": "sla_changed"
+    },
+    {
+      "id": "change-number-word-sla",
+      "before": "Security incidents must be reviewed within one hour.",
+      "after": "Security incidents must be reviewed within four hours.",
+      "kind": "sla_changed"
+    },
+    {
+      "id": "change-cadence-weakened",
+      "before": "Accounts must be reviewed daily.",
+      "after": "Accounts must be reviewed weekly.",
+      "kind": "sla_changed"
+    },
+    {
+      "id": "change-unrelated-obligations",
+      "before": "Administrators must disable dormant user accounts.",
+      "after": "Administrators must approve new user accounts.",
+      "kinds": ["obligation_removed", "obligation_added"]
+    },
+    {
+      "id": "change-should-not-reversal",
+      "before": "Administrators should not export access credentials.",
+      "after": "Administrators should export access credentials.",
+      "kind": "obligation_reversed"
+    },
+    {
+      "id": "change-mandatory-modal-equivalence",
+      "before": "Accounts must use multi-factor authentication.",
+      "after": "Accounts shall use multi-factor authentication.",
+      "kind": "non_material_rewording"
+    },
+    {
+      "id": "change-must-not-to-should-not",
+      "before": "Administrators must not export access credentials.",
+      "after": "Administrators should not export access credentials.",
+      "kind": "obligation_softened"
+    },
+    {
+      "id": "change-subordinate-negative-is-not-main-reversal",
+      "before": "Administrators must allow access after they revoke stale credentials.",
+      "after": "Administrators must allow access after they remove stale credentials.",
+      "kind": "obligation_rewritten"
+    },
+    {
+      "id": "change-active-passive-equivalence",
+      "before": "Security must retain audit logs for 365 days.",
+      "after": "Audit logs must be retained for 365 days by Security.",
+      "kind": "non_material_rewording"
+    },
+    {
+      "id": "change-approval-exception-added",
+      "before": "Privileged accounts must use multi-factor authentication.",
+      "after": "Privileged accounts must use multi-factor authentication if the owner approves.",
+      "kind": "obligation_softened"
+    },
+    {
+      "id": "change-emergency-exception-added",
+      "before": "Privileged accounts must use multi-factor authentication.",
+      "after": "Privileged accounts must use multi-factor authentication except during emergencies.",
+      "kind": "obligation_softened"
+    },
+    {
+      "id": "change-retention-removed",
+      "before": "Audit logs must be retained for 365 days.",
+      "after": "Audit logs must be retained.",
+      "kind": "retention_weakened"
+    },
+    {
+      "id": "change-word-retention-reduced",
+      "before": "Audit logs must be retained for one year.",
+      "after": "Audit logs must be retained for six months.",
+      "kind": "retention_weakened"
+    },
+    {
+      "id": "change-immediate-deadline-removed",
+      "before": "Compromised credentials must be revoked immediately.",
+      "after": "Compromised credentials must be revoked.",
+      "kind": "sla_changed"
+    },
+    {
+      "id": "change-enabled-to-disabled",
+      "before": "User accounts must be enabled.",
+      "after": "User accounts must be disabled.",
+      "kind": "obligation_reversed"
+    },
+    {
+      "id": "change-approve-to-reject",
+      "before": "Administrators must approve access requests.",
+      "after": "Administrators must reject access requests.",
+      "kind": "obligation_reversed"
+    },
+    {
+      "id": "change-generic-object-any-removed",
+      "before": "Administrators must not share any passwords.",
+      "after": "Administrators must not share passwords.",
+      "kind": "non_material_rewording"
+    },
+    {
+      "id": "change-subject-modifier-reduces-scope",
+      "before": "Privileged accounts must use multi-factor authentication.",
+      "after": "Production privileged accounts must use multi-factor authentication.",
+      "kind": "scope_reduced"
+    },
+    {
+      "id": "change-benign-heading-taxonomy-rename",
+      "before": "# Access Control\n\nAccounts must use MFA.",
+      "after": "# Identity and Access Control\n\nAccounts must use MFA.",
+      "kind": "non_material_rewording"
+    }
+  ],
+  "alignment": [
+    {
+      "id": "align-access-control",
+      "policy_text": "All privileged accounts must use multi-factor authentication.",
+      "resource_type": "aws_iam_policy",
+      "block": "{ name = \"require-mfa\" }",
+      "domains": ["access_control"]
+    },
+    {
+      "id": "align-logging",
+      "policy_text": "Audit logs must be retained for one year.",
+      "resource_type": "aws_cloudwatch_log_group",
+      "block": "{ retention_in_days = 365 }",
+      "domains": ["logging"]
+    },
+    {
+      "id": "align-encryption",
+      "policy_text": "Encryption keys must be protected and reviewed each year.",
+      "resource_type": "aws_kms_key",
+      "block": "{ enable_key_rotation = true }",
+      "domains": ["encryption"]
+    },
+    {
+      "id": "align-network-security",
+      "policy_text": "The production firewall must deny unrestricted ingress.",
+      "resource_type": "aws_security_group",
+      "block": "{ name = \"production-boundary\" }",
+      "domains": ["network_security"]
+    },
+    {
+      "id": "align-backup",
+      "policy_text": "Production backups must be retained and tested.",
+      "resource_type": "aws_backup_vault",
+      "block": "{ name = \"production\" }",
+      "domains": ["backup"]
+    },
+    {
+      "id": "align-vulnerability",
+      "policy_text": "Vulnerability scans must be performed each week.",
+      "resource_type": "aws_inspector2_enabler",
+      "block": "{ account_ids = [] }",
+      "domains": ["vulnerability"]
+    }
+  ],
+  "scf": [
+    {
+      "id": "scf-known-ia-2",
+      "text": "Accounts must use multi-factor authentication.",
+      "domains": ["access_control"],
+      "control_ids": ["IA-2"],
+      "source_confidence": 0.8,
+      "scf_control_ids": ["IAC-02"],
+      "confidence_capped": true
+    },
+    {
+      "id": "scf-multiple-backbones-preserved",
+      "text": "Access controls must enforce account and identity requirements.",
+      "domains": [],
+      "control_ids": ["AC-2", "AC-3", "IA-2"],
+      "source_confidence": 0.8,
+      "scf_control_ids": ["IAC-02", "IAC-07.2", "IAC-15", "IAC-20", "NET-12", "TDA-18"],
+      "confidence_capped": true
+    },
+    {
+      "id": "scf-unknown-explicit-does-not-fallback",
+      "text": "Access controls must implement IAC-999.",
+      "domains": ["access_control"],
+      "control_ids": ["IAC-999"],
+      "source_confidence": 0.9,
+      "scf_control_ids": [],
+      "confidence_capped": true
+    }
+  ]
+}

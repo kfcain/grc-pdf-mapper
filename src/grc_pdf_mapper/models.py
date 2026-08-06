@@ -18,6 +18,16 @@ class ObligationStrength(str, Enum):
     DESCRIPTIVE = "descriptive"
 
 
+class StatementKind(str, Enum):
+    OBLIGATION = "obligation"
+    PROHIBITION = "prohibition"
+    RECOMMENDATION = "recommendation"
+    PERMISSION = "permission"
+    RESPONSIBILITY = "responsibility"
+    CONTROL_DESCRIPTION = "control_description"
+    CITATION = "citation"
+
+
 class ControlStatement(BaseModel):
     """One control-related obligation extracted from policy text."""
 
@@ -26,8 +36,13 @@ class ControlStatement(BaseModel):
     heading_path: list[str] = Field(default_factory=list)
     page: int | None = None
     strength: ObligationStrength = ObligationStrength.DESCRIPTIVE
+    statement_kind: StatementKind = StatementKind.CONTROL_DESCRIPTION
+    action_polarity: str = "positive"
     keywords: list[str] = Field(default_factory=list)
     candidate_framework_ids: list[str] = Field(default_factory=list)
+    classification_confidence: float = 0.0
+    classification_status: str = "unclassified"
+    classification_reasons: list[str] = Field(default_factory=list)
     source_span: tuple[int, int] | None = None
     content_hash: str = ""
 
@@ -129,6 +144,8 @@ class VerbiageChange(BaseModel):
     before_statement_id: str | None = None
     after_statement_id: str | None = None
     similarity: float = 0.0
+    classification_confidence: float = 0.0
+    classification_reasons: list[str] = Field(default_factory=list)
     risk_note: str = ""
 
 

@@ -174,6 +174,9 @@ def _ui_payload(
             {
                 "statement_id": stmt.get("statement_id"),
                 "strength": stmt.get("strength"),
+                "statement_kind": stmt.get("statement_kind"),
+                "classification_confidence": stmt.get("classification_confidence"),
+                "classification_reasons": stmt.get("classification_reasons") or [],
                 "text": stmt.get("text"),
                 "heading_path": stmt.get("heading_path") or [],
                 "keywords": stmt.get("keywords") or [],

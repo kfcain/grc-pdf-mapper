@@ -74,12 +74,18 @@ function renderResults(data) {
   for (const row of statements) {
     const tr = document.createElement("tr");
     const strength = (row.strength || "descriptive").toLowerCase();
+    const kind = (row.statement_kind || "control_description").replaceAll("_", " ");
+    const confidence = Number(row.classification_confidence || 0);
+    const classifierTitle = (row.classification_reasons || []).join("; ");
     const controls = (row.controls || [])
       .map((c) => `<span>${escapeHtml(c.framework)}:${escapeHtml(c.control_id)}</span>`)
       .join("");
 
     tr.innerHTML = `
-      <td><span class="strength is-${escapeAttr(strength)}">${escapeHtml(strength)}</span></td>
+      <td title="${escapeAttr(classifierTitle)}">
+        <span class="strength is-${escapeAttr(strength)}">${escapeHtml(strength)}</span>
+        <span class="classification-meta">${escapeHtml(kind)} · ${Math.round(confidence * 100)}%</span>
+      </td>
       <td class="obligation">${escapeHtml(row.text || "")}</td>
       <td><div class="controls">${controls || "<span>—</span>"}</div></td>
     `;

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "links": [
+    {
+      "link_id": "lnk-prod-mfa",
+      "doc_id": "pol-ac-prod",
+      "statement_anchor": "Privileged accounts must use multi-factor authentication",
+      "statement_keywords": [
+        "privileged",
+        "multi-factor",
+        "authentication"
+      ],
+      "expected_domains": [
+        "access_control"
+      ],
+      "expected_statement_kind": "obligation",
+      "expected_strength": "must",
+      "expected_action_polarity": "positive",
+      "control_ids": [
+        "IA-2",
+        "AC-3"
+      ],
+      "iac_repositories": [
+        "production-platform-iac"
+      ],
+      "iac_paths": [
+        "environments/production/identity/main.tf"
+      ],
+      "terraform_addresses": [
+        "environments/production/identity::aws_iam_policy.require_mfa"
+      ],
+      "terraform_resource_types": [
+        "aws_iam_policy"
+      ],
+      "owner": "Identity Engineering",
+      "direction": "bidirectional"
+    }
+  ]
+}

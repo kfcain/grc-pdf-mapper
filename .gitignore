@@ -9,6 +9,7 @@ __pycache__/
 .grc-lineage-lab/
 .grc-lineage-ci/
 .grc-pac-lab/
+.grc-monitor/
 examples/viewer/.store/
 *.egg-info/
 dist/

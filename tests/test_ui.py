@@ -51,6 +51,9 @@ def test_analyze_markdown_upload(client: TestClient):
     assert payload["engine"] == "markdown"
     assert payload["statement_count"] >= 8
     assert payload["statements"]
+    assert all(row["statement_kind"] for row in payload["statements"])
+    assert all(row["classification_confidence"] > 0 for row in payload["statements"])
+    assert all(row["classification_reasons"] for row in payload["statements"])
     assert "must" in {row["strength"] for row in payload["statements"]} or "shall" in {
         row["strength"] for row in payload["statements"]
     }

@@ -41,6 +41,15 @@ DOMAIN_TO_FAMILY: dict[str, str] = {
     "access_control": "IAC",
     "encryption": "CRY",
     "logging": "MON",
+    "network_security": "NET",
+    "vulnerability": "VPM",
+    "asset": "AST",
+    "data_protection": "DCH",
+    "awareness": "SAT",
+    "physical": "PES",
+    "secure_development": "TDA",
+    "risk": "RSK",
+    "governance": "GOV",
     "incident": "IRO",
     "vendor": "TPM",
     "privacy": "PRI",
@@ -175,19 +184,25 @@ class ScfClient:
 
     def map_statement(self, statement: ControlStatement) -> list[CrosswalkHit]:
         """Map one obligation onto SCF, then fan out to target frameworks."""
-        hits: list[CrosswalkHit] = []
         scf_ids: list[str] = []
+        has_candidate_citations = any(
+            control_id.strip() for control_id in statement.candidate_framework_ids
+        )
 
         for cid in statement.candidate_framework_ids:
             if is_scf_control_id(cid):
-                scf_ids.append(cid.upper())
+                # Shape alone is not proof that an SCF control exists.
+                if self.get_control(cid.upper()) is not None:
+                    scf_ids.append(cid.upper())
                 continue
             fw_id = guess_scf_framework_id(cid)
             if not fw_id:
                 continue
             scf_ids.extend(self.framework_to_scf(fw_id, cid))
 
-        if not scf_ids:
+        # A supplied citation is authoritative. If it is unknown or cannot be
+        # resolved, do not replace it with unrelated controls from a domain.
+        if not scf_ids and not has_candidate_citations:
             for domain in statement.keywords:
                 scf_ids.extend(self.domain_scf_ids(domain))
 
@@ -201,9 +216,34 @@ class ScfClient:
             seen.add(key)
             ordered.append(key)
 
-        for sid in ordered[:12]:
-            hits.extend(self.hits_for_scf_control(sid, statement))
-        return hits[: self.expand_limit + 12]
+        control_hits = [
+            self.hits_for_scf_control(sid, statement) for sid in ordered[:12]
+        ]
+        backbones = [
+            hit
+            for hits in control_hits
+            for hit in hits
+            if hit.framework == "SCF"
+        ]
+        expansion_groups = [
+            [hit for hit in hits if hit.framework != "SCF"]
+            for hits in control_hits
+        ]
+        expansions: list[CrosswalkHit] = []
+        cursor = 0
+        while len(expansions) < self.expand_limit:
+            emitted = False
+            for group in expansion_groups:
+                if cursor >= len(group):
+                    continue
+                expansions.append(group[cursor])
+                emitted = True
+                if len(expansions) >= self.expand_limit:
+                    break
+            if not emitted:
+                break
+            cursor += 1
+        return [*backbones, *expansions]
 
     def framework_to_scf(self, framework_id: str, control_id: str) -> list[str]:
         reverse = self._framework_reverse_map(framework_id)
@@ -235,6 +275,16 @@ class ScfClient:
             "family": scf_id.split("-", 1)[0],
             "crosswalks": {},
         }
+        source_confidence = (
+            statement.classification_confidence
+            if statement and statement.classification_confidence > 0
+            else None
+        )
+        backbone_confidence = (
+            0.9 if statement and statement.candidate_framework_ids else 0.72
+        )
+        if source_confidence is not None:
+            backbone_confidence = min(backbone_confidence, source_confidence)
         hits: list[CrosswalkHit] = [
             CrosswalkHit(
                 source="scf-api",
@@ -242,7 +292,7 @@ class ScfClient:
                 control_id=str(control.get("control_id") or scf_id),
                 title=str(control.get("title") or ""),
                 relationship="backbone",
-                confidence=0.9 if statement and statement.candidate_framework_ids else 0.72,
+                confidence=backbone_confidence,
                 url=f"{self.base_url}/api/controls/{scf_id}.json",
                 raw={
                     "family": control.get("family"),
@@ -266,7 +316,11 @@ class ScfClient:
                         control_id=str(mid),
                         title="",
                         relationship="scf-crosswalk",
-                        confidence=0.88,
+                        confidence=(
+                            min(0.88, source_confidence)
+                            if source_confidence is not None
+                            else 0.88
+                        ),
                         url=f"{self.base_url}/api/crosswalks/{fw_id}.json",
                         cre_ids=[scf_id],
                         raw={"scf_id": scf_id, "framework_id": fw_id, "attribution": SCF_ATTRIBUTION},
