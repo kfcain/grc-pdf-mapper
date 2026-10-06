@@ -166,8 +166,8 @@ def analyze_impact(
     if not older or not newer:
         raise ValueError("Unknown snapshot id")
 
-    left = store.load_statements(older.statement_ids)
-    right = store.load_statements(newer.statement_ids)
+    left = store.load_statements(older.statement_ids, statement_hashes=older.statement_hashes)
+    right = store.load_statements(newer.statement_ids, statement_hashes=newer.statement_hashes)
     changes = detect_verbiage_changes(left, right)
 
     with CrosswalkClient(offline=offline) as client:

@@ -82,6 +82,7 @@ class DocumentSnapshot(BaseModel):
     snapshot_id: str
     doc_id: str
     version_label: str
+    format_version: int = 1
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     source_hash: str
     markdown_hash: str
@@ -90,6 +91,8 @@ class DocumentSnapshot(BaseModel):
     author: str | None = None
     approval_status: str = "draft"
     statement_ids: list[str] = Field(default_factory=list)
+    # Empty for legacy snapshots. New snapshots bind every statement's exact JSON bytes.
+    statement_hashes: dict[str, str] = Field(default_factory=dict)
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
