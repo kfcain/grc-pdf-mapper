@@ -100,6 +100,12 @@ grc-pdf ask report.json "Do you require MFA for privileged production access?"
 grc-pdf evidence report.json AC-2
 ```
 
+Document history uses immutable snapshots. Reimporting identical content and
+metadata returns the current snapshot without adding an event. Reverting to older
+content creates a new child, so previous history stays intact. New snapshots bind
+the exact extracted statements by hash. Existing stores remain readable. See
+[`docs/LINEAGE.md`](docs/LINEAGE.md) for the format, API, and storage limits.
+
 ## View examples
 
 Live gallery (GitHub Pages):

@@ -44,22 +44,22 @@ def analyze_document(
     snapshot_id = "ephemeral"
     impact_alert: ImpactAlert | None = None
     if store and commit:
-        previous = store.head(slug)
-        snap = store.commit(
+        result = store.commit_with_result(
             doc_id=slug,
             ingest=ingest,
             statements=statements,
             version_label=version_label,
             author=author,
         )
+        snap = result.snapshot
         snapshot_id = snap.snapshot_id
 
-        if alert_on_change and previous and previous.snapshot_id != snap.snapshot_id:
+        if alert_on_change and result.created and snap.parent_snapshot_id:
             registry = assessments or AssessmentRegistry()
             impact_alert = analyze_impact(
                 store,
                 slug,
-                previous.snapshot_id,
+                snap.parent_snapshot_id,
                 snap.snapshot_id,
                 assessments=registry.active(),
                 offline=offline,

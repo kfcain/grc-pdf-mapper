@@ -10,7 +10,6 @@ from pathlib import Path
 
 from grc_pdf_mapper.alerts import AlertRouter, default_router
 from grc_pdf_mapper.assessments import AssessmentRegistry
-from grc_pdf_mapper.impact import analyze_impact
 from grc_pdf_mapper.lineage import PolicyLineageStore
 from grc_pdf_mapper.models import ImpactAlert
 from grc_pdf_mapper.pipeline import analyze_document
@@ -63,7 +62,7 @@ class PolicyWatcher:
             digest = _file_hash(item.path)
             if digest == item.last_hash:
                 continue
-            alert = self._handle_change(item, digest)
+            alert = self._handle_change(item)
             if alert:
                 alerts.append(alert)
             item.last_hash = digest
@@ -77,8 +76,7 @@ class PolicyWatcher:
                 return collected
             time.sleep(interval_seconds)
 
-    def _handle_change(self, item: WatchedDoc, digest: str) -> ImpactAlert | None:
-        previous = self.store.head(item.doc_id)
+    def _handle_change(self, item: WatchedDoc) -> ImpactAlert | None:
         version = datetime.now(timezone.utc).strftime("auto-%Y%m%dT%H%M%SZ")
         report = analyze_document(
             item.path,
@@ -88,29 +86,26 @@ class PolicyWatcher:
             author=self.author,
             offline=self.offline,
             commit=True,
-            alert_on_change=False,  # watcher publishes explicitly below
+            alert_on_change=True,
+            assessments=self.assessments,
+            alert_router=_WatchRouter(self.store, self.router, item.path),
         )
-        if not previous:
-            # First seen: baseline only, no alert noise.
-            return None
-        if previous.snapshot_id == report.snapshot_id:
-            return None
+        return getattr(report, "_impact_alert", None)
 
-        alert = analyze_impact(
-            self.store,
-            item.doc_id,
-            previous.snapshot_id,
-            report.snapshot_id,
-            assessments=self.assessments.active(),
-            offline=self.offline,
-        )
-        alert.metadata.update(
-            {
-                "source_path": str(item.path),
-                "content_hash": digest,
-                "trigger": "watch",
-            }
-        )
+
+class _WatchRouter(AlertRouter):
+    """Add watch context before the pipeline delivers its exact-parent comparison."""
+
+    def __init__(self, store: PolicyLineageStore, router: AlertRouter, path: Path) -> None:
+        super().__init__()
+        self.store, self.router, self.path = store, router, path
+
+    def publish(self, alert: ImpactAlert) -> ImpactAlert:
+        snapshot = self.store.get_snapshot(alert.doc_id, alert.newer_snapshot_id)
+        if snapshot is None:
+            raise ValueError("Watch alert snapshot is missing")
+        alert.metadata.update({"source_path": str(self.path), "content_hash": snapshot.source_hash,
+                               "trigger": "watch"})
         self.router.publish(alert)
         return alert
 
