@@ -4,13 +4,24 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
+import stat
 import tempfile
+import time
+from contextlib import contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from grc_pdf_mapper.models import ControlStatement, DocumentSnapshot, DriftFinding, IngestResult
+
+
+@dataclass(frozen=True)
+class CommitResult:
+    snapshot: DocumentSnapshot
+    created: bool
 
 
 class PolicyLineageStore:
@@ -27,7 +38,10 @@ class PolicyLineageStore:
         docs/<doc_id>/log.jsonl   # append-only event log
     """
 
-    def __init__(self, root: str | Path) -> None:
+    def __init__(self, root: str | Path, *, lock_timeout: float = 5.0) -> None:
+        if not math.isfinite(lock_timeout) or lock_timeout < 0:
+            raise ValueError("lock_timeout must be nonnegative and finite")
+        self.lock_timeout = lock_timeout
         self.root = Path(root)
         self.objects = self.root / "objects"
         self.statements = self.root / "statements"
@@ -48,8 +62,27 @@ class PolicyLineageStore:
         approval_status: str = "draft",
         metadata: dict[str, Any] | None = None,
     ) -> DocumentSnapshot:
+        return self.commit_with_result(
+            doc_id=doc_id, ingest=ingest, statements=statements, version_label=version_label,
+            author=author, approval_status=approval_status, metadata=metadata).snapshot
+
+    def commit_with_result(
+        self, *, doc_id: str, ingest: IngestResult, statements: list[ControlStatement],
+        version_label: str, author: str | None = None, approval_status: str = "draft",
+        metadata: dict[str, Any] | None = None,
+    ) -> CommitResult:
+        """Commit under the store lock and report whether this call created a revision."""
+        self._doc_dir(doc_id)
+        with self._locked():
+            self._recover(doc_id)
+            return self._commit_locked(doc_id=doc_id, ingest=ingest, statements=statements,
+                                       version_label=version_label, author=author,
+                                       approval_status=approval_status, metadata=metadata)
+
+    def _commit_locked(self, *, doc_id, ingest, statements, version_label,
+                       author, approval_status, metadata) -> CommitResult:
         doc_dir = self._doc_dir(doc_id)
-        parent = self.head(doc_id)
+        parent = self._head(doc_id)
         statement_hashes: dict[str, str] = {}
         for stmt in statements:
             if stmt.statement_id in statement_hashes:
@@ -75,31 +108,35 @@ class PolicyLineageStore:
         # Identical retries return the existing revision and do not append another event.
         ignored = {"snapshot_id", "created_at", "parent_snapshot_id"}
         if parent and parent.model_dump(mode="json", exclude=ignored) == snapshot.model_dump(mode="json", exclude=ignored):
-            return parent
+            return CommitResult(parent, False)
         snapshot.snapshot_id = _snapshot_digest(snapshot)
         doc_dir.mkdir(parents=True, exist_ok=True)
         snap_path = doc_dir / f"{snapshot.snapshot_id}.json"
-        # Never overwrite an earlier revision, including after a content reversion.
-        with snap_path.open("x", encoding="utf-8") as fh:
-            fh.write(snapshot.model_dump_json(indent=2))
-        _atomic_text(doc_dir / "HEAD", snapshot.snapshot_id)
-        with (doc_dir / "log.jsonl").open("a", encoding="utf-8") as fh:
-            fh.write(
-                json.dumps(
-                    {
-                        "event": "commit",
-                        "snapshot_id": snapshot.snapshot_id,
-                        "version_label": version_label,
-                        "author": author,
-                        "approval_status": approval_status,
-                        "statement_count": len(statements),
-                    }
-                )
-                + "\n"
-            )
-        return snapshot
+        if snap_path.exists():
+            # Reuse a complete orphan left before its commit intent was published.
+            stored = self.get_snapshot(doc_id, snapshot.snapshot_id)
+            if stored.model_dump(exclude={"created_at"}) != snapshot.model_dump(exclude={"created_at"}):
+                raise ValueError("Conflicting snapshot object")
+            snapshot = stored
+        else:
+            _publish_immutable(snap_path, snapshot.model_dump_json(indent=2).encode("utf-8"))
+        _atomic_text(doc_dir / ".pending-commit.json", json.dumps({
+            "version": 1, "snapshot_id": snapshot.snapshot_id,
+            "parent_snapshot_id": snapshot.parent_snapshot_id}, sort_keys=True))
+        self._recover(doc_id)
+        return CommitResult(snapshot, True)
 
     def head(self, doc_id: str) -> DocumentSnapshot | None:
+        return self.recover(doc_id)
+
+    def recover(self, doc_id: str) -> DocumentSnapshot | None:
+        """Finish a durable pending commit before returning the current HEAD."""
+        self._doc_dir(doc_id)
+        with self._locked():
+            self._recover(doc_id)
+            return self._head(doc_id)
+
+    def _head(self, doc_id: str) -> DocumentSnapshot | None:
         head_path = self._doc_dir(doc_id) / "HEAD"
         _reject_symlink(head_path)
         if not head_path.exists():
@@ -108,6 +145,64 @@ class PolicyLineageStore:
         if snapshot is None:
             raise ValueError("HEAD refers to a missing snapshot")
         return snapshot
+
+    @contextmanager
+    def _locked(self):
+        try:
+            import fcntl
+        except ImportError as exc:
+            raise RuntimeError("Lineage commits require POSIX file locks") from exc
+        path = self.root / ".writer.lock"
+        fd = os.open(path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
+        with os.fdopen(fd, "a") as lock:
+            info = os.fstat(lock.fileno())
+            if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+                raise ValueError("Writer lock must be a regular private file")
+            deadline = time.monotonic() + self.lock_timeout
+            while True:
+                try:
+                    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError("Lineage writer lock timed out")
+                    time.sleep(min(0.01, max(0, deadline - time.monotonic())))
+            try:
+                current = path.lstat()
+                if (current.st_dev, current.st_ino) != (info.st_dev, info.st_ino):
+                    raise ValueError("Writer lock was replaced")
+                yield
+            finally:
+                fcntl.flock(lock, fcntl.LOCK_UN)
+
+    def _recover(self, doc_id: str) -> None:
+        directory = self._doc_dir(doc_id)
+        path = directory / ".pending-commit.json"
+        _reject_symlink(path)
+        if not path.exists():
+            return
+        intent = json.loads(path.read_text(encoding="utf-8"))
+        if (not isinstance(intent, dict)
+                or set(intent) != {"version", "snapshot_id", "parent_snapshot_id"}
+                or type(intent["version"]) is not int or intent["version"] != 1):
+            raise ValueError("Invalid pending commit")
+        snapshot = self.get_snapshot(doc_id, intent["snapshot_id"])
+        if snapshot is None or snapshot.parent_snapshot_id != intent["parent_snapshot_id"]:
+            raise ValueError("Pending commit does not match its snapshot")
+        head = self._head(doc_id)
+        if (head.snapshot_id if head else None) not in {snapshot.parent_snapshot_id, snapshot.snapshot_id}:
+            raise ValueError("Pending commit conflicts with HEAD")
+        if snapshot.parent_snapshot_id and self.get_snapshot(doc_id, snapshot.parent_snapshot_id) is None:
+            raise ValueError("Pending commit parent is missing")
+        self.read_markdown(snapshot.markdown_hash)
+        self.load_statements(snapshot.statement_ids, statement_hashes=snapshot.statement_hashes)
+        event = {"event": "commit", "snapshot_id": snapshot.snapshot_id,
+                 "version_label": snapshot.version_label, "author": snapshot.author,
+                 "approval_status": snapshot.approval_status, "statement_count": len(snapshot.statement_ids)}
+        _append_event(directory / "log.jsonl", event)
+        _atomic_text(directory / "HEAD", snapshot.snapshot_id)
+        path.unlink()
+        _sync_directory(directory)
 
     def get_snapshot(self, doc_id: str, snapshot_id: str) -> DocumentSnapshot | None:
         _validate_digest(snapshot_id, length=20)
@@ -296,8 +391,44 @@ def _write_hashed(path: Path, raw: bytes, digest: str) -> None:
     if path.exists():
         _read_hashed(path, digest)
         return
-    with path.open("xb") as fh:
-        fh.write(raw)
+    _publish_immutable(path, raw)
+
+
+def _publish_immutable(path: Path, raw: bytes) -> None:
+    """Publish complete bytes without replacing an existing object."""
+    fd, name = tempfile.mkstemp(dir=path.parent, prefix=".object-")
+    try:
+        with os.fdopen(fd, "wb") as fh:
+            fh.write(raw)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.link(name, path)
+        _sync_directory(path.parent)
+    finally:
+        Path(name).unlink(missing_ok=True)
+
+
+def _append_event(path: Path, event: dict) -> None:
+    _reject_symlink(path)
+    raw = path.read_text(encoding="utf-8") if path.exists() else ""
+    rows = [json.loads(line) for line in raw.splitlines() if line.strip()]
+    if any(not isinstance(row, dict) or row.get("event") != "commit" for row in rows):
+        raise ValueError("Invalid commit event log")
+    matches = [row for row in rows if row.get("snapshot_id") == event["snapshot_id"]]
+    if matches:
+        if matches != [event]:
+            raise ValueError("Conflicting commit event")
+        return
+    _atomic_text(path, raw + ("\n" if raw and not raw.endswith("\n") else "")
+                 + json.dumps(event, sort_keys=True) + "\n")
+
+
+def _sync_directory(path: Path) -> None:
+    fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
 
 
 def _atomic_text(path: Path, content: str) -> None:
@@ -306,6 +437,9 @@ def _atomic_text(path: Path, content: str) -> None:
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as fh:
             fh.write(content)
+            fh.flush()
+            os.fsync(fh.fileno())
         os.replace(name, path)
+        _sync_directory(path.parent)
     finally:
         Path(name).unlink(missing_ok=True)
